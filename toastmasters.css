@@ -1,0 +1,53 @@
+@charset "utf-8";
+/* CSS Document */
+
+#agenda_print a, #agendalogin a, button {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+div.role-block {
+margin-bottom: 2px;
+clear: both;
+}
+div.role-title { 
+font-weight: bold;
+width: 180px;
+float: left;
+}
+div.role-data {
+margin-left: 185px;
+}
+
+.update_form {
+display: none;
+}
+
+button.save_changes
+{
+  background-color: #1e8cbe;
+  background-image: none;
+  background-repeat: repeat;
+  background-attachment: scroll;
+  background-position: 0% 0%;
+  background-clip: border-box;
+  background-origin: padding-box;
+  background-size: auto auto;
+  border-top-color: #0074a2;
+  border-right-color-value: #0074a2;
+  border-bottom-color: #0074a2;
+  border-left-color-value: #0074a2;
+  box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;
+  color: #ffffff;
+}
+button.save_changes.focus, .save_changes:focus
+{
+	background-color:#00F;
+}
