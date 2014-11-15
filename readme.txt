@@ -4,7 +4,7 @@ Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,8 @@ First install RSVPMaker - [download from wordpress.org](https://wordpress.org/pl
 
 == Installation ==
 
-1. Upload the plugin folder to the `/wp-content/plugins/` directory
+1. First, download and install RSVPMaker
+1. Upload the RSVPMaker for Toastmasters plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
@@ -46,7 +47,7 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 
 == Changelog ==
 
-= 1.2 =
+= 1.2/1.3 =
 
 * Fixed recommend function bug
 * Default event template created on plugin activation
