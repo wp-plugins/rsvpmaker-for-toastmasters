@@ -4,7 +4,7 @@ Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,3 +43,10 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 
 1. Role signup on the online agenda.
 2. Data collected through the plugin feeds performance reports, such as this one showing progress toward Competent Communicator.
+
+== Changelog ==
+
+= 1.2 =
+
+* Fixed recommend function bug
+* Default event template created on plugin activation

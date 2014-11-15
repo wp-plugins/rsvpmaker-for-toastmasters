@@ -2,9 +2,9 @@
 /*
 Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
-Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking.
+Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.1
+Version: 1.2
 Author URI: http://www.carrcommunications.com
 
 */
@@ -115,12 +115,13 @@ elseif($count < 10)
 if($templates)
 foreach($templates as $template) {
 	$permalink = rsvpmaker_permalink_query($template->ID);
+	printf('<p>Edit Template: <a href="%s">%s</a></p>',admin_url('post.php?action=edit&post='.$template->ID), $template->post_title);
 	if(function_exists('wp4t_print_redirect') )
-		printf('<p>Edit Template: <a href="%sshortcode_editor=1">%s</a></p>',$permalink, $template->post_title);
+		printf('<p>Edit Template: (Simplified Editor): <a href="%sshortcode_editor=1">%s</a></p>',$permalink, $template->post_title);
+	
 	printf('<p><a href="%s">Add events</a> based on Template: %s</p>',admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$template->ID), $template->post_title);	
 }		
 
- 
 if(isset($wp4toastmasters_mailman["mpass"]))
 echo '<p><a href="'.trailingslashit($wp4toastmasters_mailman["mpath"]).'members" target="_blank">Members Email List</a> password: '.$wp4toastmasters_mailman["mpass"].'
 <br />(Email is automatically added for new members but not automatically deleted when members/users are deleted from the website)<br /></p>';
@@ -307,8 +308,7 @@ $wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
 
 }
 
-add_action('wp_dashboard_setup', 'awesome_add_dashboard_widgets' );
-
+add_action('wp_dashboard_setup', 'awesome_add_dashboard_widgets',1 );
 
 function toastmaster_short($atts=array(),$content="") {
 
@@ -1495,6 +1495,8 @@ if($_GET["recommendation"])
 	{
 		if($_GET["recommendation"] == 'success')
 			$link = '<div style="border: thin solid #00F; padding: 10px; margin: 10px; background-color: #eee;">You have accepted a role for this meeting. Thanks!</div>';
+		elseif($_GET["recommendation"] == 'code_error')
+			$link = '<div style="border: thin solid #F00; padding: 10px; margin: 10px; background-color: #eee;">Oops, something went wrong with the automatic sign up. Please sign in with your password to take a role.</div>';		
 		else
 			$link = '<div style="border: thin solid #F00; padding: 10px; margin: 10px; background-color: #eee;">Oops, someone else took that role first. Sign in to take any other open role listed below.</div>';		
 	}
@@ -1538,7 +1540,8 @@ if($_POST["editor_suggest"])
 			$msg = sprintf('<p>Toastmaster %s %s has recomended you for the role of %s for %s</p>',$user->first_name,$user->last_name,$neatname, $date);
 			$member = get_userdata($value);
 			$email = $member->user_email;
-			$url = $permalink.sprintf('key=%s&you=%s&code=%s&count=%s',$name,$value,$code,$count);
+			$hash = recommend_hash($name, $value);
+			$url = $permalink.sprintf('key=%s&you=%s&code=%s&count=%s',$name,$value,$hash,$count);
 			$msg .= sprintf("\n\n<p>".'Click here to <a href="%s">ACCEPT</a> (no password required if you act before someone else takes this role)</p>',$url);
 			if($_POST["editor_suggest_note"][$name])
 				$msg .= "\n\n<p><b>Note from ".$user->first_name.' '.$user->last_name.": </b>".$_POST["editor_suggest_note"][$name].'</p>';
@@ -1661,6 +1664,7 @@ return ob_get_clean();
 
 function display_member($userdata, $title='')
 	 {
+	global $post;
 /*
 if($_GET["phones"])
 {
@@ -1760,11 +1764,11 @@ if(!empty($title))
 			else
 				$expires = $default_expires;
 			printf('<p> 
-			<form action="'.rsvpmaker_permalink_query().'" method="post"><input name="member_id" type="hidden" value="%d" />Status<br /><textarea name="status" cols="60" rows="1">%s</textarea>
+			<form action="'.rsvpmaker_permalink_query($post->ID).'" method="post"><input name="member_id" type="hidden" value="%d" />Status<br /><textarea name="status" cols="60" rows="1">%s</textarea>
 			<br />Status Expires: <input type="" name="status_expires" value="%s" /> Year-Month-Day<br />
 			<input type="submit" name="submit" value="Submit" /></form></p>',$userdata->ID,$userdata->status, $expires);
 			if(isset($userdata->status))
-			printf('<form action="'.rsvpmaker_permalink_query().'" method="post"><input name="member_id" type="hidden" value="%d" /><input type="submit" name="remove_status" value="Clear Status" /></form>',$userdata->ID,$userdata->status);			
+			printf('<form action="'.rsvpmaker_permalink_query($post->ID).'" method="post"><input name="member_id" type="hidden" value="%d" /><input type="submit" name="remove_status" value="Clear Status" /></form>',$userdata->ID,$userdata->status);			
 			}
 
 ?>
@@ -2145,6 +2149,9 @@ function add_member_user($user) {
 	if(!isset($user["user_login"]) || empty($user["user_login"]) )
 		$user["user_login"] = preg_replace('/[^a-z]/','',strtolower($user["first_name"].$user["last_name"]));
 
+	if($exists = get_user_by('login',$user["user_login"] ) ) // if 2 people have the same name
+		$user["user_login"] = $user["user_email"];
+		
 	$incpath = trailingslashit(str_replace('content','includes',WP_CONTENT_DIR));
 	include_once $incpath.'registration.php';	
 
@@ -2437,6 +2444,11 @@ return sprintf('<form id="edit_roles_form" method="post" action="%s"">
 }
 add_filter('the_content','edit_toast_roles',1);
 
+function recommend_hash($role, $user) {
+global $post;
+return md5($role.$user.$post->ID);
+}
+
 function accept_recommended_role() {
 // key=General_Evaluator-1&you=31&code=eZHuvRnuvb^(
 global $post;
@@ -2444,31 +2456,32 @@ $permalink = rsvpmaker_permalink_query($post->ID);
 $custom_fields = get_post_custom($post->ID);
 if($_GET["key"] && $_GET["you"] && $_GET["code"])
 	{
-		$code = get_post_meta($post->ID,'suggest_code', true);
 		$you = (int) $_GET["you"];
+		$hash = recommend_hash($_GET["key"], $you);
 		$count = (int) $_GET["count"];
 		$key = preg_replace('/[0-9]/','',$_GET["key"]);
-		if($code != $_GET["code"])
-			die("invalid code ".$code." not ".$_GET["code"]);
+		if($hash != $_GET["code"])
+			{
+			header("Location: ".$permalink."recommendation=code_error");
+			exit();
+			}
 		$success = false;
 		for($i =1; $i <= $count; $i++)
 			{
 				$name = $key.$i;
-				printf('<p>%s %s</p>',$name,$you);
 				if($custom_fields[$name][0])
 					; //echo "<p>Role is taken</p>";
 				else
 					{
 					update_post_meta($post->ID, $name, $you);
-					echo  "<p>Role is OPEN</p>";
 					$success = true;
 					break;
 					}
 			}
 	if($success)
-		header("Location: ".$permalink."?recommendation=success");
+		header("Location: ".$permalink."recommendation=success");
 	else
-		header("Location: ".$permalink."?recommendation=oops");
+		header("Location: ".$permalink."recommendation=oops");
 	exit();
 	}
 }
@@ -3224,7 +3237,9 @@ $currentorder =array();
 
 function awemailer($mail) {
 	
-	global $rsvp_options;	
+	global $rsvp_options;
+	$rsvp_options = apply_filters('rsvp_email_options',$rsvp_options);
+	
 	if(!$rsvp_options["smtp"])
 		{
 		echo "<div>email not set up</div>";
@@ -3912,10 +3927,91 @@ else
 }
 } // end function exists
 
-function toastmasters_datebox_message() {
+function toastmasters_datebox_message () {
 echo '<div style="padding: 5px; margin: 5px; backround-color: #eee; border: thin dotted black;">For a regular Toastmasters meeting, do not worry about the parameters below. You may use this RSVP functionality to schedule other sorts of events (for example, training or open house events.)</div>';
 }
 
 add_action ('rsvpmaker_datebox_message','toastmasters_datebox_message');
+
+function wp4toast_template() {
+
+global $wpbd;
+$sql = "SELECT ID FROM `$wpdb->posts` WHERE `post_name` LIKE 'toastmasters-meet%' AND post_status='publish' ORDER BY `ID` DESC ";
+if($wpdb->get_var($sql))
+	return;
+
+$default = '[agenda_note comment="text between here and /agenda_note will be shown on the agenda only"]
+
+<strong>Club Mission:</strong> We provide a supportive and positive learning experience in which members are empowered to develop communication and leadership skills, resulting in greater self-confidence and personal growth.
+
+<strong>Sgt. at Arms</strong> <em>calls the meeting to the order,</em>
+
+[/agenda_note]
+
+[toastmaster role="Invocation" count="1" agenda_note="" ]
+
+[agenda_note comment="text between here and /agenda_note will be shown on the agenda only"]
+
+<strong>President </strong>or<strong> Presiding Officer</strong> <em>leads the self-introductions</em>
+
+Introduces the <strong>Toastmaster of the Day</strong>
+
+[/agenda_note]
+
+[toastmaster role="Toastmaster of the Day" count="1" agenda_note="Introduces supporting roles. Leads the meeting." ]
+
+[toastmaster role="Ah Counter" count="1" agenda_note="" indent="1" ]
+
+[toastmaster role="Timer" count="1" agenda_note="" indent="1" ]
+
+[toastmaster role="Vote Counter" count="1" agenda_note="" indent="1" ]
+
+[toastmaster role="Body Language Monitor" count="1" agenda_note="" indent="1" ]
+
+
+[toastmaster role="Grammarian" count="1" agenda_note="Leads word of the day contest." indent="1" ]
+
+[toastmaster role="Topics Master" count="1" agenda_note="" ]
+
+
+[toastmaster role="Humorist" count="1" agenda_note="" ]
+
+[toastmaster role="Speaker" count="3" agenda_note="" ]
+
+[toastmaster role="Backup Speaker" count="1" agenda_note="" ]
+
+[toastmaster role="General Evaluator" count="1" agenda_note="Explains the importance of evaluations. Introduces Evaluators. Asks for Grammarian report. Asks for Body Language Monitor report (and awarding of Best Gestures Ribbon). Gives overall evaluation of the meeting." ]
+
+[toastmaster role="Evaluator" count="3" agenda_note="" ]
+
+[toastmaster themewords="1" ]
+
+[toastmaster officers="1" label="Officers" ]';
+
+	$post = array(
+	  'post_content'   => $default,
+	  'post_name'      => 'toastmasters-meeting',
+	  'post_title'     => 'Toastmasters Meeting',
+	  'post_status'    => 'publish',
+	  'post_type'      => 'rsvpmaker',
+	  'post_author'    => $user_id,
+	  'ping_status'    => 'closed'
+	);
+	$templateID = wp_insert_post($post);
+
+	if($parent_id = wp_is_post_revision($templateID))
+		{
+		$templateID = $parent_id;
+		}
+	$template["hour"]= 19;
+	$template["minutes"] = '00';
+	$template["week"] = 6;
+	$template["dayofweek"] = 1;
+
+	update_post_meta($templateID, '_sked', $template);
+
+}
+
+register_activation_hook( __FILE__, 'wp4toast_template' );
 
 ?>
