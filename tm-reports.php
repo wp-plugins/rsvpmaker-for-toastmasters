@@ -1683,9 +1683,7 @@ if($_POST["newstat"])
 						{
 							$adjustment = $count - $oldcount;
 							$sql = sprintf( "INSERT into %s SET user_id=%d, role='%s', quantity=%d, datetime=CURDATE() ",$wpdb->prefix.'toastmasters_history',$user_id, $role, $adjustment );
-						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
-							echo $sql . "<br />";
-							//$wpdb->query($sql);
+							$wpdb->query($sql);
 						}
 					}
 

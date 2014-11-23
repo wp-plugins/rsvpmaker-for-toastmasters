@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.2
+Version: 1.3.1
 Author URI: http://www.carrcommunications.com
 
 */
@@ -1299,7 +1299,7 @@ include(WP_PLUGIN_DIR . '/rsvpmaker-for-toastmasters/shortcode_editor.php');
 }
 
 function awesome_menu() {
-//add_submenu_page('edit.php?post_type=rsvpmaker', "Speech Progress", "Speech Progress", 'edit_posts', "speech_progress", "speech_progress");
+add_submenu_page('edit.php?post_type=rsvpmaker', "Agenda Setup", "Agenda Setup", 'edit_rsvpmakers', "agenda_setup", "agenda_setup");
 //add_submenu_page('edit.php?post_type=rsvpmaker', "New Toastmasters Template", "New Toastmasters Template", 'edit_posts', 'role_setup', 'role_setup');
 //add_submenu_page('profile.php', "Default Password", "Default Password", 'manage_options', "detect_default_password", "detect_default_password" );
 add_submenu_page('profile.php', "Add Member", "Add Member", 'edit_others_posts', "add_awesome_member", "add_awesome_member" );
@@ -4013,5 +4013,73 @@ Introduces the <strong>Toastmaster of the Day</strong>
 }
 
 register_activation_hook( __FILE__, 'wp4toast_template' );
+
+if($_GET["page"] == 'agenda_setup')
+	add_action('admin_head', 'agenda_setup_js');
+
+function agenda_setup_js () {
+	wp_enqueue_script( 'jquery-ui-sortable' );
+}
+
+add_action( 'wp_ajax_rsvptoast_save', 'rsvptoast_save_callback' );
+
+function rsvptoast_save_callback() {
+	global $wpdb; // this is how you get access to the database
+
+	print_r($_POST);
+
+	die(); // this is required to terminate immediately and return a proper response
+}
+
+function agenda_setup () {
+?>
+
+<form id="agenda_form">
+<ul id="sortable">
+<?php
+for($i = 0; $i < 10; $i++)
+{
+?>
+     <li class="ui-state-default" id="item_<?php echo $i; ?>"><input name="title_<?php echo $i; ?>" id="title_<?php echo $i; ?>"><textarea name="text_<?php echo $i; ?>" id="text_<?php echo $i; ?>"></textarea></li>
+<?php
+}
+?>
+</ul>
+<button id="save">Save</button>
+</form>
+
+<script>
+jQuery(function($){
+
+$("#sortable").sortable({
+
+    stop: function (event, ui) {
+
+        var new_order = $(this).sortable('serialize') + $("agenda_form").serialize();
+        $.post( ajaxurl, { action: 'rsvptoast_save', order: new_order }, function( data ) {
+
+            console.log('ajax sent and response received');     
+
+        });
+    }
+});
+
+$("#agenda_form").on("submit", 'submit_sorted_agenda');
+
+function submit_sorted_agenda()
+{
+        var new_order = $(this).sortable('serialize') + $("agenda_form").serialize();
+        $.post( ajaxurl, { action: 'rsvptoast_save', order: new_order }, function( data ) {
+			// do something with data		
+		});
+		return false;
+}
+
+})
+
+
+</script>
+<?php
+}
 
 ?>
