@@ -4,7 +4,7 @@ Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ First install RSVPMaker - [download from wordpress.org](https://wordpress.org/pl
 
 == Installation ==
 
-1. First, download and install RSVPMaker
+1. First, download and install [RSVPMaker](https://wordpress.org/plugins/rsvpmaker/)
 1. Upload the RSVPMaker for Toastmasters plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
@@ -46,6 +46,10 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 2. Data collected through the plugin feeds performance reports, such as this one showing progress toward Competent Communicator.
 
 == Changelog ==
+
+= 1.3.1 =
+
+Bug fix: member stats editing
 
 = 1.2/1.3 =
 
