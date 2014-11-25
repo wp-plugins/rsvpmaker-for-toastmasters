@@ -4,9 +4,8 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.3.1
+Version: 1.3.2
 Author URI: http://www.carrcommunications.com
-
 */
 
 include "tm-reports.php";
@@ -3935,8 +3934,8 @@ add_action ('rsvpmaker_datebox_message','toastmasters_datebox_message');
 
 function wp4toast_template() {
 
-global $wpbd;
-$sql = "SELECT ID FROM `$wpdb->posts` WHERE `post_name` LIKE 'toastmasters-meet%' AND post_status='publish' ORDER BY `ID` DESC ";
+global $wpdb;
+$sql = "SELECT ID FROM `$wpdb->posts` WHERE `post_content` LIKE '%[toastmasters%' AND post_status='publish' ORDER BY `ID` DESC ";
 if($wpdb->get_var($sql))
 	return;
 
@@ -3992,6 +3991,66 @@ Introduces the <strong>Toastmaster of the Day</strong>
 	  'post_content'   => $default,
 	  'post_name'      => 'toastmasters-meeting',
 	  'post_title'     => 'Toastmasters Meeting',
+	  'post_status'    => 'publish',
+	  'post_type'      => 'rsvpmaker',
+	  'post_author'    => $user_id,
+	  'ping_status'    => 'closed'
+	);
+	$templateID = wp_insert_post($post);
+
+	if($parent_id = wp_is_post_revision($templateID))
+		{
+		$templateID = $parent_id;
+		}
+	$template["hour"]= 19;
+	$template["minutes"] = '00';
+	$template["week"] = 6;
+	$template["dayofweek"] = 1;
+
+	update_post_meta($templateID, '_sked', $template);
+
+$default = '[agenda_note label="" sep="" comment="block of text continues until /agenda_note"]
+
+<strong>Club Mission:</strong> We provide a supportive and positive learning experience in which members are empowered to develop communication and leadership skills, resulting in greater self-confidence and personal growth.
+
+<strong>Sgt. at Arms</strong> <em>calls the meeting to the order</em>
+
+<strong>President </strong>or<strong> Presiding Officer</strong> <em>leads the self-introductions</em>
+
+Introduces the <strong>Contest Master</strong>
+
+[/agenda_note]
+
+[toastmaster role="Contest Master" count="1" agenda_note="Introduces supporting roles. Leads the meeting." ]
+
+[toastmaster role="Chief Judge" count="1" agenda_note="" ]
+
+[toastmaster role="Timer" count="1" agenda_note="" ]
+
+[toastmaster role="Vote Counter" count="1" agenda_note="" ]
+
+[toastmaster role="Videographer" count="1" agenda_note="" ]
+
+[toastmaster role="International Speech Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Table Topics Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Humorous Speech Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Evaluation Contest Contestant" count="6" agenda_note="" ]
+
+[agenda_note label="" sep="" comment="block of text continues until /agenda_note"]
+
+<strong>Club Dues:</strong> Please pay your club dues of $5 per week. See Treasurer Bruce Goldfarb if you need to get caught up. Prepayment discount: $104 for 26 weeks
+
+[/agenda_note]
+
+[toastmaster officers="1" label="Officers" ]';
+
+	$post = array(
+	  'post_content'   => $default,
+	  'post_name'      => 'contest',
+	  'post_title'     => 'Contest',
 	  'post_status'    => 'publish',
 	  'post_type'      => 'rsvpmaker',
 	  'post_author'    => $user_id,
@@ -4081,5 +4140,25 @@ function submit_sorted_agenda()
 </script>
 <?php
 }
+
+function toast_activate() {
+global $wpdb;
+
+$wpdb->show_errors();
+
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."toastmasters_history` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `datetime` date NOT NULL,
+  `role` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+dbDelta($sql);
+}
+
+register_activation_hook( __FILE__, 'toast_activate' );
 
 ?>
