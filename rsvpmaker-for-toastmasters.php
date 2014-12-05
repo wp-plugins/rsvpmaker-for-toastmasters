@@ -400,7 +400,7 @@ return ob_get_clean();
 
 function toastmaster_short($atts=array(),$content="") {
 
-	if(isset($_GET["page"]) && $_GET["page"] == 'agenda_setup')
+	if(isset($_GET["page"]) && ($_GET["page"] == 'agenda_setup'))
 		return agenda_setup_shortcode($atts, $content);
 	elseif(!empty($content))
 		return agenda_note($atts, $content);
@@ -570,9 +570,60 @@ function toastmaster_short($atts=array(),$content="") {
 
 add_shortcode( 'toastmaster', 'toastmaster_short' );
 
+function agenda_layout($atts) {
+	if(isset($_GET["print_agenda"]))
+	{
+	global $agenda_layout_start;
+	global $agenda_columns;
+	$agenda_columns++;
+	if($agenda_columns == 2)
+		$output .= '</td>';
+	if($agenda_columns == 3)
+		{
+		$output .= '</td></tr></table>';
+		}
+	if($agenda_columns > 2)
+		return $output;
+	if(!$agenda_layout_start)
+		{
+			$agenda_layout_start = true;
+			$output .= '<table width="100%"><tr>';
+		}
+	if(isset($atts["sidebar"]) && $atts["sidebar"])
+		$output .= '<td width="33%">';	
+	else
+		$output .= '<td width="*" style="padding-left: 10px; padding-right: 10px; ">';	
+	return $output;
+	}
+	elseif(isset($_GET["page"]))
+	{
+	if($_GET["page"] == 'toastmasters_reconcile')
+		return;
+	global $agenda_setup_item;
+	if(!isset($agenda_setup_item) )
+		$agenda_setup_item = 0;
+	else
+		$agenda_setup_item++;
+	$index = 'item_'.$agenda_setup_item;
+
+	global $agenda_columns;
+	$agenda_columns++;
+	if($agenda_columns < 3)
+		{
+		$c = (isset($atts["sidebar"])) ? ' checked="checked" ' : '';
+		$radio = sprintf('<br /><input type="radio" name="agenda_sidebar" value="%s" %s> Sidebar',$index, $c);			
+		}
+	else
+		$radio = '';
+	return sprintf('<li id="%s"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[%s]" value="1">%s <br /><input type="checkbox" name="remove[%s]" value="1" /> Remove</li>',$index, $index, $radio,$index);
+	}
+}
+
+add_shortcode('agenda_layout','agenda_layout');
+
 function agenda_note($atts, $content) {
 	
-if(isset($_GET["page"]) && $_GET["page"] = 'agenda_setup')
+if(isset($_GET["page"]) && $_GET["page"] == 'agenda_setup')
 	return agenda_note_edit($atts, $content );
 
 if($_GET["word_agenda"])
@@ -4136,10 +4187,10 @@ if($_POST)
 {
 	$post_id = (int) $_POST["post_id"];
 	$permalink = get_permalink($post_id);
-	$agenda_link = rsvpmaker_permalink_query($post_id, 'agenda=1');
+	$agenda_link = rsvpmaker_permalink_query($post_id, 'print_agenda=1');
 
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong> <a href="%s">View Form</a> <a href="%s">View Agenda</a></p>
+		<p><strong>%s updated.</strong> <a href="%s">View Form</a> | <a href="%s">View Agenda</a></p>
 	</div>','Meeting Agenda',$permalink, $agenda_link);
 	if($_POST["sked"] )
 		{
@@ -4157,6 +4208,13 @@ printf('<div id="message" class="updated">
 					$output .= $name .'="'.$value.'" ';
 				$output .= ']'.$_POST["agenda_note"][$item].'[/agenda_note]';
 				//echo $output . '<br />';
+				}
+			elseif($_POST["agenda_layout"][$item])
+				{
+				$output = '[agenda_layout ';
+				if($_POST["agenda_sidebar"] == $item)
+					$output .= ' sidebar="1" ';
+				$output .= ']';
 				}
 			else
 				{
@@ -4198,6 +4256,7 @@ global $agenda_setup_item;
 <style>
 ul#sortable li {
 width: 90%;
+min-height: 100px;
 padding: 10px;
 margin-bottom: 10px;
 border: thick dotted #8CF;
@@ -4222,7 +4281,7 @@ echo do_shortcode($post->post_content);
 <?php submit_button(); ?>
 </form>
 
-<p><button id="add_role">Add Role</button> <button id="add_note">Add Agenda Note</button> <button id="add_officers">Add Officers</button> <button id="add_themewords">Add Theme/Words of the Day</button></p>
+<p><button id="add_role">Add Role</button> <button id="add_note">Add Agenda Note</button> <button id="add_officers">Add Officers</button> <button id="add_themewords">Add Theme/Words of the Day</button> <button id="two_column">Two-Column Agenda</button></p>
 
 <script>
 jQuery(function($){
@@ -4270,6 +4329,20 @@ jQuery(function($){
   $('#sortable').append('<li id="' + item_index + '"><div class="themewords"><input type="hidden" name="atts[item_15][themewords]" value="1" />Block of text for meeting theme, words of the day, or other notes (can be edited along with role assignments).<br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
 });
 
+	$("#two_column").click(function() {
+	for(i = 0; i < 3; i++)
+	{
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+	if(i == 2)
+  		$('#sortable').append('<li id="' + item_index + '"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[' + item_index + ']" value="1"><br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
+	else
+  		$('#sortable').append('<li id="' + item_index + '"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[' + item_index + ']" value="1"><br /><input type="radio" name="agenda_sidebar" value="' + item_index + '" /> Sidebar<br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');	
+	}
+});
+
 })
 </script>
 <?php
@@ -4282,7 +4355,7 @@ else
 			$sql = "SELECT *, $wpdb->posts.ID as postID
 FROM $wpdb->postmeta
 JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID
-WHERE meta_key='_sked'";
+WHERE meta_key='_sked' AND post_content LIKE '%[toastmaster%'";
 			
 		$results = $wpdb->get_results($sql);
 		if($results)
