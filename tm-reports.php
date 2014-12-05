@@ -1,25 +1,5 @@
 <?php
 
-function toast_activate() {
-global $wpdb;
-
-$wpdb->show_errors();
-
-require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."toastmasters_history` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `datetime` date NOT NULL,
-  `role` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `quantity` int(11) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
-dbDelta($sql);
-}
-
-register_activation_hook( __FILE__, 'toast_activate' );
-
 add_action( 'admin_menu', 'toastmasters_reports_menu' );
 
 function toastmasters_reports_menu() {
@@ -118,6 +98,9 @@ if($_POST["adj"])
 						{
 							$sqldate = ($_POST["date_it"]) ? 'CURDATE() ' : " '0000-00-00' ";
 							$sql = sprintf( "INSERT into %s SET user_id=%d, role='%s', quantity=%d, datetime=%s ",$wpdb->prefix.'toastmasters_history',$user_id, $role, $count, $sqldate );
+							$wpdb->show_errors();
+							echo $sql . " line 122<br />";
+
 						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
 							//echo $sql . "<br />";
 							$wpdb->query($sql);
@@ -1683,9 +1666,8 @@ if($_POST["newstat"])
 						{
 							$adjustment = $count - $oldcount;
 							$sql = sprintf( "INSERT into %s SET user_id=%d, role='%s', quantity=%d, datetime=CURDATE() ",$wpdb->prefix.'toastmasters_history',$user_id, $role, $adjustment );
-						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
-							echo $sql . "<br />";
-							//$wpdb->query($sql);
+					$wpdb->show_errors();
+							$wpdb->query($sql);
 						}
 					}
 
@@ -1700,6 +1682,7 @@ foreach($_POST["editcl"] as $user_id => $cl_updates)
 				if(!empty($role) )
 					{
 					$sql = sprintf( "INSERT into %s SET user_id=%d, role='%s', quantity=1, datetime=CURDATE() ",$wpdb->prefix.'toastmasters_history',$user_id, $role);
+					$wpdb->show_errors();
 					$wpdb->query($sql);
 					}
 			}

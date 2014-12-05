@@ -4,9 +4,8 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.2
+Version: 1.4.1
 Author URI: http://www.carrcommunications.com
-
 */
 
 include "tm-reports.php";
@@ -116,8 +115,8 @@ if($templates)
 foreach($templates as $template) {
 	$permalink = rsvpmaker_permalink_query($template->ID);
 	printf('<p>Edit Template: <a href="%s">%s</a></p>',admin_url('post.php?action=edit&post='.$template->ID), $template->post_title);
-	if(function_exists('wp4t_print_redirect') )
-		printf('<p>Edit Template: (Simplified Editor): <a href="%sshortcode_editor=1">%s</a></p>',$permalink, $template->post_title);
+	$role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$template->ID);
+	printf('<p>Agenda Setup: <a href="%s">%s</a></p>',$role_editor, $template->post_title);
 	
 	printf('<p><a href="%s">Add events</a> based on Template: %s</p>',admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$template->ID), $template->post_title);	
 }		
@@ -310,10 +309,99 @@ $wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
 
 add_action('wp_dashboard_setup', 'awesome_add_dashboard_widgets',1 );
 
+function agenda_note_edit($atts = array(), $content='' ) {
+global $agenda_setup_item;
+$content = trim(strip_tags($content,'<b><i><strong><em><img><div><span>'));
+if(!isset($agenda_setup_item) )
+	$agenda_setup_item = 0;
+else
+	$agenda_setup_item++;
+$index = 'item_'.$agenda_setup_item;
+ob_start();
+echo '<li id="'.$index.'">';
+?>
+<div class="note">
+<textarea name="agenda_note[<?php echo $index; ?>]" cols="80" rows="3" id="agenda_note_<?php echo $index; ?>" placeholder="Agenda Note"/><?php echo $content; /*trim(strip_tags(str_replace("</p>","</p>\n",$content),'<b><strong><em><i>'));*/ ?></textarea> <br />
+Display on: <select name="atts[<?php echo $index; ?>][agenda_display]" ><?php if($atts["agenda_display"]) printf('<option value="%s">%s</option>',$atts["agenda_display"], $atts["agenda_display"]) ?><option value="agenda">agenda</option><option value="web">web</option><option value="both">both</option></select>
+<input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> List Officers <input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $index; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" />
+<input type="hidden" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); else echo $atts["sep"]; ?>" >
+<?php if(isset($atts["style"]) && !empty($atts["style"]) ) { ?>
+<input type="hidden" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" > (CSS style set in <a href="<?php echo admin_url('post.php?action=edit&post='.$post->ID)?>">editor</a>)
+<?php } ?>
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove 
+</div>
+</li>
+<?php
+return ob_get_clean();
+}
+
+function agenda_setup_shortcode($atts = array(), $content='' ) {
+if(!empty($content))
+	return agenda_note_edit($atts, $content );
+global $agenda_setup_item;
+if(!isset($agenda_setup_item) )
+	$agenda_setup_item = 0;
+else
+	$agenda_setup_item++;
+$index = 'item_'.$agenda_setup_item;
+ob_start();
+echo '<li id="'.$index.'">';
+
+if(isset($atts["themewords"]))
+{
+?>
+<div class="themewords">
+<input type="hidden" name="atts[<?php echo $index; ?>][themewords]" value="1" />Block of text for meeting theme, words of the day, or other notes (can be edited along with role assignments).
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove </div>
+<?php
+}
+elseif(isset($atts["officers"]))
+{
+?>
+<div class="officers" >
+<input type="hidden" name="atts[<?php echo $index; ?>][officers]" value="1" />
+<input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $i; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" /> Displays listing of officers on agenda<br />
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove 
+</div>
+<?php
+}
+else
+{
+$count = (isset($atts["count"])) ? $atts["count"] : 1;
+?>
+<div class="rolefield">
+<input type="text" name="atts[<?php echo $index; ?>][role]" size="60" id="field_<?php echo $index; ?>" placeholder="Role" value="<?php echo $atts["role"]; ?>" />
+<select name="atts[<?php echo $index; ?>][count]"><option value="<?php echo $count; ?>"><?php echo $count; ?></option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select> <input type="checkbox" name="atts[<?php echo $index; ?>][indent]" value="1" <?php if(isset($atts["indent"]) && $atts["indent"]) echo 'checked="checked"'; ?> /> Indent<br />
+<input type="text" name="atts[<?php echo $index; ?>][agenda_note]"  size="60" id="rolenotefield_<?php echo $index; ?>" placeholder="Role Note" value="<?php echo htmlentities($atts["agenda_note"]); ?>" /> (note displayed on agenda only)<br /><input type="text" name="atts[<?php echo $index; ?>][time]" size="60" id="rolenotefield_<?php echo $index; ?>" placeholder="Time: 7:15 pm OR 7:15 pm, 7:30 pm, 7:45 pm" value="<?php echo htmlentities($atts["time"]); ?>" /> <br />
+<?php
+if(isset($atts["leader"]) && $atts["leader"])
+{
+?>
+<strong>Leader field</strong> - can be renamed but should not be removed
+<input type="hidden" name="atts[<?php echo $index; ?>][leader]" value="1" />
+<?php
+}
+else
+{
+?>
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove
+<?php
+}
+?>
+<br />
+</div>
+<?php
+}
+
+echo '</li>';
+
+return ob_get_clean();
+}
+
 function toastmaster_short($atts=array(),$content="") {
 
-	if(isset($_REQUEST["shortcode_editor"]))
-		return toastmasters_short_edit($atts, $content);
+	if(isset($_GET["page"]) && ($_GET["page"] == 'agenda_setup'))
+		return agenda_setup_shortcode($atts, $content);
 	elseif(!empty($content))
 		return agenda_note($atts, $content);
 	elseif(isset($atts["themewords"]))
@@ -365,6 +453,8 @@ function toastmaster_short($atts=array(),$content="") {
 
 	if($_GET["print_agenda"] || $_GET["email_agenda"])
 		{
+		if($atts["time"])
+			$time = explode(',',$atts["time"]);
 		for($i = 1; $i <= $count; $i++)
 			{
 			$field = '_' . $field_base . '_' . $i;
@@ -373,7 +463,10 @@ function toastmaster_short($atts=array(),$content="") {
 				$output  .= "\n".'<div class="role-agenda-item" style="margin-left: 15px;">';
 			else
 				$output  .= "\n".'<div class="role-agenda-item">';
-			$output .= '<p><strong>'.$atts["role"].': </strong>';
+			$output .= '<p>';
+			if(is_array($time) && $time[$i - 1])
+				$output .= '<em>'.$time[$i - 1].'</em> ';
+			$output .= '<strong>'.$atts["role"].': </strong>';
 			if($assigned == '-1')
 				{
 				$output .= 'Not Available';
@@ -403,7 +496,8 @@ function toastmaster_short($atts=array(),$content="") {
 		
 		$field = '_' . $field_base . '_' . $i;
 		$assigned = (int) get_post_meta($post->ID, $field, true);
-		$output .= '<div class="role-block"><div class="role-title" style="font-weight: bold;">'.$atts["role"].': </div><div class="role-data"> ';
+		$output .= '<div class="role-block"><div class="role-title" style="font-weight: bold;">';
+		$output .= $atts["role"].': </div><div class="role-data"> ';
 		if(is_user_member_of_blog() && !($_GET["edit_roles"] || $_GET["recommend_roles"] || ($_GET["page"] == 'toastmasters_reconcile' ) )  ) 
 			$output .= sprintf(' <form id="%s_form" method="post" class="toastrole" action="%s" style="display: inline;"><input type="hidden" name="role" id="role" value="%s"><input type="hidden" name="post_id" id="post_id" value="%d">',$field,$permalink, $field, $post->ID);
 		
@@ -476,9 +570,60 @@ function toastmaster_short($atts=array(),$content="") {
 
 add_shortcode( 'toastmaster', 'toastmaster_short' );
 
+function agenda_layout($atts) {
+	if(isset($_GET["print_agenda"]))
+	{
+	global $agenda_layout_start;
+	global $agenda_columns;
+	$agenda_columns++;
+	if($agenda_columns == 2)
+		$output .= '</td>';
+	if($agenda_columns == 3)
+		{
+		$output .= '</td></tr></table>';
+		}
+	if($agenda_columns > 2)
+		return $output;
+	if(!$agenda_layout_start)
+		{
+			$agenda_layout_start = true;
+			$output .= '<table width="100%"><tr>';
+		}
+	if(isset($atts["sidebar"]) && $atts["sidebar"])
+		$output .= '<td width="33%">';	
+	else
+		$output .= '<td width="*" style="padding-left: 10px; padding-right: 10px; ">';	
+	return $output;
+	}
+	elseif(isset($_GET["page"]))
+	{
+	if($_GET["page"] == 'toastmasters_reconcile')
+		return;
+	global $agenda_setup_item;
+	if(!isset($agenda_setup_item) )
+		$agenda_setup_item = 0;
+	else
+		$agenda_setup_item++;
+	$index = 'item_'.$agenda_setup_item;
+
+	global $agenda_columns;
+	$agenda_columns++;
+	if($agenda_columns < 3)
+		{
+		$c = (isset($atts["sidebar"])) ? ' checked="checked" ' : '';
+		$radio = sprintf('<br /><input type="radio" name="agenda_sidebar" value="%s" %s> Sidebar',$index, $c);			
+		}
+	else
+		$radio = '';
+	return sprintf('<li id="%s"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[%s]" value="1">%s <br /><input type="checkbox" name="remove[%s]" value="1" /> Remove</li>',$index, $index, $radio,$index);
+	}
+}
+
+add_shortcode('agenda_layout','agenda_layout');
+
 function agenda_note($atts, $content) {
 	
-if(isset($_REQUEST["shortcode_editor"]))
+if(isset($_GET["page"]) && $_GET["page"] == 'agenda_setup')
 	return agenda_note_edit($atts, $content );
 
 if($_GET["word_agenda"])
@@ -1235,71 +1380,8 @@ $blogusers = get_users('blog_id=1&orderby=nicename');
 	}
 }
 
-function role_setup () {
-echo "under construction";
-return;
-$dayarray = Array(__("Sunday",'rsvpmaker'),__("Monday",'rsvpmaker'),__("Tuesday",'rsvpmaker'),__("Wednesday",'rsvpmaker'),__("Thursday",'rsvpmaker'),__("Friday",'rsvpmaker'),__("Saturday",'rsvpmaker'));
-$weekarray = Array(__("Varies",'rsvpmaker'),__("First",'rsvpmaker'),__("Second",'rsvpmaker'),__("Third",'rsvpmaker'),__("Fourth",'rsvpmaker'),__("Last",'rsvpmaker'),__("Every",'rsvpmaker'));
-
-global $post;
-global $wp_query;
-global $wpdb;
-global $current_user;
-
-$backup = $wp_query;
-add_filter('posts_fields', 'rsvpmaker_template_fields' );
-add_filter('posts_join', 'rsvpmaker_template_join' );
-add_filter('posts_where', 'rsvpmaker_template_where' );
-add_filter('posts_orderby', 'rsvpmaker_template_orderby' );
-
-$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-
-$querystring = "post_type=rsvpmaker&post_status=publish&paged=$paged&posts_per_page=50";
-
-$wpdb->show_errors();
-
-$wp_query = new WP_Query($querystring);
-
-// clean up so this doesn't interfere with other operations
-remove_filter('posts_join', 'rsvpmaker_template_fields' );
-remove_filter('posts_join', 'rsvpmaker_template_join' );
-remove_filter('posts_where', 'rsvpmaker_template_where' );
-remove_filter('posts_orderby', 'rsvpmaker_template_orderby' );
-
-if ( !$_POST && have_posts() ) {
-printf('<table  class="wp-list-table widefat fixed posts" cellspacing="0"><thead><tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>',__('Title','rsvpmaker'),__('Role Editor','rsvpmaker'),__('Schedule','rsvpmaker'),__('Projected Dates','rsvpmaker'),__('Event','rsvpmaker'));
-while ( have_posts() ) : the_post();
-
-		$template = unserialize($post->sked);
-		if((int)$template["week"] == 0)
-			$s = __('Schedule Varies','rsvpmaker');
-		else
-			$s = $weekarray[(int) $template["week"]].' '.$dayarray[(int) $template["dayofweek"]];	
-		
-		$template_recur_url = admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$post->ID);
-		$role_editor = rsvpmaker_permalink_query($post->ID, 'shortcode_editor=1');
-		$eds = get_additional_editors($post->ID); 
-		if(($post->post_author == $current_user->ID) || in_array($current_user->ID,$eds) || current_user_can('edit_rsvpmaker',$post->ID) )
-			{
-			$template_edit_url = admin_url('post.php?action=edit&post='.$post->ID);
-			$title = sprintf('<a href="%s">%s</a>',$template_edit_url,$post->post_title);
-			}
-		else
-			{
-			$title = $post->post_title;
-			}
-		printf('<tr><td>%s</td><td><a href="%s">Role Editor</a></td><td>%s</td><td><a href="%s">'.__('Projected Dates','rsvpmaker').'</a></td><td>%s</td></tr>'."\n",$title,$role_editor,$s,$template_recur_url,next_or_recent($post->ID));
-endwhile;
-echo "</tbody></table>";
-}
-
-$action = admin_url('edit.php?post_type=rsvpmaker&page=role_setup');
-include(WP_PLUGIN_DIR . '/rsvpmaker-for-toastmasters/shortcode_editor.php');
-
-}
-
 function awesome_menu() {
-//add_submenu_page('edit.php?post_type=rsvpmaker', "Speech Progress", "Speech Progress", 'edit_posts', "speech_progress", "speech_progress");
+add_submenu_page('edit.php?post_type=rsvpmaker', "Agenda Setup", "Agenda Setup", 'edit_rsvpmakers', "agenda_setup", "agenda_setup");
 //add_submenu_page('edit.php?post_type=rsvpmaker', "New Toastmasters Template", "New Toastmasters Template", 'edit_posts', 'role_setup', 'role_setup');
 //add_submenu_page('profile.php', "Default Password", "Default Password", 'manage_options', "detect_default_password", "detect_default_password" );
 add_submenu_page('profile.php', "Add Member", "Add Member", 'edit_others_posts', "add_awesome_member", "add_awesome_member" );
@@ -1511,9 +1593,11 @@ elseif( !is_user_member_of_blog() )
 	$link .= sprintf('<div id="agendalogin"><a href="%s">Login to Sign Up for Roles</a></div>',site_url().'/wp-login.php?redirect_to='.urlencode($permalink));
 else
 	{
-
-	if(function_exists('wp4t_redirect') && current_user_can('edit_others_rsvpmakers') )
-		$role_editor = ' <a target="_blank" href="'.$permalink.'shortcode_editor=1">Agenda Setup</a>';
+	if(current_user_can('edit_rsvpmakers'))
+		{
+		$role_editor_url = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post->ID);
+		$role_editor = ' <a href="'.$role_editor_url.'">Agenda Setup</a>';
+		}
 	else
 		$role_editor = '';
 	$link .= sprintf('<div id="agenda_print"><a href="%sedit_roles=1">Edit Signups</a> <a href="%srecommend_roles=1">Recommend</a> <a  target="_blank" href="%semail_agenda=1">Email</a> <a  target="_blank" href="%s">Signup Sheet</a> <a target="_blank" href="%sprint_agenda=1">Agenda</a> <a target="_blank" href="%sprint_agenda=1&word_agenda=1">Export to Word</a>%s</div>',$permalink ,$permalink, $permalink, site_url('?signup2=1'),$permalink,$permalink, $role_editor);
@@ -3441,8 +3525,11 @@ add_action('admin_init','archive_users_init');
 
 function toast_admin_notice () {
 global $post;
-if( function_exists('wp4t_print_redirect') && ( $_GET["post"] && ($post->post_type == 'rsvpmaker') ) && strpos($post->post_content,'[toastmaster') )
-	echo '<div style="color: #00F; background-color: #CCF; padding: 5px; margin:5px; border: thin solid: #00F;">You can edit the Toastmaster roles setup and agenda text in a <a href="'.rsvpmaker_permalink_query($post->ID,'shortcode_editor=1').'">simplified editor</a>, using drag-and-drop widgets. Or <a href"'.site_url('/rsvpmaker/?shortcode_editor=1&new_template=1').'">create a new agenda template</a>.</div>';
+$role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post->ID);
+
+if( ($_GET["action"] == 'edit') && strpos($post->post_content,'role=') )//isset($post->post_content) && 
+	echo '<div style="padding: 5px; margin:5px; border: thick dotted #8CF;
+">You can edit the Toastmaster roles setup and agenda text in a <a href="'.$role_editor.'">simplified editor</a>, using drag-and-drop widgets.</div>';
 }
 
 add_action('admin_notices', 'toast_admin_notice');
@@ -3458,13 +3545,12 @@ if(!function_exists('add_implicit_links') ) { function add_implicit_links($text)
 
 // shortcode editor functions 
 
-function shortcode_eventdates() {
+function shortcode_eventdates($post_id) {
 
-global $post;
 global $wpdb;
 global $rsvp_options;
 global $custom_fields;
-$custom_fields = get_post_custom($post->ID);
+$custom_fields = get_post_custom($post_id);
 
 if(isset($custom_fields["_sked"][0]))
 	{
@@ -3557,8 +3643,11 @@ if(isset($custom_fields["_meet_recur"][0]))
 //printf('<p><a href="%s">%s</a> | <a href="%s">%s</a></p>',admin_url('post.php?action=edit&post='.$t),__('Edit Template','rsvpmaker'),admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$t),__('See Related Events','rsvpmaker'));
 	}
 	
-if(isset($post->ID) )
-	$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."rsvp_dates WHERE postID=".$post->ID.' ORDER BY datetime',ARRAY_A);
+if(isset($post_id) )
+	{
+	$sql = "SELECT * FROM ".$wpdb->prefix."rsvp_dates WHERE postID=".$post_id.' ORDER BY datetime';
+	$results = $wpdb->get_results($sql,ARRAY_A);
+	}
 else
 	$results = false;
 
@@ -3935,8 +4024,8 @@ add_action ('rsvpmaker_datebox_message','toastmasters_datebox_message');
 
 function wp4toast_template() {
 
-global $wpbd;
-$sql = "SELECT ID FROM `$wpdb->posts` WHERE `post_name` LIKE 'toastmasters-meet%' AND post_status='publish' ORDER BY `ID` DESC ";
+global $wpdb;
+$sql = "SELECT ID FROM `$wpdb->posts` WHERE `post_content` LIKE '%[toastmasters%' AND post_status='publish' ORDER BY `ID` DESC ";
 if($wpdb->get_var($sql))
 	return;
 
@@ -4010,8 +4099,372 @@ Introduces the <strong>Toastmaster of the Day</strong>
 
 	update_post_meta($templateID, '_sked', $template);
 
+$default = '[agenda_note label="" sep="" comment="block of text continues until /agenda_note"]
+
+<strong>Club Mission:</strong> We provide a supportive and positive learning experience in which members are empowered to develop communication and leadership skills, resulting in greater self-confidence and personal growth.
+
+<strong>Sgt. at Arms</strong> <em>calls the meeting to the order</em>
+
+<strong>President </strong>or<strong> Presiding Officer</strong> <em>leads the self-introductions</em>
+
+Introduces the <strong>Contest Master</strong>
+
+[/agenda_note]
+
+[toastmaster role="Contest Master" count="1" agenda_note="Introduces supporting roles. Leads the meeting." ]
+
+[toastmaster role="Chief Judge" count="1" agenda_note="" ]
+
+[toastmaster role="Timer" count="1" agenda_note="" ]
+
+[toastmaster role="Vote Counter" count="1" agenda_note="" ]
+
+[toastmaster role="Videographer" count="1" agenda_note="" ]
+
+[toastmaster role="International Speech Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Table Topics Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Humorous Speech Contestant" count="6" agenda_note="" ]
+
+[toastmaster role="Evaluation Contest Contestant" count="6" agenda_note="" ]
+
+[agenda_note label="" sep="" comment="block of text continues until /agenda_note"]
+
+<strong>Club Dues:</strong> Please pay your club dues of $5 per week. See Treasurer Bruce Goldfarb if you need to get caught up. Prepayment discount: $104 for 26 weeks
+
+[/agenda_note]
+
+[toastmaster officers="1" label="Officers" ]';
+
+	$post = array(
+	  'post_content'   => $default,
+	  'post_name'      => 'contest',
+	  'post_title'     => 'Contest',
+	  'post_status'    => 'publish',
+	  'post_type'      => 'rsvpmaker',
+	  'post_author'    => $user_id,
+	  'ping_status'    => 'closed'
+	);
+	$templateID = wp_insert_post($post);
+
+	if($parent_id = wp_is_post_revision($templateID))
+		{
+		$templateID = $parent_id;
+		}
+	$template["hour"]= 19;
+	$template["minutes"] = '00';
+	$template["week"] = 6;
+	$template["dayofweek"] = 1;
+
+	update_post_meta($templateID, '_sked', $template);
+
 }
 
 register_activation_hook( __FILE__, 'wp4toast_template' );
+
+if($_GET["page"] == 'agenda_setup')
+	add_action('admin_head', 'agenda_setup_js');
+
+function agenda_setup_js () {
+	wp_enqueue_script( 'jquery-ui-sortable' );
+}
+
+add_action( 'wp_ajax_rsvptoast_save', 'rsvptoast_save_callback' );
+
+function rsvptoast_save_callback() {
+	global $wpdb; // this is how you get access to the database
+
+	print_r($_POST);
+
+	die(); // this is required to terminate immediately and return a proper response
+}
+
+function agenda_setup () {
+global $wpdb;
+
+if($_POST)
+{
+	$post_id = (int) $_POST["post_id"];
+	$permalink = get_permalink($post_id);
+	$agenda_link = rsvpmaker_permalink_query($post_id, 'print_agenda=1');
+
+printf('<div id="message" class="updated">
+		<p><strong>%s updated.</strong> <a href="%s">View Form</a> | <a href="%s">View Agenda</a></p>
+	</div>','Meeting Agenda',$permalink, $agenda_link);
+	if($_POST["sked"] )
+		{
+				echo rsvp_template_update_checkboxes($post_id);
+		}
+
+	$item_array = explode(",",$_POST["order"]);
+	foreach($item_array as $item)
+		{
+			if($_POST["agenda_note"][$item])
+				{
+				$output = '[agenda_note ';
+				$atts = $_POST["atts"][$item];
+				foreach($atts as $name => $value)
+					$output .= $name .'="'.$value.'" ';
+				$output .= ']'.$_POST["agenda_note"][$item].'[/agenda_note]';
+				//echo $output . '<br />';
+				}
+			elseif($_POST["agenda_layout"][$item])
+				{
+				$output = '[agenda_layout ';
+				if($_POST["agenda_sidebar"] == $item)
+					$output .= ' sidebar="1" ';
+				$output .= ']';
+				}
+			else
+				{
+				$output = '[toastmaster ';
+				$atts = $_POST["atts"][$item];
+				foreach($atts as $name => $value)
+					$output .= $name .'="'.$value.'" ';
+				$output .= ']';
+				}
+
+			if($_POST["remove"][$item])
+				echo '<p style="color: red;">Remove: '.$output.'</p>';
+			else
+				{
+				echo "<p>$output</p>";
+				$post_content .= $output ."\n\n";
+				}
+		}
+	
+	$my_post = array(
+      'ID'           => $post_id,
+      'post_title' => $_POST["post_title"],
+      'post_content' => $post_content
+  );
+
+//print_r($my_post);
+// Update the post into the database
+   wp_update_post( $my_post );
+
+}
+
+if($_GET["post_id"])
+{
+$post_id = (int) $_GET["post_id"];
+global $post;
+$post = get_post($post_id);
+global $agenda_setup_item;
+?>
+<style>
+ul#sortable li {
+width: 90%;
+min-height: 100px;
+padding: 10px;
+margin-bottom: 10px;
+border: thick dotted #8CF;
+cursor:move;
+}
+h1, h1 input[type="text"] {
+font-size: 30px;
+}
+</style>
+<form id="agenda_form" method="post" action = "<?php echo admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup'); ?>">
+<input type="hidden" name="post_id" value="<?php echo $post_id; ?>" />
+<h1>Title: <input type="text" name="post_title" value="<?php echo $post->post_title; ?>" size="40" /></h1>
+<p><em>You can add and drop roles, change the number of openings for speakers and other roles, and specify other formatting parameters. To reorder items for the agenda and signup form, position your mouse over any of the blocks outlined in blue to drag-and-drop them into another position.</em></p>
+<?php shortcode_eventdates($post->ID); ?>
+<ul id="sortable">
+<?php
+echo do_shortcode($post->post_content);
+//the_content();
+?>
+</ul>
+<input type="hidden" id="order" name="order" value="<?php for($i = 0; $i <= $agenda_setup_item; $i++) { if($i > 0) echo ","; echo "item_".$i; } ?>">
+<?php submit_button(); ?>
+</form>
+
+<p><button id="add_role">Add Role</button> <button id="add_note">Add Agenda Note</button> <button id="add_officers">Add Officers</button> <button id="add_themewords">Add Theme/Words of the Day</button> <button id="two_column">Two-Column Agenda</button></p>
+
+<script>
+jQuery(function($){
+	
+	window.agenda_setup_item = <?php echo $agenda_setup_item;?>;
+
+        $( "#sortable" ).sortable({
+            placeholder: "ui-state-highlight",
+            cursor: 'crosshair',
+            update: function(event, ui) {
+                var order = $("#sortable").sortable("toArray");
+                $('#order').val(order.join(","));
+            }
+    });
+
+	$("#add_role").click(function() {
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+  $('#sortable').append('<li id="' + item_index + '"><div class="rolefield"><input type="text" name="atts[' + item_index + '][role]" size="60" id="field_' + item_index + '" placeholder="Role" value="" /><select name="atts[' + item_index + '][count]"><option value="1">1</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select> <input type="checkbox" name="atts[' + item_index + '][indent]" value="1"  /> Indent<br /><input type="text" name="atts[' + item_index + '][agenda_note]"  size="60" id="rolenotefield_' + item_index + '" placeholder="Role Note" value="" /> (note displayed on agenda only)<br /><input type="text" name="atts[' + item_index + '][time]" size="60" id="rolenotefield_' + item_index + '" placeholder="Time: 7:15 pm OR 7:15 pm, 7:30 pm, 7:45 pm" value="" /> <br /><br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove<br /></div></li>');
+});
+
+	$("#add_note").click(function() {
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+  $('#sortable').append('<li id="' + item_index + '"><div class="note"><textarea name="agenda_note[' + item_index + ']" cols="80" rows="3" id="agenda_note_' + item_index + '" placeholder="Agenda Note"/></textarea> <br />Display on: <select name="atts[' + item_index + '][agenda_display]" ><option value="agenda">agenda</option><option value="web">web</option><option value="both">both</option></select><input type="checkbox" name="atts[' + item_index + '][officers]" value="1"  /> List Officers <input type="text" name="atts[' + item_index + '][label]" size="60" id="field_item_' + item_index + '" placeholder="Label for Officers (default: Officers)" value="" /><input type="hidden" name="atts[' + item_index + '][sep]" value="" ><br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
+});
+
+	$("#add_officers").click(function() {
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+  $('#sortable').append('<li id="' + item_index + '"><div class="officers" ><input type="hidden" name="atts[' + item_index + '][officers]" value="1" /><input type="text" name="atts[' + item_index + '][label]" size="60" id="field_' + item_index + '" placeholder="Label for Officers (default: Officers)" value="Officers" /> Displays listing of officers on agenda<br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
+});
+
+	$("#add_themewords").click(function() {
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+  $('#sortable').append('<li id="' + item_index + '"><div class="themewords"><input type="hidden" name="atts[item_15][themewords]" value="1" />Block of text for meeting theme, words of the day, or other notes (can be edited along with role assignments).<br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
+});
+
+	$("#two_column").click(function() {
+	for(i = 0; i < 3; i++)
+	{
+	agenda_setup_item++;
+	var item_index = 'item_' + agenda_setup_item;
+	var neworder = $('#order').val() + ',' + item_index; 
+	$('#order').val( neworder );
+	if(i == 2)
+  		$('#sortable').append('<li id="' + item_index + '"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[' + item_index + ']" value="1"><br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');
+	else
+  		$('#sortable').append('<li id="' + item_index + '"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[' + item_index + ']" value="1"><br /><input type="radio" name="agenda_sidebar" value="' + item_index + '" /> Sidebar<br /><input type="checkbox" name="remove[' + item_index + ']" value="1" /> Remove </div></li>');	
+	}
+});
+
+})
+</script>
+<?php
+}
+else
+{
+		$dayarray = Array(__("Sunday",'rsvpmaker'),__("Monday",'rsvpmaker'),__("Tuesday",'rsvpmaker'),__("Wednesday",'rsvpmaker'),__("Thursday",'rsvpmaker'),__("Friday",'rsvpmaker'),__("Saturday",'rsvpmaker'));
+		$weekarray = Array(__("Varies",'rsvpmaker'),__("First",'rsvpmaker'),__("Second",'rsvpmaker'),__("Third",'rsvpmaker'),__("Fourth",'rsvpmaker'),__("Last",'rsvpmaker'),__("Every",'rsvpmaker'));
+	
+			$sql = "SELECT *, $wpdb->posts.ID as postID
+FROM $wpdb->postmeta
+JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID
+WHERE meta_key='_sked' AND post_content LIKE '%[toastmaster%'";
+			
+		$results = $wpdb->get_results($sql);
+		if($results)
+		foreach ($results as $r)
+			{
+			$sked = unserialize($r->meta_value);
+			$day = $dayarray[$sked["dayofweek"]];
+			if($sked["week"])
+				$day = $weekarray[$sked["week"]] ." ".$day;
+			$template_options .= sprintf('<option value="%d">%s (%s)</option>',$r->postID,$r->post_title,$day);
+			}
+
+			$sql = "SELECT *, $wpdb->posts.ID as postID, datetime > CURDATE( ) as current
+FROM `".$wpdb->prefix."rsvp_dates`
+JOIN $wpdb->posts ON ".$wpdb->prefix."rsvp_dates.postID = $wpdb->posts.ID
+WHERE datetime >= '".date('Y-m')."-1' AND $wpdb->posts.post_content LIKE '%[toastmaster%' AND $wpdb->posts.post_status = 'publish'
+ORDER BY datetime LIMIT 0,100"; 
+		$results = $wpdb->get_results($sql);
+		if($results)
+		foreach ($results as $r)
+			{
+			$event_options .= sprintf('<option value="%d">%s %s</option>',$r->postID,$r->post_title,$r->datetime);
+			}
+			
+		$action = admin_url('edit.php');
+		
+		printf('<form method="get" action="%s"><p>Get Agenda For <select name="post_id"><optgroup label="Templates">%s</optgroup><optgroup label="Events">%s</optgroup></select>
+<input type="hidden" name="post_type" value="rsvpmaker" /><input type="hidden" name="page" value="agenda_setup" />		
+		</p>',$action, $template_options, $event_options);
+		submit_button('Get Agenda');
+		echo '</form>';
+
+		printf('<form method="put" action="%s">',$action);
+		submit_button('Make New Agenda Template');
+		echo '</form>';
+
+}
+
+}
+
+function new_agenda_template() {
+global $current_user;
+if($_REQUEST["submit"] != 'Make New Agenda Template')
+	return;
+$default = '[toastmaster role="Speaker" count="1" ]';
+
+	$post = array(
+	  'post_content'   => $default,
+	  'post_title'     => 'Title Goes Here',
+	  'post_status'    => 'publish',
+	  'post_type'      => 'rsvpmaker',
+	  'post_author'    => $current_user->ID,
+	  'ping_status'    => 'closed'
+	);
+	$templateID = wp_insert_post($post);
+
+	if($parent_id = wp_is_post_revision($templateID))
+		{
+		$templateID = $parent_id;
+		}
+	$template["hour"]= 19;
+	$template["minutes"] = '00';
+	$template["week"] = 6;
+	$template["dayofweek"] = 1;
+
+	update_post_meta($templateID, '_sked', $template);
+	header('Location: '.admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$templateID));
+	exit();
+}
+
+add_action('admin_init','new_agenda_template');
+
+function toast_activate() {
+global $wpdb;
+
+$wpdb->show_errors();
+
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."toastmasters_history` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `datetime` date NOT NULL,
+  `role` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+dbDelta($sql);
+}
+
+register_activation_hook( __FILE__, 'toast_activate' );
+
+function toolbar_link_to_agenda( $wp_admin_bar ) {
+if(!current_user_can('edit_others_rsvpmakers') )
+	return;
+global $post;
+if(!strpos($post->post_content,'toastmaster') )
+	return;
+	$role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post->ID);
+	$args = array(
+		'id'    => 'agenda_setup',
+		'title' => 'Agenda Setup',
+		'href'  => $role_editor,
+		'meta'  => array( 'class' => 'agenda-setup-page')
+	);
+	$wp_admin_bar->add_node( $args );
+}
+
+if(strpos($_SERVER['REQUEST_URI'],'rsvpmaker=') || strpos($_SERVER['REQUEST_URI'],'rsvpmaker/'))
+	add_action( 'admin_bar_menu', 'toolbar_link_to_agenda', 999 );
 
 ?>
