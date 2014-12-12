@@ -4,7 +4,7 @@ Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,11 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 2. Data collected through the plugin feeds performance reports, such as this one showing progress toward Competent Communicator.
 
 == Changelog ==
+
+= 1.4.2 =
+
+* Added support for members-only posts. Posts tagged to the Members Only category will only be displayed to logged in members. (Display name of category can vary, but slug must be 'members-only')
+* Bug fixes and a removal of a hard-coded mention of a carrcommunications.com email address.
 
 = 1.4 =
 

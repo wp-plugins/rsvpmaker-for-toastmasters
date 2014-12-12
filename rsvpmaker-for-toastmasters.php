@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.1
+Version: 1.4.2
 Author URI: http://www.carrcommunications.com
 */
 
@@ -114,11 +114,12 @@ elseif($count < 10)
 if($templates)
 foreach($templates as $template) {
 	$permalink = rsvpmaker_permalink_query($template->ID);
-	printf('<p>Edit Template: <a href="%s">%s</a></p>',admin_url('post.php?action=edit&post='.$template->ID), $template->post_title);
-	$role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$template->ID);
+
+	printf('<p>Edit Template: <a href="%s">%s</a></p>',edit_template_url($template->ID), $template->post_title);
+	$role_editor = agenda_setup_url($template->ID);
 	printf('<p>Agenda Setup: <a href="%s">%s</a></p>',$role_editor, $template->post_title);
 	
-	printf('<p><a href="%s">Add events</a> based on Template: %s</p>',admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$template->ID), $template->post_title);	
+	printf('<p><a href="%s">Add events</a> based on Template: %s</p>',add_from_template_url($template->ID), $template->post_title);	
 }		
 
 if(isset($wp4toastmasters_mailman["mpass"]))
@@ -323,11 +324,9 @@ echo '<li id="'.$index.'">';
 <div class="note">
 <textarea name="agenda_note[<?php echo $index; ?>]" cols="80" rows="3" id="agenda_note_<?php echo $index; ?>" placeholder="Agenda Note"/><?php echo $content; /*trim(strip_tags(str_replace("</p>","</p>\n",$content),'<b><strong><em><i>'));*/ ?></textarea> <br />
 Display on: <select name="atts[<?php echo $index; ?>][agenda_display]" ><?php if($atts["agenda_display"]) printf('<option value="%s">%s</option>',$atts["agenda_display"], $atts["agenda_display"]) ?><option value="agenda">agenda</option><option value="web">web</option><option value="both">both</option></select>
-<input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> List Officers <input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $index; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" />
-<input type="hidden" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); else echo $atts["sep"]; ?>" >
-<?php if(isset($atts["style"]) && !empty($atts["style"]) ) { ?>
-<input type="hidden" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" > (CSS style set in <a href="<?php echo admin_url('post.php?action=edit&post='.$post->ID)?>">editor</a>)
-<?php } ?>
+<input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> List Officers <input type="text" name="atts[<?php echo $index; ?>][label]" size="40" id="field_<?php echo $index; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" /> Separator between officer names: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); elseif(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" >
+<br />CSS (advanced option)
+<input type="text" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" >
 <br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove 
 </div>
 </li>
@@ -360,7 +359,8 @@ elseif(isset($atts["officers"]))
 ?>
 <div class="officers" >
 <input type="hidden" name="atts[<?php echo $index; ?>][officers]" value="1" />
-<input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $i; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" /> Displays listing of officers on agenda<br />
+<input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $i; ?>" placeholder="Label for Officers (default: Officers)" value="<?php echo $atts["label"]; ?>" /> Displays listing of officers on agenda
+<br />Separator between officer names: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); elseif(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" >
 <br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> Remove 
 </div>
 <?php
@@ -473,8 +473,11 @@ function toastmaster_short($atts=array(),$content="") {
 				}
 			elseif($assigned)
 				{
+					$title = get_post_meta($post->ID, '_title'.$field, true);
+					if(!empty($title))
+						$title = ": ".$title;
 					$member = get_userdata( $assigned );
-					$output .= sprintf('<span class="member-role">%s %s</span>',$member->first_name, $member->last_name);
+					$output .= sprintf('<span class="member-role">%s %s%s</span>',$member->first_name, $member->last_name, $title);
 				}
 			else
 				$open[$atts["role"]]++;
@@ -1009,14 +1012,8 @@ add_action('init','role_post');
 function speaker_details_agenda ($field) {
 	global $post;
 	$manual = get_post_meta($post->ID, '_manual'.$field, true);
-	$title = get_post_meta($post->ID, '_title'.$field, true);
 	$intro = get_post_meta($post->ID, '_intro'.$field, true);
 	$output .= ($manual && !strpos($manual,'Manual /') ) ? '<div><strong>'.$manual."</strong></div>" : "\n";
-	if($_GET["long"])
-		{
-		$output .= ($title) ? "\n".'<div><strong>'.$title."</strong></div>\n" : "\n";	
-		$output .= ($intro) ? wpautop($intro) : "\n";	
-		}
 	if($output)
 		$output = "\n".'<div class="speaker-details">'.$output.'</div>'."\n";
 	return $output;
@@ -1173,7 +1170,6 @@ global $post;
 
 		return $output;
 }
-
 
 function speech_progress () {
 global $wpdb;
@@ -2323,7 +2319,7 @@ Please <a href="%s">edit your member profile</a> to change your password and che
 			$mail["replyto"] = $admin_email;
 			$mail["html"] = "<html>\n<body>\n".wpautop($message)."\n</body></html>";
 			$mail["to"] = $user["user_email"];
-			$mail["cc"] = 'david@carrcommunications.com';			
+			$mail["cc"] = $admin_email;			
 			$mail["from"] = $admin_email;
 			$mail["fromname"] = get_bloginfo('name');
 			awemailer($mail);
@@ -4268,7 +4264,9 @@ font-size: 30px;
 </style>
 <form id="agenda_form" method="post" action = "<?php echo admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup'); ?>">
 <input type="hidden" name="post_id" value="<?php echo $post_id; ?>" />
-<h1>Title: <input type="text" name="post_title" value="<?php echo $post->post_title; ?>" size="40" /></h1>
+<div style="float: right; width: 250px; text-align: center; margin-right: 10px;"><a href="<?php echo edit_template_url($post_id); ?>">Switch to standard WordPress editor<br />(shortcode view)</a></div>
+
+<h1>Title: <input type="text" name="post_title" value="<?php echo $post->post_title; ?>" size="30" /></h1>
 <p><em>You can add and drop roles, change the number of openings for speakers and other roles, and specify other formatting parameters. To reorder items for the agenda and signup form, position your mouse over any of the blocks outlined in blue to drag-and-drop them into another position.</em></p>
 <?php shortcode_eventdates($post->ID); ?>
 <ul id="sortable">
@@ -4466,5 +4464,405 @@ if(!strpos($post->post_content,'toastmaster') )
 
 if(strpos($_SERVER['REQUEST_URI'],'rsvpmaker=') || strpos($_SERVER['REQUEST_URI'],'rsvpmaker/'))
 	add_action( 'admin_bar_menu', 'toolbar_link_to_agenda', 999 );
+
+function edit_template_url($post_id) {
+return admin_url('post.php?action=edit&post='.$post_id);
+}
+
+function add_from_template_url($post_id) {
+return admin_url('edit.php?post_type=rsvpmaker&page=rsvpmaker_template_list&t='.$post_id);
+}
+
+function agenda_setup_url($post_id) {
+return admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post_id);
+}
+
+function member_only_content($content) {
+
+if( !in_category('members-only') ) 
+	return $content;
+
+if(!is_user_member_of_blog() )
+return '<div style="width: 100%; background-color: #ddd;">You must be logged in and a member of this blog to view this content</div>'. sprintf('<div id="member_only_login"><a href="%s">Login to View</a></div>',site_url('/wp-login.php?redirect_to='.urlencode(get_permalink()) ) );
+else
+return $content.'<div style="width: 100%; background-color: #ddd;">Note: This is member-only content (login required)</div>';
+
+}
+
+add_filter('the_content','member_only_content');
+
+// widget for members only posts
+class WP_Widget_Members_Posts extends WP_Widget {
+
+	public function __construct() {
+		$widget_ops = array('classname' => 'widget_members_entries', 'description' => __( "Your site&#8217;s most recent members-only posts.") );
+		parent::__construct('members-posts', __('Members Posts'), $widget_ops);
+		$this->alt_option_name = 'widget_members_entries';
+
+		add_action( 'save_post', array($this, 'flush_widget_cache') );
+		add_action( 'deleted_post', array($this, 'flush_widget_cache') );
+		add_action( 'switch_theme', array($this, 'flush_widget_cache') );
+	}
+
+	public function widget($args, $instance) {
+		$cache = array();
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_members_posts', 'widget' );
+		}
+
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		if ( ! isset( $args['widget_id'] ) ) {
+			$args['widget_id'] = $this->id;
+		}
+
+		if ( isset( $cache[ $args['widget_id'] ] ) ) {
+			echo $cache[ $args['widget_id'] ];
+			return;
+		}
+
+		ob_start();
+
+		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Members Only Posts' );
+
+		/** This filter is documented in wp-includes/default-widgets.php */
+		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+
+		$number = ( ! empty( $instance['number'] ) ) ? absint( $instance['number'] ) : 5;
+		if ( ! $number )
+			$number = 5;
+		$show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
+
+		/**
+		 * Filter the arguments for the members Posts widget.
+		 *
+		 * @since 3.4.0
+		 *
+		 * @see WP_Query::get_posts()
+		 *
+		 * @param array $args An array of arguments used to retrieve the members posts.
+		 */
+		$r = new WP_Query( apply_filters( 'widget_posts_args', array(
+			'posts_per_page'      => $number,
+			'category_name' => 'members-only',
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true
+		) ) );
+
+		if ($r->have_posts()) :
+?>
+		<?php echo $args['before_widget']; ?>
+		<?php if ( $title ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		} ?>
+		<ul>
+		<?php while ( $r->have_posts() ) : $r->the_post(); ?>
+			<li>
+				<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+			<?php if ( $show_date ) : ?>
+				<span class="post-date"><?php echo get_the_date(); ?></span>
+			<?php endif; ?>
+			</li>
+		<?php endwhile; ?>
+		</ul>
+		<?php echo $args['after_widget']; ?>
+<?php
+		// Reset the global $the_post as this query will have stomped on it
+		wp_reset_postdata();
+
+		endif;
+
+		if ( ! $this->is_preview() ) {
+			$cache[ $args['widget_id'] ] = ob_get_flush();
+			wp_cache_set( 'widget_members_posts', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['number'] = (int) $new_instance['number'];
+		$instance['show_date'] = isset( $new_instance['show_date'] ) ? (bool) $new_instance['show_date'] : false;
+		$this->flush_widget_cache();
+
+		$alloptions = wp_cache_get( 'alloptions', 'options' );
+		if ( isset($alloptions['widget_members_entries']) )
+			delete_option('widget_members_entries');
+
+		return $instance;
+	}
+
+	public function flush_widget_cache() {
+		wp_cache_delete('widget_members_posts', 'widget');
+	}
+
+	public function form( $instance ) {
+		$title     = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$number    = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+		$show_date = isset( $instance['show_date'] ) ? (bool) $instance['show_date'] : false;
+?>
+		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" /></p>
+
+		<p><label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+		<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
+
+		<p><input class="checkbox" type="checkbox" <?php checked( $show_date ); ?> id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" />
+		<label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Display post date?' ); ?></label></p>
+<?php
+	}
+}
+
+//widget for posts excluding members only
+class WP_Widget_Club_News_Posts extends WP_Widget {
+
+	public function __construct() {
+		$widget_ops = array('classname' => 'widget_club_news_entries', 'description' => __( "Your site&#8217;s most recent public blog posts.") );
+		parent::__construct('club-news-posts', __('Club News Posts'), $widget_ops);
+		$this->alt_option_name = 'widget_club_news_entries';
+
+		add_action( 'save_post', array($this, 'flush_widget_cache') );
+		add_action( 'deleted_post', array($this, 'flush_widget_cache') );
+		add_action( 'switch_theme', array($this, 'flush_widget_cache') );
+	}
+
+	public function widget($args, $instance) {
+		$cache = array();
+		if ( ! $this->is_preview() ) {
+			$cache = wp_cache_get( 'widget_club_news_posts', 'widget' );
+		}
+
+		if ( ! is_array( $cache ) ) {
+			$cache = array();
+		}
+
+		if ( ! isset( $args['widget_id'] ) ) {
+			$args['widget_id'] = $this->id;
+		}
+
+		if ( isset( $cache[ $args['widget_id'] ] ) ) {
+			echo $cache[ $args['widget_id'] ];
+			return;
+		}
+
+		ob_start();
+
+		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Club News' );
+
+		/** This filter is documented in wp-includes/default-widgets.php */
+		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+
+		$number = ( ! empty( $instance['number'] ) ) ? absint( $instance['number'] ) : 5;
+		if ( ! $number )
+			$number = 5;
+		$show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
+
+		/**
+		 * Filter the arguments for the club_news Posts widget.
+		 *
+		 * @since 3.4.0
+		 *
+		 * @see WP_Query::get_posts()
+		 *
+		 * @param array $args An array of arguments used to retrieve the club_news posts.
+		 */
+		$category = get_category_by_slug('members-only');
+		if($category)
+			$qargs =  array(
+			'posts_per_page'      => $number,
+			'cat' => '-'.$category->term_id,
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true);
+		else
+			$qargs =  array(
+			'posts_per_page'      => $number,
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true);
+						
+		$r = new WP_Query( apply_filters( 'widget_posts_args', $qargs ) );
+
+		if ($r->have_posts()) :
+?>
+		<?php echo $args['before_widget']; ?>
+		<?php if ( $title ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
+		
+		 ?>
+		<ul>
+		<?php while ( $r->have_posts() ) : $r->the_post(); ?>
+			<li>
+				<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+			<?php if ( $show_date ) : ?>
+				<span class="post-date"><?php echo get_the_date(); ?></span>
+			<?php endif; ?>
+			</li>
+		<?php endwhile; ?>
+		</ul>
+		<?php echo $args['after_widget']; ?>
+<?php
+		// Reset the global $the_post as this query will have stomped on it
+		wp_reset_postdata();
+
+		endif;
+
+		if ( ! $this->is_preview() ) {
+			$cache[ $args['widget_id'] ] = ob_get_flush();
+			wp_cache_set( 'widget_club_news_posts', $cache, 'widget' );
+		} else {
+			ob_end_flush();
+		}
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['number'] = (int) $new_instance['number'];
+		$instance['show_date'] = isset( $new_instance['show_date'] ) ? (bool) $new_instance['show_date'] : false;
+		$this->flush_widget_cache();
+
+		$alloptions = wp_cache_get( 'alloptions', 'options' );
+		if ( isset($alloptions['widget_club_news_entries']) )
+			delete_option('widget_club_news_entries');
+
+		return $instance;
+	}
+
+	public function flush_widget_cache() {
+		wp_cache_delete('widget_club_news_posts', 'widget');
+	}
+
+	public function form( $instance ) {
+		$title     = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$number    = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+		$show_date = isset( $instance['show_date'] ) ? (bool) $instance['show_date'] : false;
+?>
+		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" /></p>
+
+		<p><label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+		<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
+
+		<p><input class="checkbox" type="checkbox" <?php checked( $show_date ); ?> id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" />
+		<label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Display post date?' ); ?></label></p>
+<?php
+	}
+}
+
+add_action( 'widgets_init', function(){
+     register_widget( 'WP_Widget_Members_Posts' );
+     register_widget( 'WP_Widget_Club_News_Posts' );
+});
+
+function club_news($args) {
+ob_start();		
+		$title = (!empty($args["title"]) ) ? $args["title"] : 'Club News';
+		$show_date = (!empty($args["show_date"])) ? 1 : 0;
+		$show_excerpt = (!empty($args["show_excerpt"])) ? 1 : 0;
+		$show_thumbnail = (!empty($args["show_thumbnail"])) ? 1 : 0;
+		echo '<h2 class="club_news">'.$title."</h2>\n";
+		$category = get_category_by_slug('members-only');
+		if($category)
+			$qargs =  array(
+			'posts_per_page'      => $number,
+			'cat' => '-'.$category->term_id,
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true);
+		else
+			$qargs =  array(
+			'posts_per_page'      => $number,
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true);
+						
+		$r = new WP_Query( apply_filters( 'widget_posts_args', $qargs ) );
+
+		if ($r->have_posts()) :
+		 ?>
+		<?php while ( $r->have_posts() ) : $r->the_post(); ?>
+			<h3>
+				<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+			<?php if ( $show_date ) : ?>
+				<span class="post-date"><?php echo get_the_date(); ?></span>
+			<?php endif; ?>
+			</h3>
+			<?php
+			
+			if ( $show_thumbnail && has_post_thumbnail() ) : ?>
+				<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+				<?php the_post_thumbnail('thumbnail'); ?>
+				</a>
+			<?php endif;			
+			
+			 if ( $show_excerpt ) : ?>
+				<div class="post-excerpt"><?php the_excerpt(); ?></div>
+			<?php endif; ?>
+		<?php endwhile; ?>
+<?php
+		// Reset the global $the_post as this query will have stomped on it
+		wp_reset_postdata();
+		endif;
+return ob_get_clean();
+}
+
+function members_only($args) {
+ob_start();		
+		$title = (!empty($args["title"]) ) ? $args["title"] : 'Members Only';
+		$show_date = (!empty($args["show_date"])) ? 1 : 0;
+		$show_excerpt = (!empty($args["show_excerpt"])) ? 1 : 0;
+		$show_thumbnail = (!empty($args["show_thumbnail"])) ? 1 : 0;
+		echo '<h2 class="club_news">'.$title."</h2>\n";
+		$qargs =  array(
+		'posts_per_page'      => $number,
+		'category_name' => 'members-only',
+		'no_found_rows'       => true,
+		'post_status'         => 'publish',
+		'ignore_sticky_posts' => true);
+						
+		$r = new WP_Query( apply_filters( 'widget_posts_args', $qargs ) );
+
+		if ($r->have_posts()) :
+		 ?>
+		<?php while ( $r->have_posts() ) : $r->the_post(); ?>
+			<h3>
+				<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+			<?php if ( $show_date ) : ?>
+				<span class="post-date"><?php echo get_the_date(); ?></span>
+			<?php endif; ?>
+			</h3>
+			<?php
+			
+			if ( $show_thumbnail && has_post_thumbnail() ) : ?>
+				<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+				<?php the_post_thumbnail('thumbnail'); ?>
+				</a>
+			<?php endif;			
+			
+			 if ( $show_excerpt ) : ?>
+				<div class="post-excerpt"><?php the_excerpt(); ?></div>
+			<?php endif; ?>
+		<?php endwhile; ?>
+<?php
+		// Reset the global $the_post as this query will have stomped on it
+		wp_reset_postdata();
+		endif;
+return ob_get_clean();
+}
+
+add_shortcode('club_news','club_news');
+add_shortcode('members_only','members_only');
+
+function toast_excerpt_more( $more ) {
+	return ' <a class="read-more" href="'. get_permalink( get_the_ID() ) . '">[' . __('Read More', 'your-text-domain') . ']</a>';
+}
+add_filter( 'excerpt_more', 'toast_excerpt_more' );
 
 ?>
