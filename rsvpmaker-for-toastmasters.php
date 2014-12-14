@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.2
+Version: 1.4.3
 Author URI: http://www.carrcommunications.com
 */
 
@@ -138,7 +138,7 @@ echo $wp4toastmasters_officer_message;
 <p>WordPress for Toastmasters is offered as a free service, but tips and non-monetary thank yous are appreciated. Particularly if you find the site easier to use or more effective for marketing, consider helping me out.</p>
 <p>Monetary contributions help keep me motivated and offset the costs of web hosting. There are some upgrades to the site I will only be able to make if I get some funding.</p>
 <p>Non-montary rewards might include sending me leads on paying work (web development or writing and editing) or giving me a plug on social media.</p>
-<p>&mdash; David F. Carr, currently an Area Governor in District 47, doing business as <a href="http://www.carrcommunications.com">Carr Communications Inc.</a> Follow me on <a href="https://twitter.com/davidfcarr">Twitter</a>, connect on <a href="http://www.linkedin.com/in/davidfcarr">LinkedIn</a> and <a href="https://www.facebook.com/carrcomm">Facebook</a>.</p>
+<p>&mdash; David F. Carr, currently an Area Governor in District 47, doing business as <a href="http://www.carrcommunications.com">Carr Communications Inc.</a> Follow me on <a href="https://twitter.com/davidfcarr">Twitter</a>, connect on <a href="http://www.linkedin.com/in/davidfcarr">LinkedIn</a> and <a href="https://www.facebook.com/carrcomm">Facebook</a>. &quot;Like&quot; the <a href="https://www.facebook.com/wp4toastmasters">WordPress for Toastmasters Facebook page</a>.</p>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="CF5QHBWBNG7AY">
@@ -458,7 +458,7 @@ function toastmaster_short($atts=array(),$content="") {
 		for($i = 1; $i <= $count; $i++)
 			{
 			$field = '_' . $field_base . '_' . $i;
-			$assigned = (int) get_post_meta($post->ID, $field, true);
+			$assigned = get_post_meta($post->ID, $field, true);
 			if($atts["indent"])
 				$output  .= "\n".'<div class="role-agenda-item" style="margin-left: 15px;">';
 			else
@@ -476,8 +476,14 @@ function toastmaster_short($atts=array(),$content="") {
 					$title = get_post_meta($post->ID, '_title'.$field, true);
 					if(!empty($title))
 						$title = ": ".$title;
-					$member = get_userdata( $assigned );
-					$output .= sprintf('<span class="member-role">%s %s%s</span>',$member->first_name, $member->last_name, $title);
+					if(is_numeric($assigned))
+						{
+						$member = get_userdata( $assigned );
+						$name = $member->first_name.' '.$member->last_name;
+						}
+					else
+						$name = $assigned.' (guest)';
+					$output .= sprintf('<span class="member-role">%s%s</span>', $name, $title);
 				}
 			else
 				$open[$atts["role"]]++;
@@ -498,20 +504,25 @@ function toastmaster_short($atts=array(),$content="") {
 		{
 		
 		$field = '_' . $field_base . '_' . $i;
-		$assigned = (int) get_post_meta($post->ID, $field, true);
+		$assigned = get_post_meta($post->ID, $field, true);
 		$output .= '<div class="role-block"><div class="role-title" style="font-weight: bold;">';
 		$output .= $atts["role"].': </div><div class="role-data"> ';
 		if(is_user_member_of_blog() && !($_GET["edit_roles"] || $_GET["recommend_roles"] || ($_GET["page"] == 'toastmasters_reconcile' ) )  ) 
 			$output .= sprintf(' <form id="%s_form" method="post" class="toastrole" action="%s" style="display: inline;"><input type="hidden" name="role" id="role" value="%s"><input type="hidden" name="post_id" id="post_id" value="%d">',$field,$permalink, $field, $post->ID);
-		
+				
 		if($assigned == '-1')
 				{
 				$output .= 'Not Available';
 				}
 		elseif($assigned  && !($_GET["edit_roles"] || ($_GET["page"] == 'toastmasters_reconcile' ) ) )
 			{
+			if(is_numeric($assigned))
+				{
 				$member = get_userdata( $assigned );
-				$output .= sprintf('<div class="member-role">%s %s</div>',$member->first_name, $member->last_name);				
+				$output .= sprintf('<div class="member-role">%s %s</div>',$member->first_name, $member->last_name);	
+				}
+			else
+				$output .= sprintf('<div class="member-role">%s (guest)</div>',$assigned);
 			}
 		
 			if(is_user_member_of_blog() )
@@ -528,7 +539,8 @@ function toastmaster_short($atts=array(),$content="") {
 				{
 					// editor admin options
 					$awe_user_dropdown = awe_user_dropdown($field, $assigned);
-					$output .= $awe_user_dropdown;
+					$output .= 'Member: '.$awe_user_dropdown;
+					$output .= '<br />Or guest: <input type="text" name="edit_guest['.$field.']" />';
 					if(strpos($field,'Speaker') )
 						$output .= '<div><input type="checkbox" name="delete_speaker[]" value="'.$field.'" /> Delete</div>'. $detailsform;
 				}
@@ -688,6 +700,8 @@ global $sortmember;
 global $fnamesort;
 
 $options = '<option value="0">Open</option>';
+if(!empty($assigned) && !is_numeric($assigned) )
+	$options = sprintf('<option value="%s">%s (guest)</option>',$assigned,$assigned).$options;
 
 $blogusers = get_users('blog_id='.get_current_blog_id() );
     foreach ($blogusers as $user) {		
@@ -939,6 +953,12 @@ if($_POST["editor_assign"] && current_user_can('edit_posts') )
 			//echo '<br />'.$role . ' => '. $user_id;
 			update_post_meta($post_id,$role,$user_id);
 		}
+		foreach($_POST["edit_guest"] as $role => $guest)
+		{
+			if(!empty($guest))
+				update_post_meta($post_id,$role,$guest);			
+		}
+		
 		//awesome_wall('Edited the roster',$post_id);
 	awesome_wall("edited role signups ",$post_id);
 
@@ -1413,6 +1433,52 @@ if(!is_array($wp4toastmasters_officer_titles) )
 	$wp4toastmasters_officer_titles = array("President","VP of Education","VP of Membership","VP of Public Relations","Treasurer","Secretary","Sgt. at Arms","Immediate Past President");
 $wp4toastmasters_member_message = get_option('wp4toastmasters_member_message');
 $wp4toastmasters_officer_message = get_option('wp4toastmasters_officer_message');
+ 
+$public = get_option('blog_public');
+?>
+<h3>Make the Website Public</h3>
+<p><input type="radio" name="blog_public" value="1" <?php if($public) echo ' checked="checked" '; ?> /> Yes, this website is open for business!</p>
+<p><input type="radio" name="blog_public" value="0" <?php if(!$public) echo ' checked="checked" '; ?> /> No, I am still testing, so I don't want this site indexed by Google or other search engines.</p>
+<?php
+$tzstring = get_option('timezone_string');
+if(empty($tzstring) )
+	echo "<p>Timezone not set - defaults to UTC 0 (UK time)</p>";
+
+$current_offset = get_option('gmt_offset');
+
+$check_zone_info = true;
+
+// Remove old Etc mappings. Fallback to gmt_offset.
+if ( false !== strpos($tzstring,'Etc/GMT') )
+	$tzstring = '';
+
+if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
+	$check_zone_info = false;
+	if ( 0 == $current_offset )
+		$tzstring = 'UTC+0';
+	elseif ($current_offset < 0)
+		$tzstring = 'UTC' . $current_offset;
+	else
+		$tzstring = 'UTC+' . $current_offset;
+}
+
+?>
+<h3>Timezone</h3>
+<p><label for="timezone_string"><?php _e('Timezone') ?></label>
+<select id="timezone_string" name="timezone_string">
+<optgroup label="U.S. Mainland">
+<option value="America/New_York">New York</option>
+<option value="America/Chicago">Chicago</option>
+<option value="America/Denver">Denver</option>
+<option value="America/Los_Angeles">Los Angeles</option>
+</optgroup>
+<?php echo wp_timezone_choice($tzstring); ?>
+</select>
+<br /><?php _e('Choose a city in the same timezone as you.'); ?>
+</p>
+
+<h3>Officer List</h3>
+<?php
 
 foreach($wp4toastmasters_officer_titles as $index => $title)
 {
@@ -1427,6 +1493,9 @@ for($index = $index; $index < $limit; $index++)
 	$dropdown = awe_user_dropdown ('wp4toastmasters_officer_ids['.$index.']', 0, true);
 	printf('<p><input type="text" name="wp4toastmasters_officer_titles[%s]" value="%s" /> %s</p>', $index, '', $dropdown);
 	}
+?>
+<p>Officers will be listed at the top of the members page, be assigned editing rights on the website, and have access to the screens for adding or editing member (user) records.</p>
+<?php
 if(current_user_can('update_core'))
 {
 // restrict this to network admin on multisite
@@ -1514,7 +1583,6 @@ foreach($reminder_options as $index => $value)
 <option value="">None</option>
 <?php echo $options; ?>
 </select>
-<br /><em>Be sure to <a href="<?php echo admin_url('options-general.php'); ?>">set your timezone</a> so this will work correctly</em>
 </p>
 
 <input type="submit" value="Submit" />
@@ -1537,6 +1605,8 @@ function register_wp4toastmasters_settings() {
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toastmasters_member_message' );
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toastmasters_officer_message' );
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toast_reminder' );
+	register_setting( 'wp4toastmasters-settings-group', 'timezone_string' );
+	register_setting( 'wp4toastmasters-settings-group', 'blog_public' );
 }
 
 add_action('user_register','add_to_mailman');
@@ -3526,6 +3596,16 @@ $role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id
 if( ($_GET["action"] == 'edit') && strpos($post->post_content,'role=') )//isset($post->post_content) && 
 	echo '<div style="padding: 5px; margin:5px; border: thick dotted #8CF;
 ">You can edit the Toastmaster roles setup and agenda text in a <a href="'.$role_editor.'">simplified editor</a>, using drag-and-drop widgets.</div>';
+
+$public = get_option('blog_public');
+
+if(!$public)
+	echo '<div style="padding: 5px; margin:5px; border: thin solid red;">This blog is not being indexed by search engines. To make it public, visit the <a href="'.admin_url('options-general.php?page=wp4toastmasters_settings').'">Toastmasters Settings</a> screen.</div>';
+
+$tz = get_option('timezone_string');
+if(empty($tz) )
+	echo '<div style="padding: 5px; margin:5px; border: thin solid red;">Make sure to set the correct timezone for your site so scheduling functions will work properly. Visit the <a href="'.admin_url('options-general.php?page=wp4toastmasters_settings').'">Toastmasters Settings</a> screen.</div>';
+
 }
 
 add_action('admin_notices', 'toast_admin_notice');

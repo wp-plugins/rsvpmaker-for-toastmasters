@@ -4,7 +4,7 @@ Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,11 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 2. Data collected through the plugin feeds performance reports, such as this one showing progress toward Competent Communicator.
 
 == Changelog ==
+
+= 1.4.3 =
+
+* Added ability to assign a role to a guest of the club who is not on the member list.
+* Toastmasters settings screen includes key options such as setting the timezone (important for scheduling) and making the site public (turning off the "discourage search engines from indexing this site" option).
 
 = 1.4.2 =
 
