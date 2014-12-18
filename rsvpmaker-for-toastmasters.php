@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.3
+Version: 1.4.4
 Author URI: http://www.carrcommunications.com
 */
 
@@ -1051,8 +1051,21 @@ global $post;
 		$output .= '<div><label for="man">Manual / Speech / Time</label>
 		<input type="hidden" name="post_id" value="'.$post->ID.'" />
 		<select class="speaker_details" name="_manual['.$field.']" style="width: 400px;"><option value="'.$manual.'">'.$manual.'
-</option>
-<option value="Choose Manual / Speech">Choose Manual / Speech</option>
+</option>'.get_toast_speech_options().'
+</select><br>
+		<div>Choose a speech from the current list of Toastmasters International manuals.</div>';
+			$output .= '</div>';
+
+		$title = get_post_meta($post->ID, '_title'.$field, true);
+		
+		$output .= '<div class="speech_title">Title: <input type="text" class="speaker_details" name="_title['.$field.']" value="'.$title.'" /></div>';
+		
+return $output;
+}
+
+function get_toast_speech_options() {
+
+return '<option value="Choose Manual / Speech">Choose Manual / Speech</option>
 <option value="COMPETENT COMMUNICATION (CC) MANUAL: The Ice Breaker (4 to 6 min)">COMPETENT COMMUNICATION (CC) MANUAL: The Ice Breaker (4 to 6 min)
 </option><option value="COMPETENT COMMUNICATION (CC) MANUAL: Organize Your Speech (5 to 7 min)">COMPETENT COMMUNICATION (CC) MANUAL: Organize Your Speech (5 to 7 min)
 </option><option value="COMPETENT COMMUNICATION (CC) MANUAL: Get to the Point (5 to 7 min)">COMPETENT COMMUNICATION (CC) MANUAL: Get to the Point (5 to 7 min)
@@ -1163,15 +1176,8 @@ global $post;
 </option><option value="THE PROFESSIONAL SPEAKER: The Sales Training Speech (15 to 20 min)">THE PROFESSIONAL SPEAKER: The Sales Training Speech (15 to 20 min)
 </option><option value="THE PROFESSIONAL SPEAKER: The Professional Seminar (20 to 40 min)">THE PROFESSIONAL SPEAKER: The Professional Seminar (20 to 40 min)
 </option><option value="THE PROFESSIONAL SPEAKER: The Motivational Speech (15 to 20 min)">THE PROFESSIONAL SPEAKER: The Motivational Speech (15 to 20 min)
-</option></select><br>
-		<div>Choose a speech from the current list of Toastmasters International manuals.</div>';
-			$output .= '</div>';
+</option>';
 
-		$title = get_post_meta($post->ID, '_title'.$field, true);
-		
-		$output .= '<div class="speech_title">Title: <input type="text" class="speaker_details" name="_title['.$field.']" value="'.$title.'" /></div>';
-		
-return $output;
 }
 
 function speech_public_details ($field) {
@@ -1442,7 +1448,7 @@ $public = get_option('blog_public');
 <?php
 $tzstring = get_option('timezone_string');
 if(empty($tzstring) )
-	echo "<p>Timezone not set - defaults to UTC 0 (UK time)</p>";
+	echo "<p>Timezone not set - defaults to UTC 0 (UK time). Scroll to the top of the list for U.S. timezones.</p>";
 
 $current_offset = get_option('gmt_offset');
 
@@ -1683,6 +1689,11 @@ if($_POST["editor_suggest"])
 			$count = (int) $_POST["editor_suggest_count"][$name];
 			if($value < 1)
 				continue;
+			$invite_check = $value.":".$post->ID;
+			if($_SESSION[$invite_check]) // prevent double notifications
+				continue;
+			$_SESSION[$invite_check] = 1;
+			
 			$date = $wpdb->get_var("SELECT DATE_FORMAT(datetime,'%M %d, %Y') FROM ".$wpdb->prefix."rsvp_dates WHERE postID=".$post->ID. ' ORDER BY datetime');
 			$neatname = preg_replace('/[_\-0-9]/',' ',$name);
 			//$output .= sprintf('<p>%s %s %s</p>',$neatname,$name, $value);
@@ -2203,6 +2214,7 @@ $user_pass_default = wp_generate_password();
 	</tr>
 
 	</table>
+<p><input type="checkbox" name="no_email" value="1" /> Do not send email invites (for example, if you are still testing the site).</p> 
 
 <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button-primary" value="Add Member"  /></p>
 </form>
@@ -2218,7 +2230,8 @@ if(!$_POST)
 <form method="post" action="<?php echo admin_url('users.php?page=add_awesome_member'); ?>">
 <textarea cols="80" rows="10" name="spreadsheet"></textarea>
 <br />Default Password: <input name="user_pass" type="text" id="user_pass" value="<?php echo $user_pass_default; ?>" />
-<br /><input type="checkbox" name="check_missing" value="1" /> Check for missing members (if you post a complete list of current members, this checkbox triggers a check of which website users are NOT currently on the toastmasters.org list and gives you an option to delete them). 
+<br /><input type="checkbox" name="check_missing" value="1" /> Check for missing members (if you post a complete list of current members, this checkbox triggers a check of which website users are NOT currently on the toastmasters.org list and gives you an option to delete them).
+<br /><input type="checkbox" name="no_email" value="1" /> Do not send email invites (for example, if you are still testing the site). 
 <br /><input type="submit" value="Post" />
 </form>
 <p><img src="<?php echo plugins_url( 'spreadsheet.png' , __FILE__ ); ?>" width="500" height="169" /></p>
@@ -2237,7 +2250,8 @@ if(!$_POST)
 <p>Copy roster from toastmasters.org (as shown below, Ctrl-C on Windows) and paste here (use Ctrl-V on Windows).</p>
 <form method="post" action="<?php echo admin_url('users.php?page=add_awesome_member'); ?>"><textarea cols="80" rows="10" name="paste"></textarea>
 <br />Default Password: <input name="user_pass" type="text" id="user_pass" value="<?php echo $user_pass_default; ?>" />
-<br /><input type="checkbox" name="check_missing" value="1" /> Check for missing members (if you post a complete list of current members, this checkbox triggers a check of which website users are NOT currently on the toastmasters.org list and gives you an option to delete them). 
+<br /><input type="checkbox" name="check_missing" value="1" /> Check for missing members (if you post a complete list of current members, this checkbox triggers a check of which website users are NOT currently on the toastmasters.org list and gives you an option to delete them).
+<br /><input type="checkbox" name="no_email" value="1" /> Do not send email invites (for example, if you are still testing the site). 
 <br /><input type="submit" value="Post" />
 </form>
 
@@ -2383,8 +2397,13 @@ Username: %s
 Password: %s
 
 Please <a href="%s">edit your member profile</a> to change your password and check that we have the correct contact information for you.',$user["user_login"], $user["user_pass"], $profile_url );
+			if($_POST["no_email"])
+			{
+			echo "<h3>Email notification disabled</h3><pre>".$message."</pre>";
+			}
+			else
+			{
 			$admin_email = get_bloginfo('admin_email');
-			
 			$mail["subject"] = 'Welcome to '.get_bloginfo('name');
 			$mail["replyto"] = $admin_email;
 			$mail["html"] = "<html>\n<body>\n".wpautop($message)."\n</body></html>";
@@ -2395,6 +2414,8 @@ Please <a href="%s">edit your member profile</a> to change your password and che
 			awemailer($mail);
 
 			echo "<h3>Emailing to ".$user["user_email"]."</h3><pre>".$message."</pre>";
+			}
+			
 			}
 		else
 			 {
@@ -2862,33 +2883,34 @@ $wp4toastmasters_mailman = get_option("wp4toastmasters_mailman");
 
 	if($_POST)
 	{
+	
+	if(!empty($wp4toastmasters_mailman["members"]))
+		$mail["to"] = $wp4toastmasters_mailman["members"];
+	else
+		{
+		$blogusers = get_users('blog_id='.get_current_blog_id() );
+			foreach ($blogusers as $user) {
+				//print_r($user);
+				$emails[] = $user->user_email;
+			}
+		}
+	
 	if($_POST["note"])
-		$output = nl2br(stripslashes($_POST["note"]))."\n".$output;	
-	$output = $header. $output . '</body></html>';
-
-include('Mail.php');
-include('Mail/mime.php');
-
-$text = trim(strip_tags($output));
-$html = $output;
-$crlf = "\n";
-$hdrs = array(
-              'From'    => '"'.$current_user->display_name.'" <'.$current_user->user_email.'>',
-              'Subject' => stripslashes($_POST["subject"])
-              );
-
-$mime = new Mail_mime($crlf);
-
-$mime->setTXTBody($text);
-$mime->setHTMLBody($html);
-
-$body = $mime->get();
-$hdrs = $mime->headers($hdrs);
-
-$mail =& Mail::factory('mail');
-$mail->send($wp4toastmasters_mailman["members"], $hdrs, $body);
-		
-	//mail("members@clubawesome.org",$subject,$output,"From: ".$current_user->user_email."\nContent-Type: text/html\n");
+		$output = nl2br(stripslashes($_POST["note"]))."\n".$output;		
+	$mail["html"] = $header. $output . '</body></html>';
+	$mail["from"] = $current_user->user_email;
+	$mail["fromname"] = $current_user->display_name;
+	$mail["subject"] = stripslashes($_POST["subject"]);
+	if(is_array($emails))
+	{
+		foreach($emails as $e)
+		{
+		$mail["to"] = $e;
+		echo awemailer($mail);
+		}
+	}
+	else
+		echo awemailer($mail);
 	}
 	else
 	{
@@ -2896,7 +2918,7 @@ $mail->send($wp4toastmasters_mailman["members"], $hdrs, $body);
 	if($openings)
 		$subject .= " (".$openings." open roles)";
 
-if(isset($wp4toastmasters_mailman["members"]))
+//if(isset($wp4toastmasters_mailman["members"]))
 	$mailform = '<h3>Add a Note</h3>
 	<p>Your note, along with the roster details, will be sent to all members.</p>
 	<form method="post" action="'.$permalink.'email_agenda=1">
@@ -2904,8 +2926,8 @@ Subject: <input type="text" name="subject" value="'.$subject.'" size="60"><br />
 <textarea name="note" rows="5" cols="80"></textarea><br />
 <input type="submit" value="Send" />
 </form>';
-	else
-	$mailform = "<p>Mailing list not configured.</p>";
+//	else
+//	$mailform = "<p>Mailing list not configured.</p>";
 	
 	$output = $header. $mailform . $output . '</body></html>';
 //http://www.clubawesome.org/?open_roles='.$post_id.'
@@ -3600,7 +3622,7 @@ if( ($_GET["action"] == 'edit') && strpos($post->post_content,'role=') )//isset(
 $public = get_option('blog_public');
 
 if(!$public)
-	echo '<div style="padding: 5px; margin:5px; border: thin solid red;">This blog is not being indexed by search engines. To make it public, visit the <a href="'.admin_url('options-general.php?page=wp4toastmasters_settings').'">Toastmasters Settings</a> screen.</div>';
+	echo '<div style="padding: 5px; margin:5px; border: thin solid red;">This site is not being indexed by search engines. To make it public, visit the <a href="'.admin_url('options-general.php?page=wp4toastmasters_settings').'">Toastmasters Settings</a> screen.</div>';
 
 $tz = get_option('timezone_string');
 if(empty($tz) )

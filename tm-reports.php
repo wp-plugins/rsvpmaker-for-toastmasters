@@ -11,6 +11,7 @@ add_submenu_page( 'toastmasters_reports', 'Attendance Report', 'Attendance Repor
 add_submenu_page( 'toastmasters_reports', 'Competent Communicator Progress Report', 'CC Progress', 'read', 'toastmasters_cc', 'toastmasters_cc');
 add_submenu_page( 'toastmasters_reports', 'Competent Leader Progress Report', 'CL Progress', 'read', 'cl_report', 'cl_report');
 add_submenu_page( 'toastmasters_reports', 'Mentors', 'Mentors', 'edit_others_rsvpmakers', 'toastmasters_mentors', 'toastmasters_mentors');
+add_menu_page( 'Import Free Toast Host Data', 'Import Free Toast Host Data', 'edit_others_rsvpmakers', 'import_fth', 'import_fth');
 
 add_action( 'admin_print_styles-'.$reconcilepg, 'toastmasters_css_js' );
 
@@ -1778,6 +1779,261 @@ foreach($_GET as $i => $value)
 		$query .= $value;
 	}
 printf('<div style="float: right;"><a href="%s">Full Screen</a></div>',site_url($query));
+}
+
+function import_fth () {
+?>
+<h1>Import Free Toast Host Data</h1>
+<?php
+global $wpdb;
+global $toast_roles;
+
+$action = admin_url('admin.php?page=import_fth');
+
+if($_POST["speeches"])
+{
+$fth_roles = array();
+?>
+<form action="<?php echo $action; ?>" method="post">
+<?php
+
+	echo "<h3>Match Users</h3><p>Either match with a WordPress user or leave blank (Match?) if there is no match, as with a former member.</p>";
+
+$blogusers = get_users('blog_id='.get_current_blog_id() );
+    foreach ($blogusers as $user) {	
+	$userdata = get_userdata($user->ID);
+	$index = preg_replace('/[^A-Za-z]/','',$userdata->last_name.$userdata->first_name.$userdata->user_login);
+	$members[$index] = $userdata;
+	$users_id[$userdata->ID] = sprintf('<option value="%s">%s %s</option>',$userdata->ID,$userdata->first_name,$userdata->last_name);
+	}
+ksort($members);
+
+$userlist = '<option value="">Match?</option>';
+foreach($members as $userdata)
+	{
+		$userlist .= sprintf('<option value="%s">%s %s</option>',$userdata->ID,$userdata->first_name,$userdata->last_name);
+	}
+
+if($_POST["speeches"])
+	{
+
+		$lines = explode("\n",$_POST["speeches"]);
+		foreach($lines as $index => $line)
+			{
+				$cells = explode("\t",$line);
+				//echo "<h2>Line: $index </h2>";
+				if(sizeof($cells) == 6)
+					{
+					$name = array_shift($cells);
+					//echo "<h1>$name</h1>";
+					$name = trim($name);
+					$nameindex = preg_replace('/[^A-Za-z]/','',$name);
+					$names[$nameindex] = $name;
+					}
+				//print_r($cells);
+				$speech["name"][$nameindex][] = $name;
+				$name = preg_replace('/, [A-Z]{2,4}/','',$name);
+				$speech["date"][$nameindex][] = trim($cells[0]);
+				$speech["project"][$nameindex][] = trim($cells[3]);
+				$speech["title"][$nameindex][] = trim($cells[2] . ' '. $cells[4]);
+			}
+	}
+if($_POST["stats"])
+	{
+		$lines = explode("\n",$_POST["stats"]);
+		foreach($lines as $index => $line)
+			{
+				$cells = explode("\t",$line);
+				//echo "<h2>Line: $index </h2>";
+				//print_r($cells);
+				if(sizeof($cells) == 3)
+					{
+					$name = array_shift($cells);
+					$name = trim($name);
+					$nameindex = preg_replace('/[^A-Za-z]/','',$name);
+					$names[$nameindex] = $name;
+					}
+				$stats["date"][$nameindex][] = $cells[0];
+				$stats["role"][$nameindex][] = $cells[1];
+			}
+	ksort($names);
+	foreach($names as $nameindex => $name)
+		{	
+		$p = explode(' ',trim($name));
+		$sql = "SELECT user_id from $wpdb->usermeta WHERE meta_key='first_name' AND meta_value LIKE '".$p[0]."%'";
+		$results = $wpdb->get_results($sql);
+		$matching = '';
+		foreach($results as $r)
+			$matching .= $users_id[$r->user_id];
+		printf('<p><select name="user[%s]">%s</select> = %s</p>',$nameindex,$matching.$userlist,$name);
+		}
+		
+	foreach($stats["date"] as $nameindex => $daterow)
+		{
+			//print_r($namerow);
+			foreach($daterow as $i => $date)
+			{
+			$t = strtotime($date);
+			$dates[$t] = $t;
+			$name = $names[$nameindex];
+			$role = $stats["role"][$nameindex][$i];
+			$role = trim(preg_replace('/ #[0-9]/','',$role));
+			if($role == 'Speaker')
+				continue; // track speakers through project list instead
+			if(!in_array($role,$fth_roles) )
+				$fth_roles[] = $role;
+			printf('<input type="hidden" name="role[%s][%s]" value="%s" />',$t, $nameindex, $role);
+			}
+		}
+	
+	}
+	
+	echo "<h3>Match Roles</h3>";
+	sort($fth_roles);
+	foreach($fth_roles as $role)
+	{
+			$options = '<option value="">Match?</option>';
+			
+			foreach($toast_roles as $tracked)
+				{
+					$s = ($role == $tracked) ? ' selected="selected" ' : '';
+					if(($role == 'Toastmaster') && ($tracked == 'Toastmaster of the Day'))
+						$s = ' selected="selected" ';
+					if(($role == 'Topic Master') && ($tracked == 'Topics Master'))
+						$s = ' selected="selected" ';
+					if(($role == 'Table Topics Contestant') && ($tracked == 'Table Topics'))
+						$s = ' selected="selected" ';
+					
+					$options .= sprintf('<option value="%s" %s> %s</option>',$tracked, $s, $tracked);
+				}
+	printf('<p><select name="rolelist[%s]">%s</select> = %s</p>',$role, $options, $role);
+	}
+
+	echo "<h3>Speech Projects</h3>";
+	$project_options = get_toast_speech_options();
+	foreach($speech["name"] as $nameindex => $namerow)
+		{
+			//print_r($namerow);
+			foreach($namerow as $i => $name)
+			{
+			$date = $speech["date"][$nameindex][$i];
+			$t = strtotime($date);
+			$dates[$t] = $t;
+			$project = $speech["project"][$nameindex][$i];
+			$title = $speech["title"][$nameindex][$i];
+			printf('<p>Member: %s Date: <input type="text" name="speechdate[%s][]" value="%s"> <br />Project: <select name="project[%s][%s]"><option value="%s">%s</option>%s</select>
+			<br />Title: <input type="text" name="title[%s][%s]" value="%s"></p>',$name, $nameindex, $date, $t, $nameindex, $project, $project, $project_options, $t, $nameindex, $title);
+			}
+		}
+
+	printf('<input type="hidden" name="dates" value="%s" />',implode(",",$dates));
+
+submit_button('Import Records (step 2)','primary'); ?>
+</form>
+<?php
+}
+elseif($_POST["dates"])
+{
+	
+	printf('<h3>Recording data. Verify by checking the <a href="%s">Toastmaster Reports</a> page.</h3>',admin_url('admin.php?page=toastmasters_reports'));
+	foreach($_POST["user"] as $nameindex => $id)
+		{
+			if($id)
+				$users[$nameindex] = (int) $id;
+		}
+
+	$dates = explode(",",$_POST["dates"]);
+	sort($dates);
+	foreach($dates as $date)
+		{
+			$t = (int) $date;
+			if($t == 0)
+				continue;
+			$sqldate = date('Y-m-d',$t);
+			
+			$p = array('post_title' => 'Historical Data','post_type' => 'historical-toastmsters-data','post_content' => 'used to track events imported from Free Toast Host. Do not delete.','post_status' => 'publish');
+			$post_id = wp_insert_post($p);
+			$sql = "INSERT INTO ".$wpdb->prefix."rsvp_dates SET datetime='$sqldate', postID=". $post_id; 
+			$wpdb->query($sql);
+			
+			//echo "<h1>$sqldate</h1>";
+			if(is_array($_POST["project"][$date]) )
+				{
+					$count = 1;
+					foreach($_POST["project"][$date] as $nameindex => $project)
+						{
+						if(isset($users[$nameindex]))
+							{
+							$user_id = $users[$nameindex];
+							$meta_key = '_Speaker_'.$count;
+							update_post_meta($post_id, $meta_key, $user_id);
+							//echo $meta_key.': '.$nameindex.": ".$project."<br />";
+							$count++;
+							if(empty($project))
+								continue;
+							update_post_meta($post_id, '_manual'.$meta_key, $project);
+							$title = $_POST["title"][$date][$nameindex];
+							if(!empty($title))
+								{
+								//echo "title: $title <br />";
+								update_post_meta($post_id, '_title'.$meta_key, $project);
+								}
+							}
+						}
+				}
+			if(is_array($_POST["role"][$date]) )
+				{
+					foreach($_POST["role"][$date] as $nameindex => $role)
+						{
+						if($_POST["rolelist"][$role])
+							$role = $_POST["rolelist"][$role];
+						else
+							continue;
+						if(isset($users[$nameindex]))
+							{
+							$user = $users[$nameindex];
+							//echo "user id: $user <br />";					
+							//echo $nameindex.": ".$role."<br />";
+							update_post_meta($post_id, '_'.$role.'_1', $user_id);
+							}
+						}
+				}
+		}
+}
+else
+{ // step 1 form
+?>
+<form action="<?php echo $action; ?>" method="post">
+<h3>Paste in the contents of ...</h3>
+Member Speech Historical Report:<br />
+<textarea name="speeches" cols="100" rows="10"></textarea>
+<br />
+Member Role Historical Report:<br />
+<textarea name="stats" cols="100" rows="10"></textarea>
+<?php submit_button('Import Records (step 1)','primary'); ?>
+</form>
+<div style="max-width: 605px;">
+<h1>Directions</h1>
+<p>This tool allows you to import some of the data collected through your use of Free Toast Host so that it will be reflected in the member performance reports for progress toward CC, CL, etc.</p>
+<p>When you are viewing an agenda on Free Toast Host, the reports button is displayed at the top of the screen. Click it.</p>
+<p><img src="<?php echo plugins_url('/rsvpmaker-for-toastmasters/fth_agenda_role_rpt.png'); ?>" width="600" height="80" alt="FTH agenda button" /></p>
+<p>Free Toast Host displays a dialog box prompting you to choose the report you want to access. We are going to use the Member Speech Report and the Member Role Report (the html version, not the xls download). Under Select Start Date, make sure you select &quot;All.&quot; </p>
+<p><img src="<?php echo plugins_url('/rsvpmaker-for-toastmasters/fth-dialog.png'); ?>" width="600" height="392" alt="FTH Dialog box" /></p>
+<p>First, select &quot;Member Speech Report (html)&quot; and click <strong>Run/Download</strong>.</p>
+<p>If you are prompted to print the document, click <strong>Cancel</strong>. Copy and Paste the all the data (not including the headers at the top) and paste it into the appropriate dialog on this form.</p>
+<p><img src="<?php echo plugins_url('/rsvpmaker-for-toastmasters/fth-speech-report.png'); ?>" width="600" height="455" alt="Speech Report" /></p>
+<p>Repeat the process for &quot;Member Role Report (html)&quot;.</p>
+<p><img src="<?php echo plugins_url('/rsvpmaker-for-toastmasters/fth_member_role_report.png'); ?>" width="600" height="463" alt="Role Report" /></p>
+<p>Click <strong>Import Records (step 1)</strong>.</p>
+<p>On the next screen, you will be given the opportunity to make some corrections, matching up the names of members with the correct records recorded in WordPress for Toastmasters and matching the names of roles with the standard role names WordPress for Toastmasters uses for reporting.</p>
+<p>Some data may not match up perfectly. You may have former members on the historical report for whom there is no matching record in WordPress. You may have roles that don't match up with the standard roles. If you leave those items with no selection, they simply will not be recorded.</p>
+<p>If members speech projects were not recorded in Free Toast Host, you can add that information if you have it. Otherwise, leave it blank. The member will still be recorded as having given a speech, even though you haven't specified which one.</p>
+<p>Click <strong>Import Records (step 2)</strong> and the data will be recorded.</p>
+</div>
+
+<?php
+}
+
 }
 
 ?>
