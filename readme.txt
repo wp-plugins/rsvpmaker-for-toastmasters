@@ -3,8 +3,8 @@ Contributors: davidfcarr
 Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 1.2
+Tested up to: 4.0.1
+Stable tag: 1.4.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,13 +14,18 @@ This Toastmasters-specific extension to the RSVPMaker events plugin adds role si
 
 This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking.
 
+As an alternative to other club web software options that include a custom content management system, this WordPress-based solution allows website operators to take advantage of all the flexibility available on other WordPress sites.
+
 For documentation and Toastmasters club website hosting, see [WP4Toastmasters.com](http://wp4toastmasters.com/ "WordPress for Toastmasters")
 
 First install RSVPMaker - [download from wordpress.org](https://wordpress.org/plugins/rsvpmaker/) | [documentation at RSVPMaker.com](https://rsvpmaker.com)
 
+A related set of Toastmasters-branded WordPress themes are [available for download from WP4Toastmasters.com](http://wp4toastmasters.com/2014/11/06/toastmasters-branded-wordpress-themes/), allowing clubs and districts to use a design that complies with the branding guidelines from Toastmasters International while still having a degree of design flexibility.
+
 == Installation ==
 
-1. Upload the plugin folder to the `/wp-content/plugins/` directory
+1. First, download and install [RSVPMaker](https://wordpress.org/plugins/rsvpmaker/)
+1. Upload the RSVPMaker for Toastmasters plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
@@ -46,7 +51,33 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 
 == Changelog ==
 
-= 1.2 =
+= 1.4.4 =
+
+Role data and speech details recorded on a Free Toast Host can now be imported so that it will be reflected in reports run on the website.
+
+= 1.4.3 =
+
+* Added ability to assign a role to a guest of the club who is not on the member list.
+* Toastmasters settings screen includes key options such as setting the timezone (important for scheduling) and making the site public (turning off the "discourage search engines from indexing this site" option).
+
+= 1.4.2 =
+
+* Added support for members-only posts. Posts tagged to the Members Only category will only be displayed to logged in members. (Display name of category can vary, but slug must be 'members-only')
+* Bug fixes and a removal of a hard-coded mention of a carrcommunications.com email address.
+
+= 1.4 =
+
+Simplified editor for Agenda Setup.
+
+= 1.3.2 =
+
+Correcting initial setup of database and meeting templates. If you installed an earlier version, please deactivate and reactivate the plugin for the correct setup.
+
+= 1.3.1 =
+
+Bug fix: member stats editing
+
+= 1.2/1.3 =
 
 * Fixed recommend function bug
 * Default event template created on plugin activation
