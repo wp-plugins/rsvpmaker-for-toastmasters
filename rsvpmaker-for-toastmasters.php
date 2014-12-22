@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.4
+Version: 1.4.5
 Author URI: http://www.carrcommunications.com
 */
 
@@ -308,7 +308,7 @@ $wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
 
 }
 
-add_action('wp_dashboard_setup', 'awesome_add_dashboard_widgets',1 );
+add_action('wp_dashboard_setup', 'awesome_add_dashboard_widgets',99 );
 
 function agenda_note_edit($atts = array(), $content='' ) {
 global $agenda_setup_item;
