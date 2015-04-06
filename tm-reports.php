@@ -1533,7 +1533,7 @@ function get_latest_visit ($user_id) {
 global $wpdb;
 $wpdb->show_errors();
 
-$sql = "SELECT datetime FROM `$wpdb->postmeta` JOIN ".$wpdb->prefix."rsvp_dates ON $wpdb->postmeta.post_id = postID where meta_value=".$user_id." AND BINARY meta_key RLIKE '^_[A-Z].+[0-9]$' ORDER BY datetime DESC";
+$sql = "SELECT datetime FROM `$wpdb->postmeta` JOIN ".$wpdb->prefix."rsvp_dates ON $wpdb->postmeta.post_id = postID where meta_value=".$user_id." AND BINARY meta_key RLIKE '^_[A-Z].+[0-9]$' AND datetime < NOW() ORDER BY datetime DESC";
 $date = $wpdb->get_var($sql);
 if(!$date)
 	return;
