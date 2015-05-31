@@ -4,9 +4,15 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.6
+Version: 1.4.8
 Author URI: http://www.carrcommunications.com
 */
+
+$locale = get_locale();
+
+$mofile = WP_PLUGIN_DIR . '/rsvpmaker-for-toastmasters/translations/rsvptoast-' . $locale . '.mo';
+
+load_textdomain('rsvptoast',$mofile);
 
 include "tm-reports.php";
 
@@ -42,9 +48,9 @@ ORDER BY datetime LIMIT 0, 10";
 						if($count == 3)
 							continue;
 						$count++;
-						printf('<tr><td>%s :</td><td> <a href="%s">Signup</a> | <a href="%sedit_roles=1">Edit Signups</a> | <a target="_blank" href="%semail_agenda=1">Email Roster</a></td></tr>', $title, login_redirect($permalink), login_redirect($permalink),$permalink);
-						if($index == 0 )
-						printf('<tr><td>&nbsp;</td><td> <a target="_blank" href="%sprint_agenda=1">Print Agenda</a> | <a target="_blank" href="%sprint_agenda=1&word_agenda=1">Download to Word</a></td></tr>', $permalink,$permalink);
+						printf('<tr><td>%s :</td><td> <a href="%s">'.__('Signup','rsvptoast').'</a> | <a href="%sedit_roles=1">'.__('Edit Signups','rsvptoast').'</a> | <a target="_blank" href="%semail_agenda=1">'.__('Email Roster','rsvptoast').'</a></td></tr>', $title, login_redirect($permalink), login_redirect($permalink),$permalink);
+						if($index == 0)
+						printf('<tr><td>&nbsp;</td><td> <a target="_blank" href="%sprint_agenda=1">'.__('Print Agenda','rsvptoast').'</a> | <a target="_blank" href="%sprint_agenda=1&word_agenda=1">'.__('Download to Word','rsvptoast').'</a></td></tr>', $permalink,$permalink);
 					}
 				}
 			  }
@@ -118,10 +124,6 @@ foreach($templates as $template)
 	{
 	$permalink = rsvpmaker_permalink_query($template->ID);
 	printf('<p>%s<br /><a href="%s">%s</a><br /><a href="%s">%s</a><br /><a href="%s">%s</a>', $template->post_title, add_from_template_url($template->ID), __("Add Events (based on template)",'rsvptoast'),agenda_setup_url($template->ID), __("Agenda Setup (drag-and-drop editor)",'rsvptoast'), edit_template_url($template->ID), __("Edit Shortcodes",'rsvptoast'));
-	//printf('<p>Edit: <a href="%s">%s ('.__("Template",'rsvptoast').')</a></p>',edit_template_url($template->ID), $template->post_title);
-	//$role_editor = agenda_setup_url($template->ID);
-	//printf('<p>'.__("Agenda Setup",'rsvptoast').': <a href="%s">%s('.__("Template",'rsvptoast').')</a></p>',$role_editor, $template->post_title);	
-	//printf('<p><a href="%s">%s</a>: %s %s</p>',add_from_template_url($template->ID), __("Add events",'rsvptoast'),__("based on Template",'rsvptoast'),$template->post_title);	
 	}		
 }
 
@@ -183,7 +185,7 @@ $next = $wpdb->get_row($sql);
 if(!$next)
 	die('no event scehduled');
 
-echo "Next meeting $next->datetime <br />";	
+echo __("Next meeting",'rsvptoast')." $next->datetime <br />";	
 
 $nexttime = $next->datetime;
 
@@ -192,19 +194,19 @@ echo date('l jS \of F Y h:i:s A',$t);
 $now = mktime();
 if($now > $t)
 	{
-	echo "<div>Reminder time is past</div>";
+	echo "<div>".__('Reminder time is past','rsvptoast')."</div>";
 	$reminder_run = (int) get_option('reminder_run');
 	if($reminder_run == $t)
-		echo "<div>Reminder already ran</div>";
+		echo "<div>".__('Reminder already ran','rsvptoast')."</div>";
 	else
 		{
-		echo "<div>Run reminder now </div>";
+		echo "<div>".__('Run reminder now','rsvptoast')." </div>";
 		wp4_speech_prompt($next, strtotime($next->datetime));
 		update_option('reminder_run',$t);
 		}
 	}
 else
-	echo "<br />Reminder time is NOT past";
+	echo "<br />".__("Reminder time is NOT past",'rsvptoast');
 
 die();
 }
@@ -628,7 +630,7 @@ function agenda_layout($atts) {
 		}
 	else
 		$radio = '';
-	return sprintf('<li id="%s"><em>Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).</em><input type="hidden" name="agenda_layout[%s]" value="1">%s <br /><input type="checkbox" name="remove[%s]" value="1" /> Remove</li>',$index, $index, $radio,$index);
+	return sprintf('<li id="%s"><em>'.__('Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, one at the beginning of the first column, one at the beginning of the second column, and a third at the end of the second column. One column may be designated the sidebar (skinnier column).','rsvptoast').'</em><input type="hidden" name="agenda_layout[%s]" value="1">%s <br /><input type="checkbox" name="remove[%s]" value="1" /> Remove</li>',$index, $index, $radio,$index);
 	}
 }
 
@@ -1221,7 +1223,7 @@ foreach($results as $row)
 		echo $manual . " - ".$date .'<br /><br />'; 
 	}
 
-echo "<h2>Other Roles</h2>\n";
+echo "<h2>".__("Other Roles",'rsvptoast')."</h2>\n";
 
 $sql = "SELECT *
 FROM `".$wpdb->prefix."postmeta`
@@ -1261,7 +1263,7 @@ foreach($results as $row)
 
 foreach($done as $index => $roles)
 	{
-		echo "<p>user: ".$index;
+		echo "<p>".__("user",'rsvptoast').": ".$index;
 		print_r($roles);
 		echo "</p>\n";
 	}
@@ -1701,14 +1703,13 @@ if($_POST["editor_suggest"])
 			
 			$date = $wpdb->get_var("SELECT DATE_FORMAT(datetime,'%M %d, %Y') FROM ".$wpdb->prefix."rsvp_dates WHERE postID=".$post->ID. ' ORDER BY datetime');
 			$neatname = preg_replace('/[_\-0-9]/',' ',$name);
-			//$output .= sprintf('<p>%s %s %s</p>',$neatname,$name, $value);
 			$user = get_userdata($current_user->ID);
 			$msg = sprintf('<p>Toastmaster %s %s %s %s %s %s</p>',$user->first_name,$user->last_name,__('has recomended you for the role of','rsvptoast'),$neatname, __('for','rsvptoast'),$date);
 			$member = get_userdata($value);
 			$email = $member->user_email;
 			$hash = recommend_hash($name, $value);
 			$url = $permalink.sprintf('key=%s&you=%s&code=%s&count=%s',$name,$value,$hash,$count);
-			$msg .= sprintf("\n\n".__e('<p>Click here to <a href="%s">ACCEPT</a> (no password required if you act before someone else takes this role)</p>','rsvptoast'),$url);
+			$msg .= sprintf("\n\n".__('<p>Click here to <a href="%s">ACCEPT</a> (no password required if you act before someone else takes this role)</p>','rsvptoast'),$url);
 			if($_POST["editor_suggest_note"][$name])
 				$msg .= "\n\n<p><b>".__('Note from','rsvptoast')." ".$user->first_name.' '.$user->last_name.": </b>".$_POST["editor_suggest_note"][$name].'</p>';
 			$mail["html"] = $msg;
@@ -1801,7 +1802,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 	if(is_user_member_of_blog() )
 		echo '<p><em>'.__('Contact details such as phone numbers and email are only displayed when you are logged into the website (and should only be used for Toastmasters business)','rsvptoast').'.</em><br />'.__('Related','rsvptoast').': <a href="'.site_url().'?print_contacts=1">'.__('Print Contact List','rsvptoast').'</a></p>';
 	else
-		printf( __('<p><em>These members have chosen to create public profiles. Members may <a href="%s">login</a> for an expanded listing.</em></p>','rsvptoast'),login_redirect($_SERVER['REQUEST_URI']));
+		printf( '<p><em>%s <a href="%s">%s</a>.</em></p>',__('These members have chosen to create public profiles. For an expanded listing, members may','rsvptoast'),login_redirect($_SERVER['REQUEST_URI']), __('login','rsvptoast'));
 		
 	if(is_array($officers))
 	{
@@ -1895,7 +1896,6 @@ if(!empty($title))
 			if( $userdata->$name && strpos($userdata->$name,'://') )
 				printf('<div><a target="_blank" href="%s">%s</a></div>',$userdata->$name,$value);
 			}
-		//echo $name.' '. $userdata->$name.'<br />';
 		}
 		
 		if(!$public_context || $userdata->public_email)
@@ -1927,7 +1927,7 @@ if(!empty($title))
 				$expires = $default_expires;
 			printf('<p> 
 			<form action="'.get_permalink($post->ID).'" method="post"><input name="member_id" type="hidden" value="%d" />Status<br /><textarea name="status" cols="60" rows="1">%s</textarea>
-			<br />Status Expires: <input type="" name="status_expires" value="%s" /> Year-Month-Day<br />
+			<br />'.__('Status Expires','rsvptoast').': <input type="" name="status_expires" value="%s" /> '.__('Year-Month-Day','rsvptoast').'<br />
 			<input type="submit" name="submit" value="'.__('Submit','rsvptoast').'" /></form></p>',$userdata->ID,$userdata->status, $expires);
 			if(isset($userdata->status))
 			printf('<form action="'.get_permalink($post->ID).'" method="post"><input name="member_id" type="hidden" value="%d" /><input type="submit" name="remove_status" value="'.__('Clear Status','rsvptoast').'" /></form>',$userdata->ID,$userdata->status);			
@@ -1966,20 +1966,11 @@ foreach($lines as $linenumber => $line)
 			{
 				$label[trim($cell)] = $index;
 			}
-/*		echo "<pre>";
-		print_r($label);
-		echo "</pre>";
-*/
 		}
 	else
 	{
 	if(empty($cells[0]))
 		break;
-
-/*		echo "<pre>";
-		print_r($cells);
-		echo "</pre>";
-*/
 	$user = array();
 	if(isset($label["First Name"]))
 		{
@@ -2085,7 +2076,7 @@ if($_POST["first_name"] && $_POST["last_name"] && $_POST["email"])
 	$user["user_login"] = trim($_POST["user_login"]);
 	if(empty($_POST["email"]))
 		{
-		echo "Both a user name and an email must be supplied";
+		echo __("Both a user name and an email must be supplied",'rsvptoast');
 		continue;
 		}
 	$user["user_email"] = trim($_POST["email"]);
@@ -2707,12 +2698,6 @@ foreach($wp_filter["the_content"] as $priority => $filters)
 			{
 			$r = remove_filter( 'the_excerpt', $name, $priority );
 			$r = remove_filter( 'the_content', $name, $priority );
-			/*
-			if($r)
-				echo "removed $name $priority <br />";
-			else
-				echo "error $name $priority <br />";
-			*/
 			}
 		}
 
@@ -2882,10 +2867,10 @@ $blogusers = get_users('blog_id=1&orderby=nicename');
 	$plain_password = 'someawe';
 	if($wp_hasher->CheckPassword($plain_password, $password_hashed)) {
 		wp_update_user(array('ID' => $user-ID, 'user_pass' => wp_generate_password() ) );
-	   	echo $user->user_login." YES, Matched changing now<br />";
+	   	echo $user->user_login." ".__("YES, Matched changing now",'rsvptoast')."<br />";
 	}
 	else {
-	   echo $user->user_login." Password already reset<br />";
+	   echo $user->user_login." ".__("Password already reset",'rsvptoast')."<br />";
 	}
 
 	}
@@ -2938,7 +2923,7 @@ if($_POST["event"])
 					add_post_meta($event, $name, $value);
 			}
 	$p = rsvpmaker_permalink_query($event);
-	return sprintf('Updated your data for event listing <a href="%s">%s</a>',$p,$p);
+	return sprintf(__('Updated your data for event listing','rsvptoast').' <a href="%s">%s</a>',$p,$p);
 	}
 elseif( ($speaker = $_GET["speaker"]) && ($event = $_GET["event"]) && ($count = $_GET["count"])) 
 	{
@@ -3123,7 +3108,7 @@ p
 			if($speaker = $signup["_Speaker_".$i][0])
 				{
 				$userdata = get_userdata($speaker);
-				echo "<h1>Speaker ".$userdata->first_name.' '.$userdata->last_name."</h1>";
+				echo "<h1>".__("Speaker",'rsvptoast')." ".$userdata->first_name.' '.$userdata->last_name."</h1>";
 				$title = $signup["_title_Speaker_".$i][0];
 				$intro = $signup["_intro_Speaker_".$i][0];
 				$manual = $signup["_manual_Speaker_".$i][0];
@@ -3284,7 +3269,7 @@ function awemailer($mail) {
 	
 	if(!$rsvp_options["smtp"])
 		{
-		echo "<div>email not set up</div>";
+		echo "<div>".__("Email not set up",'rsvptoast')."</div>";
 		return;
 		$headers = 'From: '.$mail["from"] . "\r\n" .
     'Reply-To: '. $mail["replyto"] . "\r\n" .
@@ -3309,8 +3294,8 @@ function awemailer($mail) {
 	}
 	elseif($rsvp_options["smtp"] == "sendgrid") {
 	$rsvpmail->SMTPAuth   = true;                  // enable SMTP authentication
-	$mail->Host = 'smtp.sendgrid.net';
-	$mail->Port = 587; 
+	$rsvpmail->Host = 'smtp.sendgrid.net';
+	$rsvpmail->Port = 587; 
 	}
 	else {
 	$rsvpmail->Host = $rsvp_options["smtp_server"]; // SMTP server
@@ -3703,7 +3688,7 @@ if($_POST['wp4toastmasters_officer_ids'] && current_user_can('manage_options') )
 				$id = (int) $id;
 				if(($id == 0) || ($id == $current_user->ID) )
 					continue;
-				elseif( user_can('manage_options', $id) )
+				elseif( user_can($id, 'manage_options') )
 					continue; // don't mess with the admin
 				else
 					{
@@ -4219,7 +4204,7 @@ font-size: 30px;
 <input type="hidden" name="post_id" value="<?php echo $post_id; ?>" />
 <div style="float: right; width: 250px; text-align: center; margin-right: 10px;"><a href="<?php echo edit_template_url($post_id); ?>"><?php _e("Switch to standard WordPress editor<br />(shortcode view)",'rsvptoast');?></a></div>
 
-<h1>Title: <input type="text" name="post_title" value="<?php echo $post->post_title; ?>" size="30" /></h1>
+<h1><?php _e("Title",'rsvptoast');?>: <input type="text" name="post_title" value="<?php echo $post->post_title; ?>" size="30" /></h1>
 <p><em><?php _e("You can add and drop roles, change the number of openings for speakers and other roles, and specify other formatting parameters. To reorder items for the agenda and signup form, position your mouse over any of the blocks outlined in blue to drag-and-drop them into another position.",'rsvptoast');?></em></p>
 <?php shortcode_eventdates($post->ID); ?>
 <ul id="sortable">
@@ -4265,11 +4250,11 @@ $sidebar_officers = $post_sidebar_officers;
 	}
 agenda_sidebar_editor ($sidebar, $sidebar_officers);
 if($template_id)
-	printf('<p><input type="checkbox" name="template_sidebar" value="%d" %s /> Default sidebar for this template',$template_id, $template_checked);
-printf('<p><input type="checkbox" name="option_sidebar" value="1" %s /> Default sidebar (if not set in template)',$option_checked);
+	printf('<p><input type="checkbox" name="template_sidebar" value="%d" %s /> '.__('Default sidebar for this template','rsvptoast'),$template_id, $template_checked);
+printf('<p><input type="checkbox" name="option_sidebar" value="1" %s /> '.__('Default sidebar (if not set in template)','rsvptoast'),$option_checked);
 }
 else
-	echo '<p><input type="checkbox" name="enable_sidebar_layout" value="1" /> Enable agenda layout with sidebar';
+	echo '<p><input type="checkbox" name="enable_sidebar_layout" value="1" /> '.__('Enable agenda layout with sidebar','rsvptoast').'</p>';
 
 ?>
 <input type="hidden" id="order" name="order" value="<?php for($i = 0; $i <= $agenda_setup_item; $i++) { if($i > 0) echo ","; echo "item_".$i; } ?>">
@@ -4480,9 +4465,9 @@ if( !in_category('members-only') )
 	return $content;
 
 if(!is_user_member_of_blog() )
-return '<div style="width: 100%; background-color: #ddd;">You must be logged in and a member of this blog to view this content</div>'. sprintf('<div id="member_only_login"><a href="%s">Login to View</a></div>',site_url('/wp-login.php?redirect_to='.urlencode(get_permalink()) ) );
+return '<div style="width: 100%; background-color: #ddd;">'.__('You must be logged in and a member of this blog to view this content','rsvptoast').'</div>'. sprintf('<div id="member_only_login"><a href="%s">'.__('Login to View','rsvptoast').'</a></div>',site_url('/wp-login.php?redirect_to='.urlencode(get_permalink()) ) );
 else
-return $content.'<div style="width: 100%; background-color: #ddd;">Note: This is member-only content (login required)</div>';
+return $content.'<div style="width: 100%; background-color: #ddd;">'.__('Note: This is member-only content (login required)','rsvptoast').'</div>';
 
 }
 
@@ -4493,7 +4478,7 @@ class WP_Widget_Members_Posts extends WP_Widget {
 
 	public function __construct() {
 		$widget_ops = array('classname' => 'widget_members_entries', 'description' => __( "Your site&#8217;s most recent members-only posts.",'rsvptoast') );
-		parent::__construct('members-posts', __('Members Posts'), $widget_ops);
+		parent::__construct('members-posts', __('Members Posts','rsvptoast'), $widget_ops);
 		$this->alt_option_name = 'widget_members_entries';
 
 		add_action( 'save_post', array($this, 'flush_widget_cache') );
@@ -4603,10 +4588,10 @@ class WP_Widget_Members_Posts extends WP_Widget {
 		$number    = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
 		$show_date = isset( $instance['show_date'] ) ? (bool) $instance['show_date'] : false;
 ?>
-		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','rsvptoast' ); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:','rsvptoast' ); ?></label>
 		<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
 
 		<p><input class="checkbox" type="checkbox" <?php checked( $show_date ); ?> id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" />
@@ -4649,7 +4634,7 @@ class WP_Widget_Club_News_Posts extends WP_Widget {
 
 		ob_start();
 
-		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Club News' );
+		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Club News','rsvptoast' );
 
 		/** This filter is documented in wp-includes/default-widgets.php */
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
@@ -4760,7 +4745,7 @@ add_action( 'widgets_init', function(){
 
 function club_news($args) {
 ob_start();		
-		$title = (!empty($args["title"]) ) ? $args["title"] : 'Club News';
+		$title = (!empty($args["title"]) ) ? $args["title"] : __('Club News','rsvptoast');
 		$show_date = (!empty($args["show_date"])) ? 1 : 0;
 		$show_excerpt = (!empty($args["show_excerpt"])) ? 1 : 0;
 		$show_thumbnail = (!empty($args["show_thumbnail"])) ? 1 : 0;
@@ -4918,7 +4903,7 @@ if($post_id)
 {
 
 $custom = get_post_custom($post->ID);
-echo "<pre>Custom\n";
+echo "<pre>".__("Custom",'rsvptoast')."\n";
 print_r($custom);
 echo "<pre>";
 
@@ -4951,7 +4936,7 @@ $sidebar = !empty($custom["_sidebar_officers"][0]);
 	}
 
 ?>
-<h3><?php _e('Sidebar for'); echo " "; the_title(); echo " ".$date; ?></h3>
+<h3><?php _e('Sidebar for','rsvptoast'); echo " "; the_title(); echo " ".$date; ?></h3>
 <form action="<?php echo admin_url('edit.php?post_type=rsvpmaker&page=agenda_sidebar&post_id='.$post_id); ?>" method="post">
 <?php
 agenda_sidebar_editor($sidebar, $sidebar_officers);
