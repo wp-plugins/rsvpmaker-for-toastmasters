@@ -8,7 +8,7 @@ $reconcilepg = add_submenu_page( 'toastmasters_reports', 'Reconcile', 'Reconcile
 add_submenu_page( 'toastmasters_reports', 'Edit Stats', 'Edit Member Stats', 'edit_others_rsvpmakers', 'toastmasters_edit_stats', 'toastmasters_edit_stats');
 add_submenu_page( 'toastmasters_reports', 'Record Attendance', 'Record Attendance', 'edit_others_rsvpmakers', 'toastmasters_attendance', 'toastmasters_attendance');
 add_submenu_page( 'toastmasters_reports', 'Attendance Report', 'Attendance Report', 'read', 'toastmasters_attendance_report', 'toastmasters_attendance_report');
-add_submenu_page( 'toastmasters_reports', 'Competent Communicator Progress Report', 'CC Progress', 'read', 'toastmasters_cc', 'toastmasters_cc');
+add_submenu_page( 'toastmasters_reports', 'Competent Communicator Progress Report', 'CC Progress Report', 'read', 'toastmasters_cc', 'toastmasters_cc');
 add_submenu_page( 'toastmasters_reports', 'Competent Leader Progress Report', 'CL Progress', 'read', 'cl_report', 'cl_report');
 add_submenu_page( 'toastmasters_reports', 'Mentors', 'Mentors', 'edit_others_rsvpmakers', 'toastmasters_mentors', 'toastmasters_mentors');
 add_menu_page( 'Import Free Toast Host Data', 'Import Free Toast Host Data', 'edit_others_rsvpmakers', 'import_fth', 'import_fth');
@@ -102,27 +102,13 @@ if($_POST["adj"])
 							$wpdb->show_errors();
 							echo $sql . " line 122<br />";
 
-						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
-							//echo $sql . "<br />";
 							$wpdb->query($sql);
 						}
-/*
-						if($count > 0)
-						{						
-						printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
-						update_user_meta($user_id, $role, $count);
-						}
-						elseif($_POST["was"][$user_id][$role])
-						{						
-						printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
-						update_user_meta($user_id, $role, $count, $_POST["was"][$user_id][$role]);
-						}					
-*/
 					}
 
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Member stats');
+		<p><strong>%s '.__('updated','rsvptoast').'.</strong></p>
+	</div>',__('Member stats','rsvptoast'));
 					
 			}
 	if($_POST["addcl"])
@@ -156,7 +142,7 @@ if($_GET["toastmaster"])
 		$userdata = get_userdata($id);
 		printf('<h2>%s %s</h2>',$userdata->first_name, $userdata->last_name);
 		if($_GET["edit"])
-		echo "<p><em>Use this form to give credit for activities that were not tracked through the agenda.</em></p>";
+		echo "<p><em>".__('Use this form to give credit for activities that were not tracked through the agenda.','rsvptoast')."</em></p>";
 		$myroles = awesome_get_stats($userdata);
 		foreach($toast_roles as $role)
 			{
@@ -168,7 +154,7 @@ if($_GET["toastmaster"])
 				else
 					$in = '';
 
-				printf('<p>%s%d %s</p>',$in,$myroles[$role],$role); //echo "<td>".$myroles[$role]."</td>";
+				printf('<p>%s%d %s</p>',$in,$myroles[$role],$role); 
 			}
 
 		foreach($competent_leader as $role)
@@ -182,7 +168,7 @@ if($_GET["toastmaster"])
 					}
 				else
 					$in = '';
-				printf('<p>%s%d %s</p>',$in,$myroles[$role],$role); //echo "<td>".$myroles[$role]."</td>";
+				printf('<p>%s%d %s</p>',$in,$myroles[$role],$role); 
 				}
 			}
 
@@ -213,11 +199,11 @@ if($_GET["toastmaster"])
 			printf('<p><textarea name="adj[%s][toastuser_note]" rows="5" cols="80"></textarea>',$userdata->ID);
 		
 		if($_GET["edit"])
-			echo '<p><input type="checkbox" name="date_it" value="1" checked="checked" /> Include today\'s date (clear checkbox if you do NOT want these adjustments included in reports on the current period).</p>
+			echo '<p><input type="checkbox" name="date_it" value="1" checked="checked" /> '.__("Include today's date (clear checkbox if you do NOT want these adjustments included in reports on the current period).",'rsvptoast').'</p>
 <input type="hidden" name="toastmaster" value="'.$id.'" />
 <p><button>Save</button></p></form>';
 		else
-	printf('<h2><a href="%s" class="add-new-h2">Edit Stats For This Member</a></h2>',admin_url('admin.php?page=toastmasters_edit_stats#'.$userdata->ID) );
+	printf('<h2><a href="%s" class="add-new-h2">'.__('Edit Stats For This Member','rsvptoast').'</a></h2>',admin_url('admin.php?page=toastmasters_edit_stats#'.$userdata->ID) );
 			
 		echo get_latest_speeches($id, $myroles);
 	}
@@ -244,7 +230,7 @@ printf('<div id="message" class="updated">
 			$userdata = get_userdata($row->user_id);
 			printf('<p><input type="checkbox" name="delete_adjustment[]" value="%d"> %s %s %s %s</p>',$row->ID,$userdata->first_name, $userdata->last_name, $row->role, $row->quantity);
 		}
-	echo '<p><button>Delete Checked</button></p>';
+	echo '<p><button>'.__('Delete Checked','rsvptoast').'</button></p>';
 	}
 else
 {
@@ -252,7 +238,7 @@ else
 if($_GET["edit"])
 {
 printf('<form action="%s" method="post">',admin_url('admin.php?page=toastmasters_reports') );
-echo "<p><em>Use this form to give credit for activities that were not tracked through the agenda.</em></p>";
+echo "<p><em>".__("Use this form to give credit for activities that were not tracked through the agenda.",'rsvptoast')."</em></p>";
 }
 else
 {
@@ -275,9 +261,9 @@ if(is_admin())
 ?>
 <form action="admin.php" method="get">
 <input type="hidden" name="page" value="toastmasters_reports" />
-Start Month: <input name="start_month" size="6" value="<?php echo $month; ?>">
-Start Year: <input name="start_year"  size="6" value="<?php echo $year; ?>">
-<button>Set</button> <?php echo $startmsg; ?>
+<?php _e("Start Month",'rsvptoast'); ?>: <input name="start_month" size="6" value="<?php echo $month; ?>">
+<?php _e("Start Year",'rsvptoast'); ?>: <input name="start_year"  size="6" value="<?php echo $year; ?>">
+<button><?php _e("Set",'rsvptoast'); ?></button> <?php echo $startmsg; ?>
 </form>
 <?php
 }// end is admin
@@ -302,7 +288,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 //echo implode("<br />",$toast_all_roles);
 
 echo '<table   class="wp-list-table widefat fixed posts" >';
-$l = '<tr><th>Name</th><th  class="role">CC Speeches</th>';
+$l = '<tr><th>'.__('Name','rsvptoast').'</th><th  class="role">'.__('CC Speeches','rsvptoast').'</th>';
 foreach ($toast_roles as $role)
 	$l .= '<th class="role">'.$role."</th>";
 $l .= "</tr>";
@@ -339,7 +325,7 @@ echo "</table>";
 
 if($_GET["edit"])
 {
-echo '<p><button>Save</button></p>
+echo '<p><button>'.__('Save','rsvptoast').'</button></p>
 </form>
 ';
 }
@@ -450,7 +436,7 @@ if($_POST)
 printf('<div id="message" class="updated">
 		<p><strong>%s updated.</strong></p>
 	</div>','Reconciliation report');
-	echo '<div style="margin-bottom: 20px;"><h2>Would You Like To Record Attendance?</h2>';
+	echo '<div style="margin-bottom: 20px;"><h2>'.__('Would You Like To Record Attendance?','rsvptoast').'</h2>';
 	toastmasters_attendance();
 	echo "</div>";
 	}
@@ -470,13 +456,13 @@ foreach($results as $row)
 	}
 
 ?>
-<h1>Reconcile Meeting Roles</h1><p><em>Use this form to reconcile and add to your record of roles filled at past meetings.</em></p>
+<h1><?php echo __('Reconcile Meeting Roles','rsvptoast').'</h1><p><em>'.__('Use this form to reconcile and add to your record of roles filled at past meetings.','rsvptoast'); ?></em></p>
 <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 <input type="hidden" name="page" value="toastmasters_reconcile" />
 <select name="pick">
 <?php echo $options; ?>
 </select>
-<button>Get Event</button>
+<button><?php _e('Get Event','rsvptoast'); ?></button>
 </form>
 <?php
 
@@ -607,8 +593,6 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 	}
 
 // TODO add routine to edit list of roles for table
-//echo implode("<br />",$toast_all_roles);
-
 
 printf("<h2>%s</h2>",$r_post->date);
 printf('<form action="%s" method="post"><input type="hidden" name="event" value="%d">',admin_url('admin.php?page=toastmasters_attendance'), $r_post->event_id);
@@ -648,7 +632,7 @@ submit_button();
 
 
 function toastmasters_attendance_report() {
-echo '<div class="wrap"><h2>Attendance Report</h2>';
+echo '<div class="wrap"><h2>'.__('Attendance Report','rsvptoast').'</h2>';
 
 if(is_admin())
 {
@@ -671,9 +655,9 @@ else
 ?>
 <form action="admin.php" method="get">
 <input type="hidden" name="page" value="toastmasters_attendance_report" />
-Start Month: <input name="start_month" size="6" value="<?php echo $month; ?>">
-Start Year: <input name="start_year"  size="6" value="<?php echo $year; ?>">
-<button>Set</button> <?php echo $startmsg; ?>
+<?php _e('Start Month','rsvptoast'); ?>: <input name="start_month" size="6" value="<?php echo $month; ?>">
+<?php _e('Start Year','rsvptoast'); ?>: <input name="start_year"  size="6" value="<?php echo $year; ?>">
+<button><?php _e('Set','rsvptoast'); ?></button> <?php echo $startmsg; ?>
 </form>
 <?php
 }
@@ -715,8 +699,6 @@ foreach($attendance as $user_id => $count)
 			$barhtml = '<div>'.$count.'</div>';
 		
 		$userdata = get_userdata($user_id);
-		//print_r($userdata);
-		//echo $barhtml;
 
 		echo '<tr><td>';
 		echo $userdata->first_name;
@@ -724,7 +706,6 @@ foreach($attendance as $user_id => $count)
 		echo $userdata->last_name;
 		echo '</td><td>';
 		echo $barhtml;
-		//echo $count;
 		echo '</td></tr>';
 	}
 echo "</table>";
@@ -751,7 +732,7 @@ function toastmasters_cc() {
 $ccs = array();
 
 echo '<div class="wrap">
-<h2>Competent Communicator Progress Report</h2>';
+<h2>'.__('Competent Communicator Progress Report','rsvptoast').'</h2>';
 
 global $wpdb;
 $wpdb->show_errors();
@@ -761,14 +742,11 @@ $results = $wpdb->get_results($sql);
 foreach($results as $row)
 	{
 		$sql = sprintf("SELECT meta_value FROM $wpdb->postmeta WHERE post_id=%d AND meta_key='%s'",$row->post_id,str_replace('_manual','',$row->meta_key));
-		//echo $sql . "<br />";
 		$member = $wpdb->get_var($sql);
 		if($member)
 			{
 			$ccs[$member]++;
 			}
-		//else
-			//echo "NOT FOUND<br />";
 	}
 
 $sql = "SELECT * FROM ".$wpdb->prefix."toastmasters_history WHERE role = 'CC Speeches'";
@@ -824,8 +802,6 @@ echo "<table>";
 		echo $userdata->first_name;
 		echo ' ';
 		echo $userdata->last_name;
-		//echo ' ';
-		//echo $userdata->education_awards;
 		echo '</strong>'.$d.'</td><td>';
 		echo $barhtml;
 		echo '</td></tr>';
@@ -833,7 +809,7 @@ echo "<table>";
 echo "<table>";
 
 if(isset($advanced))
-echo "<h3>Advanced Members</h3><p>Potential additional CC?</p>".$advanced;
+echo "<h3>".__("Advanced Members</h3><p>Potential additional CC?",'rsvptoast')."</p>".$advanced;
 
 echo "</div>";
 
@@ -858,7 +834,7 @@ foreach($choices as $choice)
 	if($score >= $goal)
 		{
 		if($echo)
-			echo '<div><span style="color: green; font-weight: bold">Goal Met!</span>'."</div>\n";
+			echo '<div><span style="color: green; font-weight: bold">'.__('Goal Met!','rsvptoast').'</span>'."</div>\n";
 		return true;
 		}
 	else
@@ -939,60 +915,17 @@ krsort($cl_leaders);
 ksort($nocl);
 ksort($text2);
 
-//echo "<h2>Projects Completed (out of 10)</h2><table>";
 
 foreach($cl_leaders as $count => $users)
 	{
-/*		$bar = 500 * ($count / 10);
-		$barhtml = '<div style="background-color: red; padding: 5px; font-size: large; width: '.$bar.'px"><span style="background-color: #fff;font-weight: bold; margin: 5px;">'.$count.'</span></div>';
-*/
 
 	foreach($users as $user)
 		{
-/*		echo '<tr><td><strong>';
-		echo $user->first_name;
-		echo ' ';
-		echo $user->last_name;
-		//echo ' ';
-		//echo $userdata->education_awards;
-		echo '</strong></td><td>';
-		echo $barhtml;
-		echo '</td></tr>';
-*/
 		$output .= $text[$user->ID];
 
 		$table2 .= '<tr><td>'.$count.'</td>'.$project_gaps[$user->ID].'</tr>';
 		}
 	}
-//echo "</table>";
-
-/*
-echo "<table><tr><th class=\"name\">Name</th><th class=\"project\">Project 1</th>
-<th class=\"project\">Project 2</th>
-<th class=\"project\">Project 3</th>
-<th class=\"project\">Project 4</th>
-<th class=\"project\">Project 5</th>
-<th class=\"project\">Project 6</th>
-<th class=\"project\">Project 7</th>
-<th class=\"project\">Project 8</th>
-<th class=\"project\">Project 9</th>
-<th class=\"project\">Project 10</th>
-</tr>
-";
-
-foreach($cl_leaders as $count => $users)
-	{
-	foreach($users as $userdata)
-		{
-		cl_project_gaps ($userdata);
-		}
-	}
-echo "</table>
-";
-
-
-print_r($project_gaps);
-*/
 
 echo "<table><tr><th>#</th><th class=\"name\">Name</th><th class=\"project\">Project 1</th>
 <th class=\"project\">Project 2</th>
@@ -1013,8 +946,6 @@ echo "<div>".implode("<br />",$nocl)."</div>";
 
 echo $output . implode($text2);
 
-//$userdata = get_userdata(45);
-//echo "<p>Projects Completed: $completed</p>";
 
 echo "</div>";
 
@@ -1033,8 +964,8 @@ $myroles = awesome_get_stats($userdata);
 
 $completed = 0;
 
-echo '<h3>PROJECT 1: Listening<br />
-COMPLETE 3 OF 4</h3>';
+echo '<h3>'.__('PROJECT 1: Listening','rsvptoast').'<br />
+'.__('COMPLETE 3 OF 4','rsvptoast').'</h3>';
 
 $choices = array(
 'Ah Counter',
@@ -1047,14 +978,14 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>Listening: 3 OF 4</td>';
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'/div>'/__('Listening: 3 OF 4','rsvptoast').'</td>';
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.sprintf('TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Listening: 3 OF 4');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').sprintf('</div><a href="#%s">%s</a></td>',$userdata->ID,__('Listening: 3 OF 4','rsvptoast'));
 
-echo "<h3>PROJECT 2: Critical Thinking<br />
-  COMPLETE 2 OF 3</h3>";
+echo "<h3>".__('PROJECT 2: Critical Thinking','rsvptoast')."<br />
+ ".__("COMPLETE 2 OF 3",'rsvptoast')."</h3>";
 
 $choices = array(
 'Evaluator',
@@ -1067,14 +998,14 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Critical Thinking: 2 OF 3');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>', __('Critical Thinking: 2 OF 3','rsvptoast') );
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Critical Thinking: 2 OF 3');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Critical Thinking: 2 OF 3','rsvptoast'));
 
-echo "<h3>PROJECT 3: Giving Feedback<br />
-COMPLETE 3 OF 3</h3>";
+echo "<h3>".__("PROJECT 3: Giving Feedback",'rsvptoast')."<br />
+".__("COMPLETE 3 OF 3",'rsvptoast')."</h3>";
 
 $choices = array(
 'Evaluator',
@@ -1087,21 +1018,21 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Feedback: 3 OF 3');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>'.sprintf('%s</td>'.__('Feedback: 3 OF 3','rsvptoast') );
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Feedback: 3 OF 3');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Feedback: 3 OF 3','rsvptoast'));
 
-echo "<h3>PROJECT 4: Time Management<br />
-  COMPLETE TIMER</h3>";
+echo "<h3>".__("PROJECT 4: Time Management",'rsvptoast')."<br />
+  ".__("COMPLETE TIMER",'rsvptoast')."</h3>";
 $choices = array(
 'Timer');
 
 $goal = 1;
 $met = is_requirement_met($choices, $goal);
 
-echo "<h3>+1 Other</h3>\n";
+echo "<h3>+1 ".__("Other",'rsvptoast')."</h3>\n";
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1148,8 +1079,8 @@ if($met)
 else
 	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Planning & Implementation: 3 OF 4');
 
-echo "<h3>PROJECT 6: Organization and Delegation<br />
-  COMPLETE 1 OF 6</h3>\n";
+echo "<h3>".__("PROJECT 6: Organization and Delegation",'rsvptoast')."<br />
+  ".__("COMPLETE 1 OF 6",'rsvptoast')."</h3>\n";
 
 $choices = array(
 "Help Organize a Club Speech Contest",
@@ -1166,14 +1097,14 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Organization & Delegation: 1 of 6');
+	echo '<h4 style="color: green;">'.__("Project Complete",'rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>'.sprintf('%s</td>',__('Organization & Delegation: 1 of 6','rsvptoast') );
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Organization & Delegation: 1 of 6');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID, __('Organization & Delegation: 1 of 6','rsvptoast') );
 
-echo "<h3>PROJECT 7: Facilitation<br />
-  COMPLETE 2 OF 4</h3>\n";
+echo "<h3>".__("PROJECT 7: Facilitation",'rsvptoast')."<br />
+  ".__("COMPLETE 2 OF 4",'rsvptoast')."</h3>\n";
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1188,14 +1119,14 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Facilitation: 2 OF 4');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>'.sprintf('%s</td>',__('Facilitation: 2 OF 4','rsvptoast') );
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Facilitation: 2 of 4');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Facilitation: 2 of 4','rsvptoast') );
 
-echo "<h3>PROJECT 8: Motivation<br />
-  COMPLETE 1 CHAIR</h3>\n";
+echo "<h3>".__("PROJECT 8: Motivation",'rsvptoast')."<br />
+  ".__("COMPLETE 1 CHAIR","rsvptoast")."</h3>\n";
 
 $choices = array("Membership Campaign Chair",
 "Club Speech Contest Chair"
@@ -1204,7 +1135,7 @@ $choices = array("Membership Campaign Chair",
 $goal = 1;
 $met = is_requirement_met($choices, $goal);
 
-echo "<h3> + 2 OTHER</h3>\n";
+echo "<h3> +2 ".__("OTHERS","rsvptoast")."</h3>\n";
 
 $choices = array(
 "PR Campaign Chair",
@@ -1219,18 +1150,18 @@ $met2 = is_requirement_met($choices, $goal);
 if($met && $met2)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Motivation: Chair + 1 Other');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>'.sprintf('%s</td>',__('Motivation: Chair + 1 Other','rsvptoast') );
 	}
 elseif($met)
-	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 1</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'DONE Chair TODO + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">'.__('Goal 1','rsvptoast').'</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('DONE Chair TODO + One Other','rsvptoast') );
 elseif($met2)
-	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 2</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'TODO Chair DONE + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 2</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('TODO Chair DONE + One Other','rsvptoast') );
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Motivation: Chair + 1 Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Motivation: Chair + 1 Other','rsvptoast') );
 
-echo "<h3>PROJECT 9: Mentoring<br />
-  COMPLETE 1 OF 3</h3>\n";
+echo "<h3>".__("PROJECT 9: Mentoring",'rsvptoast')."<br />
+  ".__("COMPLETE 1 OF 3",'rsvptoast')."</h3>\n";
 
 $choices = array(
 "Mentor for a New Member",
@@ -1244,14 +1175,14 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Mentoring: 1 of 3');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>',__('Mentoring: 1 of 3','rsvptoast') );
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Mentoring: 1 of 3');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Mentoring: 1 of 3','rsvptoast') );
 
-echo "<h3>PROJECT 10: Team Building<br />
-  COMPLETE TOASTMASTER + GENERAL EVALUATOR</h3>";
+echo "<h3>".__("PROJECT 10: Team Building",'rsvptoast')."<br />
+  ".__("COMPLETE TOASTMASTER + GENERAL EVALUATOR","rsvptoast")."</h3>";
   
 $choices = array(
 'Toastmaster of the Day',
@@ -1261,7 +1192,7 @@ $choices = array(
 $goal = 2;
 $met = is_requirement_met($choices, $goal);
 
-echo "<h3>OR 1 OF THE FOLLOWING</h3>";
+echo "<h3>".__("OR 1 OF THE FOLLOWING",'rsvptoast')."</h3>";
 
 $choices = array(
 "Membership Campaign Chair",
@@ -1277,11 +1208,11 @@ $met2 = is_requirement_met($choices, $goal);
 if($met || $met2)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Team Building');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>',__('Team Building','rsvptoast'));
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Team Building');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Team Building','rsvptoast') );
 
 return $completed;
 }
@@ -1305,10 +1236,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	echo '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>Listening: 3 OF 4</td>';
+	echo '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>'.__('Listening: 3 OF 4','rsvptoast').'</td>';
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Listening: 3 OF 4');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Listening: 3 OF 4','rsvptoast') );
 
 $choices = array(
 'Evaluator',
@@ -1321,10 +1252,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Critical Thinking: 2 OF 3');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>',__('Critical Thinking: 2 OF 3','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Critical Thinking: 2 OF 3');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,__('Critical Thinking: 2 OF 3','rsvptoast') );
 
 $choices = array(
 'Evaluator',
@@ -1337,10 +1268,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Feedback: 3 OF 3');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>%s</td>',__('Feedback: 3 OF 3','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Feedback: 3 OF 3');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Feedback: 3 OF 3','rsvptoast') );
 
 $choices = array(
 'Timer');
@@ -1361,14 +1292,14 @@ $met2 = is_requirement_met($choices, $goal, false);
 if($met && $met2)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Timer + One Other');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>',__('Timer + One Other','rsvptoast') );
 	}
 elseif($met)
-	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">Goal 1</div></div><a href="#%s">%s</a></td>',$userdata->ID,'DONE Timer TODO + One Other');
+	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">%s</div></div><a href="#%s">%s</a></td>', __('Goal 1','rsvptoast'), $userdata->ID,'DONE Timer TODO + One Other');
 elseif($met2)
-	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 2</div></div><a href="#%s">%s</a></td>',$userdata->ID,'TODO Timer DONE + One Other');
+	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">%s</div></div><a href="#%s">%s</a></td>',__('Goal 2','rsvptoast'),$userdata->ID,'TODO Timer DONE + One Other');
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Timer + One Other');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Timer + One Other','rsvptoast') );
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1383,10 +1314,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Planning & Implementation: 3 OF 4');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>%s</td>',__('Planning & Implementation: 3 OF 4','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Planning & Implementation: 3 OF 4');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID, __('Planning & Implementation: 3 OF 4','rsvptoast') );
 
 $choices = array(
 "Help Organize a Club Speech Contest",
@@ -1403,10 +1334,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Organization & Delegation: 1 of 6');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>%s</td>',__('Organization & Delegation: 1 of 6','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Organization & Delegation: 1 of 6');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'. __('TODO','rsvptoast') .'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Organization & Delegation: 1 of 6','rsvptoast') );
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1421,10 +1352,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Facilitation: 2 OF 4');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'. __('Done!','rsvptoast') .'</div>%s</td>',__('Facilitation: 2 OF 4','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Facilitation: 2 of 4');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">' . __('TODO','rsvptoast') . '</div><a href="#%s">%s</a></td>',$userdata->ID, __('Facilitation: 2 of 4','rsvptoast') );
 
 $choices = array("Membership Campaign Chair",
 "Club Speech Contest Chair"
@@ -1446,14 +1377,14 @@ $met2 = is_requirement_met($choices, $goal, false);
 if($met && $met2)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Motivation: Chair + 1 Other');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">' .__('Done!','rsvptoast'). '</div>%s</td>', __('Motivation: Chair + 1 Other','rsvptoast') );
 	}
 elseif($met)
-	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">Goal 1</div></div><a href="#%s">%s</a></td>',$userdata->ID,'DONE Chair TODO + One Other');
+	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">' . __('Goal 1','rsvptoast'). '</div></div><a href="#%s">%s</a></td>',$userdata->ID, __('DONE Chair TODO + One Other','rsvptoast') );
 elseif($met2)
-	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">Goal 2</div></div><a href="#%s">%s</a></td>',$userdata->ID,'TODO Chair DONE + One Other');
+	printf('<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red;  color: #fff;">'.__('Goal 2','rsvptoast').'</div></div><a href="#%s">%s</a></td>',$userdata->ID, __('TODO Chair DONE + One Other','rsvptoast') );
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Motivation: Chair + 1 Other');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID, __('Motivation: Chair + 1 Other','rsvptoast') );
 
 $choices = array(
 "Mentor for a New Member",
@@ -1467,10 +1398,10 @@ $met = is_requirement_met($choices, $goal, false);
 if($met)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Mentoring: 1 of 3');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>%s</td>',__('Mentoring: 1 of 3','rsvptoast') );
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Mentoring: 1 of 3');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Mentoring: 1 of 3','rsvptoast') );
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1494,10 +1425,10 @@ $met2 = is_requirement_met($choices, $goal, false);
 if($met || $met2)
 	{
 	$completed++;
-	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>%s</td>','Team Building');
+	printf('<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">'.__('Done!','rsvptoast').'</div>%s</td>',__('Team Building','rsvptoast'));
 	}
 else
-	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div><a href="#%s">%s</a></td>',$userdata->ID,'Team Building');
+	printf('<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div><a href="#%s">%s</a></td>',$userdata->ID,__('Team Building','rsvptoast') );
 
 return $completed;
 }
@@ -1511,7 +1442,6 @@ $wpdb->show_errors();
 $count = 0;
 
 $sql = "SELECT meta_key, post_id FROM `$wpdb->postmeta` where meta_value=".$user_id." AND meta_key LIKE '_Speaker%' ";
-//echo "$sql <br />";
 
 $results = $wpdb->get_results($sql);
 foreach ($results as $row) 
@@ -1567,21 +1497,21 @@ if($_POST["mentor"])
 					}
 			}
 
-printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Mentor list');
+echo '<div id="message" class="updated">
+		<p><strong>'.__('Mentor list updated','rsvptoast').'</strong></p>
+	</div>';
 
 	}
 
 if($_GET["edit"])
-	printf('<h2><a class="add-new-h2" href="%s">Return to Report</a></h2>',admin_url('admin.php?page=toastmasters_mentors') );
+	printf('<h2><a class="add-new-h2" href="%s">%s</a></h2>',admin_url('admin.php?page=toastmasters_mentors'),__('Return to Report','rsvptoast') );
 else
-	printf('<h2><a class="add-new-h2" href="%s">Edit</a></h2>',admin_url('admin.php?page=toastmasters_mentors&edit=1') );
+	printf('<h2><a class="add-new-h2" href="%s">%s</a></h2>',admin_url('admin.php?page=toastmasters_mentors&edit=1'), __('Edit','rsvptoast') );
 
 if(!$_GET["all"])
 {
 $datefilter = strtotime('3 months ago');
-printf('<p><em>Filtered by default to show members active within the last 3 months (since %s) <strong>AND</strong> who have not yet attained an educational award such as CC or CL <a href="%s">(show all)</a></em></p>',date('m/d/Y',$datefilter),admin_url('admin.php?page=toastmasters_mentors&all=1'));
+printf('<p><em>'.__('Filtered by default to show members active within the last 3 months','rsvptoast').' ('.__('since','rsvptoast').' %s) <strong>'.__('AND','rsvptoast').'</strong> '.__('who have not yet attained an educational award such as CC or CL','rsvptoast').' <a href="%s">('.__('show all','rsvptoast').')</a></em></p>',date('m/d/Y',$datefilter),admin_url('admin.php?page=toastmasters_mentors&all=1'));
 }
 
 $blogusers = get_users('blog_id='.get_current_blog_id() );
@@ -1619,7 +1549,7 @@ foreach($members as $userdata)
 	}
 
 if($_GET["edit"] && current_user_can('edit_others_rsvpmakers') )
-	echo '<button>Save</button></form>';
+	echo '<button>'.__('Save','rsvptoast').'</button></form>';
 
 echo '</div>';
 }
@@ -1628,7 +1558,7 @@ function toastmasters_edit_stats() {
 global $wpdb;
 global $toast_roles;
 global $competent_leader;
-$tasks = '<option value="">Choose a Project</option>';
+$tasks = '<option value="">'.__('Choose a Project','rsvptoast').'</option>';
 foreach($competent_leader as $task)
 	{
 		$tasks .= sprintf('<option value="%s">%s</option>',$task,$task);
@@ -1649,7 +1579,7 @@ th.role {
 }
 </style>
 <?php
-echo '<div class="wrap"><h2>Edit Member Stats</h2>';
+echo '<div class="wrap"><h2>'.__('Edit Member Stats','rsvptoast').'</h2>';
 if($_POST["newstat"])
 	{
 		$wpdb->show_errors();
@@ -1658,9 +1588,8 @@ if($_POST["newstat"])
 					foreach($newroles as $role => $count)
 					{
 						$oldcount = (int) $_POST["oldstat"][$user_id][$role];
-						if(!is_numeric($count))// || ($count != 0) || ($_POST["was"][$user_id][$role]) )
+						if(!is_numeric($count))
 						{
-						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
 						update_user_meta($user_id, $role, $count);
 						}
 						elseif($count != $oldcount)
@@ -1690,8 +1619,8 @@ foreach($_POST["editcl"] as $user_id => $cl_updates)
 	}
 
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Member stats');
+		<p><strong>%s.</strong></p>
+	</div>',__('Member stats updated','rsvptoast') );
 
 	}
 
@@ -1711,10 +1640,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 	$achievements[$index] = awesome_get_stats($userdata);
 	}
 
-// TODO add routine to edit list of roles for table
-//echo implode("<br />",$toast_all_roles);
-
-$l = '<table class="wp-list-table widefat fixed posts" ><tr><th  class="role">CC Speeches</th>';
+$l = '<table class="wp-list-table widefat fixed posts" ><tr><th  class="role">'.__('CC Speeches','rsvptoast').'</th>';
 foreach ($toast_roles as $role)
 	$l .= '<th class="role">'.$role."</th>";
 $l .= "</tr>";
@@ -1757,7 +1683,7 @@ foreach ($members as $index => $userdata)
 		echo "</p>";
 			}
 
-				printf('<p><b>Additonal Competent Leader Credits for %s %s</b></p>
+				printf('<p><b>'.__('Additonal Competent Leader Credits for','rsvptoast').' %s %s</b></p>
 				<p><select name="editcl[%d][]">%s</select><select name="editcl[%d][]">%s</select></p>
 				<p><select name="editcl[%d][]">%s</select><select name="editcl[%d][]">%s</select></p>
 				',$userdata->first_name, $userdata->last_name,$userdata->ID,$tasks,$userdata->ID,$tasks,$userdata->ID,$tasks,$userdata->ID,$tasks);
@@ -1765,7 +1691,6 @@ foreach ($members as $index => $userdata)
 	}
 
 submit_button();
-//echo '<p><button class="primary">Save</button></p></form>';
 echo '</div>';	
 }
 
@@ -1778,12 +1703,12 @@ foreach($_GET as $i => $value)
 			$query .= '&'.$i.'=';
 		$query .= $value;
 	}
-printf('<div style="float: right;"><a href="%s">Full Screen</a></div>',site_url($query));
+printf('<div style="float: right;"><a href="%s">%s</a></div>',site_url($query),__('Full Screen','rsvptoast'));
 }
 
 function import_fth () {
 ?>
-<h1>Import Free Toast Host Data</h1>
+<h1><?php _e('Import Free Toast Host Data','rsvptoast'); ?></h1>
 <?php
 global $wpdb;
 global $toast_roles;
@@ -1797,7 +1722,7 @@ $fth_roles = array();
 <form action="<?php echo $action; ?>" method="post">
 <?php
 
-	echo "<h3>Match Users</h3><p>Either match with a WordPress user or leave blank (Match?) if there is no match, as with a former member.</p>";
+	echo "<h3>".__('Match Users','rsvptoast')."</h3><p>".__("Either match with a WordPress user or leave blank (Match?) if there is no match, as with a former member.",'rsvptoast')."</p>";
 
 $blogusers = get_users('blog_id='.get_current_blog_id() );
     foreach ($blogusers as $user) {	
@@ -1921,14 +1846,14 @@ if($_POST["stats"])
 			$dates[$t] = $t;
 			$project = $speech["project"][$nameindex][$i];
 			$title = $speech["title"][$nameindex][$i];
-			printf('<p>Member: %s Date: <input type="text" name="speechdate[%s][]" value="%s"> <br />Project: <select name="project[%s][%s]"><option value="%s">%s</option>%s</select>
+			printf('<p>'.__('Member','rsvptoast').': %s '.__('Date','rsvptoast').': <input type="text" name="speechdate[%s][]" value="%s"> <br />'.__('Project','rsvptoast').': <select name="project[%s][%s]"><option value="%s">%s</option>%s</select>
 			<br />Title: <input type="text" name="title[%s][%s]" value="%s"></p>',$name, $nameindex, $date, $t, $nameindex, $project, $project, $project_options, $t, $nameindex, $title);
 			}
 		}
 
 	printf('<input type="hidden" name="dates" value="%s" />',implode(",",$dates));
 
-submit_button('Import Records (step 2)','primary'); ?>
+submit_button(__('Import Records (step 2)','rsvptoast'),'primary'); ?>
 </form>
 <?php
 }
@@ -1951,7 +1876,7 @@ elseif($_POST["dates"])
 				continue;
 			$sqldate = date('Y-m-d',$t);
 			
-			$p = array('post_title' => 'Historical Data','post_type' => 'historical-toastmsters-data','post_content' => 'used to track events imported from Free Toast Host. Do not delete.','post_status' => 'publish');
+			$p = array('post_title' => __('Historical Data','rsvptoast'),'post_type' => 'historical-toastmsters-data','post_content' => __('used to track events imported from Free Toast Host. Do not delete.','rsvptoast'),'post_status' => 'publish');
 			$post_id = wp_insert_post($p);
 			$sql = "INSERT INTO ".$wpdb->prefix."rsvp_dates SET datetime='$sqldate', postID=". $post_id; 
 			$wpdb->query($sql);
@@ -2004,13 +1929,13 @@ else
 { // step 1 form
 ?>
 <form action="<?php echo $action; ?>" method="post">
-<h3>Paste in the contents of ...</h3>
-Member Speech Historical Report:<br />
+<h3><?php _e('Paste in the contents of','rsvptoast'); ?> ...</h3>
+<?php _e('Member Speech Historical Report','rsvptoast'); ?>:<br />
 <textarea name="speeches" cols="100" rows="10"></textarea>
 <br />
-Member Role Historical Report:<br />
+<?php _e('Member Role Historical Report','rsvptoast'); ?>:<br />
 <textarea name="stats" cols="100" rows="10"></textarea>
-<?php submit_button('Import Records (step 1)','primary'); ?>
+<?php submit_button(__('Import Records (step 1)','rsvptoast'),'primary'); ?>
 </form>
 <div style="max-width: 605px;">
 <h1>Directions</h1>
