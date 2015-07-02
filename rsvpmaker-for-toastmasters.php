@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.8
+Version: 1.4.9
 Author URI: http://www.carrcommunications.com
 */
 
@@ -104,7 +104,6 @@ $count = $wpdb->get_var($sql);
 
 $args = array('post_type' => 'rsvpmaker','post_status' => 'publish', 'meta_key' => '_sked');
 $templates = get_posts($args);
-
 if($count == 0)
 	{
 
@@ -119,18 +118,20 @@ elseif($count < 10)
 
 if($templates)
 {
-echo "<p><strong>".__('Event Templates','rsvptoast').'</strong></p>';
+echo "<p><strong>Toastmasters ".__('Event Templates','rsvptoast').'</strong></p>';
 foreach($templates as $template) 
 	{
+	if( strpos($template->post_content,'[toastmaster') === false )
+		continue;
 	$permalink = rsvpmaker_permalink_query($template->ID);
-	printf('<p>%s<br /><a href="%s">%s</a><br /><a href="%s">%s</a><br /><a href="%s">%s</a>', $template->post_title, add_from_template_url($template->ID), __("Add Events (based on template)",'rsvptoast'),agenda_setup_url($template->ID), __("Agenda Setup (drag-and-drop editor)",'rsvptoast'), edit_template_url($template->ID), __("Edit Shortcodes",'rsvptoast'));
+	printf('<p>%s<br /><a href="%s">%s</a><br /><a href="%s">%s</a>', $template->post_title, add_from_template_url($template->ID), __("Add Events (based on template)",'rsvptoast'),agenda_setup_url($template->ID), __("Agenda Setup (drag-and-drop editor)",'rsvptoast'));
 	}		
 }
 
-if(isset($wp4toastmasters_mailman["mpass"]))
+if(!empty($wp4toastmasters_mailman["mpass"]))
 echo '<p><a href="'.trailingslashit($wp4toastmasters_mailman["mpath"]).'members" target="_blank">'.__("Members Email List",'rsvptoast').'</a> password: '.$wp4toastmasters_mailman["mpass"].'<br /></p>';
 
-if(isset($wp4toastmasters_mailman["opass"]))
+if(!empty($wp4toastmasters_mailman["opass"]))
 echo'<p><a href="'.trailingslashit($wp4toastmasters_mailman["opath"]).'members" target="_blank">'.__("Officers Email List",'rsvptoast').'</a> password: '.$wp4toastmasters_mailman["opass"].'</p>';
 
 echo $wp4toastmasters_officer_message;
@@ -326,12 +327,13 @@ ob_start();
 echo '<li id="'.$index.'">';
 ?>
 <div class="note">
+
 <textarea name="agenda_note[<?php echo $index; ?>]" cols="80" rows="3" id="agenda_note_<?php echo $index; ?>" placeholder="<?php _e("Agenda Note",'rsvptoast');?>"/><?php echo $content; /*trim(strip_tags(str_replace("</p>","</p>\n",$content),'<b><strong><em><i>'));*/ ?></textarea> <br />
 <?php _e("Display on",'rsvptoast');?>: <select name="atts[<?php echo $index; ?>][agenda_display]" ><?php if($atts["agenda_display"]) printf('<option value="%s">%s</option>',$atts["agenda_display"], $atts["agenda_display"]) ?><option value="agenda"><?php _e("agenda",'rsvptoast');?></option><option value="web"><?php _e("web",'rsvptoast');?></option><option value="both"><?php _e("both",'rsvptoast');?></option></select>
 <input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> <?php _e("List Officers",'rsvptoast');?> <input type="text" name="atts[<?php echo $index; ?>][label]" size="40" id="field_<?php echo $index; ?>" placeholder="<?php _e("Label for Officers (default: Officers)",'rsvptoast');?>" value="<?php echo $atts["label"]; ?>" /> <?php _e("Separator between officer names",'rsvptoast');?>: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); elseif(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" >
 <br /><?php _e("CSS (advanced option)",'rsvptoast');?>
 <input type="text" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" >
-<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> <?php _e("Remove",'rsvptoast');?> 
+<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
 </div>
 </li>
 <?php
@@ -365,7 +367,7 @@ elseif(isset($atts["officers"]))
 <input type="hidden" name="atts[<?php echo $index; ?>][officers]" value="1" />
 <input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $i; ?>" placeholder="<?php _e("Label for Officers (default: Officers)",'rsvptoast');?>" value="<?php echo $atts["label"]; ?>" /> <?php _e("Displays listing of officers on agenda",'rsvptoast');?>
 <br /><?php _e("Separator between officer names",'rsvptoast');?>: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" placeholder="<?php _e("default: &quot;, &quot; for line break, use &quot;br&quot;",'rsvptoast');?>">
-<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> <?php _e("Remove",'rsvptoast');?>
+<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
 </div>
 <?php
 }
@@ -388,7 +390,7 @@ if(isset($atts["leader"]) && $atts["leader"])
 else
 {
 ?>
-<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> <?php _e("Remove",'rsvptoast');?>
+<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
 <?php
 }
 ?>
@@ -505,7 +507,7 @@ function toastmaster_short($atts=array(),$content="") {
 		
 		$field = '_' . $field_base . '_' . $i;
 		$assigned = get_post_meta($post->ID, $field, true);
-		$output .= '<div class="role-block"><div class="role-title" style="font-weight: bold;">';
+		$output .= '<div class="role-block" id="'.$field.'"><div class="role-title" style="font-weight: bold;">';
 		$output .= $atts["role"].': </div><div class="role-data"> ';
 		if(is_user_member_of_blog() && !($_GET["edit_roles"] || $_GET["recommend_roles"] || ($_GET["page"] == 'toastmasters_reconcile' ) )  ) 
 			$output .= sprintf(' <form id="%s_form" method="post" class="toastrole" action="%s" style="display: inline;"><input type="hidden" name="role" id="role" value="%s"><input type="hidden" name="post_id" id="post_id" value="%d">',$field,$permalink, $field, $post->ID);
@@ -530,7 +532,7 @@ function toastmaster_short($atts=array(),$content="") {
 
 			if(strpos($field,'Speaker') )
 				{
-				$detailsform = speaker_details($field, $permalink, $assigned);
+				$detailsform = speaker_details($field, $assigned);
 				}
 			else
 				$detailsform = '';
@@ -557,24 +559,23 @@ function toastmaster_short($atts=array(),$content="") {
 			elseif(!$assigned)
 				{
 				if(strpos($field,'Speaker') )
-					$output .= sprintf('<div class="update_form">%s</div>',$detailsform);
+					$output .= sprintf('<div class="update_form" id="update'.$field.'">%s</div>',$detailsform);
 				$output .= '<button name="take_role" id="take_role" value="1">Take Role</button>';
 				}
 
 			elseif($assigned == $current_user->ID)
 					{
-
-			if(strpos($field,'Speaker') )
-					$output .= sprintf('<div class="update_form">%s
+				if(strpos($field,'Speaker') )
+					$output .= sprintf('<div class="update_form" id="update'.$field.'">%s
 					<button name="update_role" value="1">'.__('Update Role','rsvptoast').'</button>
 					<br />
 					<em>or</em>
 					</div><div></div>',$detailsform);
 					$output .= '<button name="delete_role" id="delete_role" value="1">'.__('Remove Me','rsvptoast').'</button>';
 					}
+			elseif(strpos($field,'Speaker') )
+				$output .= '<div class="update_form" id="update'.$field.'">'.speech_public_details($field).'</div>';
 			}
-			else
-				$output .= '';
 		if(is_user_member_of_blog() && !($_GET["edit_roles"] || $_GET["recommend_roles"] || ($_GET["page"] == 'toastmasters_reconcile' ) )  ) 
 				$output .= '</form>';
 			$output .= '</div></div><!-- end role block -->';			
@@ -717,8 +718,8 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 		}
 
 		$member = get_userdata($user->ID);
-		$index = preg_replace('/[^a-zA-Z]/','',$member->last_name.$member->first_name);
-		$findex = preg_replace('/[^a-zA-Z]/','',$member->first_name.$member->last_name);
+		$index = preg_replace('/[^a-zA-Z]/','',$member->last_name.$member->first_name.$member->user_login);
+		$findex = preg_replace('/[^a-zA-Z]/','',$member->first_name.$member->last_name.$member->user_login);
 		$sortmember[$index] = $member;
 		$fnamesort[$findex] = $member;
 	}	
@@ -742,7 +743,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 				$s = ' selected="selected" ';
 			else
 				$s = '';
-			$options .= sprintf('<option %s value="%d">%s</option>',$s, $member->ID,$member->first_name.' '.$member->last_name);
+			$options .= sprintf('<option %s value="%d">%s (%s)</option>',$s, $member->ID,$member->first_name.' '.$member->last_name, $member->user_login);
 		}
 
 	$options .= "</optgroup>";
@@ -754,7 +755,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 				$s = ' selected="selected" ';
 			else
 				$s = '';
-			$options .= sprintf('<option %s value="%d">%s</option>',$s, $member->ID,$member->first_name.' '.$member->last_name);
+			$options .= sprintf('<option %s value="%d">%s (%s)</option>',$s, $member->ID,$member->first_name.' '.$member->last_name, $member->user_login);
 		}
 	$options .= "</optgroup>";
 
@@ -823,8 +824,8 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 				$member->display_name .= ' (Last filled role: '.$last_filled.')';
 				}
 			
-		$index = preg_replace('/[^a-zA-Z]/','',$member->last_name.$member->first_name);
-		$findex = preg_replace('/[^a-zA-Z]/','',$member->first_name.$member->last_name);
+		$index = preg_replace('/[^a-zA-Z]/','',$member->last_name.$member->first_name.$member->user_login);
+		$findex = preg_replace('/[^a-zA-Z]/','',$member->first_name.$member->last_name.$member->user_login);
 		$sortmember[$index] = $member;
 		$fnamesort[$findex] = $member;
 	}	
@@ -1025,7 +1026,7 @@ function speaker_details_agenda ($field) {
 	return $output;
 }
 
-function speaker_details ($field, $permalink, $assigned = 0) {
+function speaker_details ($field, $assigned = 0) {
 global $post;
 
 		$manual = get_post_meta($post->ID, '_manual'.$field, true);
@@ -1381,7 +1382,6 @@ $blogusers = get_users('blog_id=1&orderby=nicename');
 
 function awesome_menu() {
 add_submenu_page('edit.php?post_type=rsvpmaker', __("Agenda Setup",'rsvptoast'), __("Agenda Setup",'rsvptoast'), 'edit_rsvpmakers', "agenda_setup", "agenda_setup");
-add_submenu_page('edit.php?post_type=rsvpmaker', __("Agenda Sidebar",'rsvptoast'), __("Agenda Sidebar",'rsvptoast'), 'edit_rsvpmakers', "agenda_sidebar", "agenda_sidebar");
 
 add_submenu_page('profile.php', __("Add Member",'rsvptoast'), __("Add Member",'rsvptoast'), 'edit_others_posts', "add_awesome_member", "add_awesome_member" );
 
@@ -3218,27 +3218,30 @@ $currentorder =array();
 		{
 		
 		$field = '_Speaker_' . $i;
-		$assigned = (int) get_post_meta($post->ID, $field, true);
+		$assigned = get_post_meta($post->ID, $field, true);
 		if($assigned)
 			{
 				$currentorder[] = $i;
 				$fullorder[] = $scount;
 				$speaker[$scount]["assigned"] = $assigned;
 				$speaker[$scount]["details"] = get_post_meta($post->ID, '_manual'.$field, true);
+				$speaker[$scount]["title"] = get_post_meta($post->ID, '_title'.$field, true);
 				$scount++;
 			}
 		}
 
 		if(sizeof($currentorder) < $count)
 			{
-				$assigned = (int) get_post_meta($post->ID, '_Backup_Speaker_1', true);
+				$assigned = get_post_meta($post->ID, '_Backup_Speaker_1', true);
 				if($assigned)
 					{
 					$speaker[$scount]["assigned"] = $assigned;
 					$speaker[$scount]["details"] = get_post_meta($post->ID, '_manual_Backup_Speaker_1', true);
+					$speaker[$scount]["title"] = get_post_meta($post->ID, '_title_Backup_Speaker_1', true);
 					$fullorder[] = $scount;
 					delete_post_meta($post->ID,'_Backup_Speaker_1');
 					delete_post_meta($post->ID,'_manual_Backup_Speaker_1');
+					delete_post_meta($post->ID,'_title_Backup_Speaker_1');
 					}
 			}
 		if( !sizeof($fullorder) )
@@ -3250,6 +3253,7 @@ $currentorder =array();
 				{
 				update_post_meta($post->ID,'_Speaker_' . $i,$speaker[$i]["assigned"]);
 				update_post_meta($post->ID,'_manual_Speaker_' . $i,$speaker[$i]["details"]);
+				update_post_meta($post->ID,'_title_Speaker_' . $i,$speaker[$i]["title"]);
 				}
 		}
 
@@ -3475,8 +3479,7 @@ global $post;
 $role_editor = admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post->ID);
 
 if( ($_GET["action"] == 'edit') && strpos($post->post_content,'role=') )//isset($post->post_content) && 
-	printf ('<div style="padding: 5px; margin:5px; border: thick dotted #8CF;
-">'.__('You can edit the Toastmaster roles setup and agenda text in a <a href="%s">simplified editor</a>, using drag-and-drop widgets.','rsvptoast').'</div>',$role_editor );
+	echo '<div style="padding: 5px; margin:5px; border: thick solid red; font-size: 20px;"><span style="color:red;">'.__('Switch to','rsvptoast').':</span> <a href="'.$role_editor.'">Toastmasters '.__('Agenda Setup','rsvptoast').'</a> '.__('for easier drag-and-drop editing','rsvptoast').'</div>';
 
 $public = get_option('blog_public');
 
@@ -3509,7 +3512,10 @@ $custom_fields = get_post_custom($post_id);
 
 if(isset($custom_fields["_sked"][0]))
 	{
-$template = unserialize($custom_fields["_sked"][0]);
+	$template = unserialize($custom_fields["_sked"][0]);
+	template_schedule($template);
+
+/*
 $week = (int) $template["week"];
 $dow = (int) $template["dayofweek"];
 $weekarray = Array(__("Varies",'rsvpmaker'),__("First",'rsvpmaker'),__("Second",'rsvpmaker'),__("Third",'rsvpmaker'),__("Fourth",'rsvpmaker'),__("Last",'rsvpmaker'),__("Every",'rsvpmaker'));
@@ -3586,7 +3592,7 @@ echo $displayminutes;
 <em><?php _e("For an event starting at 12:30 p.m., you would select 12 p.m. and 30 minutes",'rsvpmaker'); ?>.</em>
 </td></tr></table>
 <?php
-
+*/
 		return;
 	}
 
@@ -3692,7 +3698,8 @@ if($_POST['wp4toastmasters_officer_ids'] && current_user_can('manage_options') )
 					continue; // don't mess with the admin
 				else
 					{
-						$user = array('ID' => $id, 'role' => 'officer');
+						$officer = get_userdata($id);
+						$user = array('ID' => $id, 'role' => 'officer', 'user_email' => $officer->user_email);
 						wp_update_user($user);
 					}
 			}
@@ -4199,6 +4206,18 @@ cursor:move;
 h1, h1 input[type="text"] {
 font-size: 30px;
 }
+a.removex 
+{
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px #888;
+	padding: 3px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+}
 </style>
 <form id="agenda_form" method="post" action = "<?php echo admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post_id); ?>">
 <input type="hidden" name="post_id" value="<?php echo $post_id; ?>" />
@@ -4277,6 +4296,11 @@ jQuery(function($){
             }
     });
 
+	$(".removex").click(function(e) {
+	e.preventDefault();
+	this.closest("li").remove();
+    });
+
 	$("#add_role").click(function() {
 	agenda_setup_item++;
 	var item_index = 'item_' + agenda_setup_item;
@@ -4342,10 +4366,39 @@ WHERE meta_key='_sked' AND post_content LIKE '%[toastmaster%'";
 		foreach ($results as $r)
 			{
 			$sked = unserialize($r->meta_value);
-			$day = $dayarray[$sked["dayofweek"]];
-			if($sked["week"])
-				$day = $weekarray[$sked["week"]] ." ".$day;
-			$template_options .= sprintf('<option value="%d">%s (%s)</option>',$r->postID,$r->post_title,$day);
+
+		//backward compatability
+		if(is_array($sked["week"]))
+			{
+				$weeks = $sked["week"];
+				$dows = $sked["dayofweek"];
+			}
+		else
+			{
+				$weeks = array();
+				$dows = array();
+				$weeks[0] = $sked["week"];
+				$dows[0] = $sked["dayofweek"];
+			}
+
+		$dayarray = Array(__("Sunday",'rsvpmaker'),__("Monday",'rsvpmaker'),__("Tuesday",'rsvpmaker'),__("Wednesday",'rsvpmaker'),__("Thursday",'rsvpmaker'),__("Friday",'rsvpmaker'),__("Saturday",'rsvpmaker'));
+		$weekarray = Array(__("Varies",'rsvpmaker'),__("First",'rsvpmaker'),__("Second",'rsvpmaker'),__("Third",'rsvpmaker'),__("Fourth",'rsvpmaker'),__("Last",'rsvpmaker'),__("Every",'rsvpmaker'));
+		$s = '';
+		if((int)$weeks[0] == 0)
+			$s = __('Schedule Varies','rsvpmaker');
+		else
+			{
+			foreach($weeks as $week)
+				{
+				if(!empty($s))
+					$s .= '/ ';
+				$s .= $weekarray[(int) $week].' ';
+				}
+			foreach($dows as $dow)
+				$s .= $dayarray[(int) $dow] . ' ';	
+			}
+
+			$template_options .= sprintf('<option value="%d">%s (%s)</option>',$r->postID,$r->post_title,$s);
 			}
 
 			$sql = "SELECT *, $wpdb->posts.ID as postID, datetime > CURDATE( ) as current

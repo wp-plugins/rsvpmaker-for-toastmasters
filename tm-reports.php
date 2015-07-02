@@ -3,15 +3,15 @@
 add_action( 'admin_menu', 'toastmasters_reports_menu' );
 
 function toastmasters_reports_menu() {
-add_menu_page('Toastmasters Reports', 'Toastmasters Reports', 'read', 'toastmasters_reports', 'toastmasters_reports',plugins_url('rsvpmaker-for-toastmasters/toastmasters-20.png'),'2.01');
-$reconcilepg = add_submenu_page( 'toastmasters_reports', 'Reconcile', 'Reconcile', 'edit_others_rsvpmakers', 'toastmasters_reconcile', 'toastmasters_reconcile');
-add_submenu_page( 'toastmasters_reports', 'Edit Stats', 'Edit Member Stats', 'edit_others_rsvpmakers', 'toastmasters_edit_stats', 'toastmasters_edit_stats');
-add_submenu_page( 'toastmasters_reports', 'Record Attendance', 'Record Attendance', 'edit_others_rsvpmakers', 'toastmasters_attendance', 'toastmasters_attendance');
-add_submenu_page( 'toastmasters_reports', 'Attendance Report', 'Attendance Report', 'read', 'toastmasters_attendance_report', 'toastmasters_attendance_report');
-add_submenu_page( 'toastmasters_reports', 'Competent Communicator Progress Report', 'CC Progress Report', 'read', 'toastmasters_cc', 'toastmasters_cc');
-add_submenu_page( 'toastmasters_reports', 'Competent Leader Progress Report', 'CL Progress', 'read', 'cl_report', 'cl_report');
-add_submenu_page( 'toastmasters_reports', 'Mentors', 'Mentors', 'edit_others_rsvpmakers', 'toastmasters_mentors', 'toastmasters_mentors');
-add_menu_page( 'Import Free Toast Host Data', 'Import Free Toast Host Data', 'edit_others_rsvpmakers', 'import_fth', 'import_fth');
+add_menu_page(__('Toastmasters Reports','rsvptoast'), __('Toastmasters Reports','rsvptoast'), 'read', 'toastmasters_reports', 'toastmasters_reports',plugins_url('rsvpmaker-for-toastmasters/toastmasters-20.png'),'2.01');
+$reconcilepg = add_submenu_page( 'toastmasters_reports', __('Reconcile','rsvptoast'), __('Reconcile','rsvptoast'), 'edit_others_rsvpmakers', 'toastmasters_reconcile', 'toastmasters_reconcile');
+add_submenu_page( 'toastmasters_reports', __('Edit Stats','rsvptoast'), __('Edit Member Stats','rsvptoast'), 'edit_others_rsvpmakers', 'toastmasters_edit_stats', 'toastmasters_edit_stats');
+add_submenu_page( 'toastmasters_reports', __('Record Attendance','rsvptoast'), __('Record Attendance','rsvptoast'), 'edit_others_rsvpmakers', 'toastmasters_attendance', 'toastmasters_attendance');
+add_submenu_page( 'toastmasters_reports', __('Attendance Report','rsvptoast'), __('Attendance Report','rsvptoast'), 'read', 'toastmasters_attendance_report', 'toastmasters_attendance_report');
+add_submenu_page( 'toastmasters_reports', __('Competent Communicator Progress Report','rsvptoast'), __('CC Progress','rsvptoast'), 'read', 'toastmasters_cc', 'toastmasters_cc');
+add_submenu_page( 'toastmasters_reports', __('Competent Leader Progress Report','rsvptoast'), __('CL Progress','rsvptoast'), 'read', 'cl_report', 'cl_report');
+add_submenu_page( 'toastmasters_reports', __('Mentors','rsvptoast'), __('Mentors','rsvptoast'), 'edit_others_rsvpmakers', 'toastmasters_mentors', 'toastmasters_mentors');
+add_menu_page( __('Import Free Toast Host Data','rsvptoast'), __('Import Free Toast Host Data','rsvptoast'), 'edit_others_rsvpmakers', 'import_fth', 'import_fth');
 
 add_action( 'admin_print_styles-'.$reconcilepg, 'toastmasters_css_js' );
 
@@ -78,9 +78,9 @@ if(is_admin())
 fullscreen_link();
 
 if($_POST)
-	printf('<h2><a href="%s"  class="add-new-h2">Return to Report</a> <a href="%s"  class="add-new-h2">Edit Member Stats</a></h2>',admin_url('admin.php?page=toastmasters_reports'),admin_url('admin.php?page=toastmasters_edit_stats') );
+	printf('<h2><a href="%s"  class="add-new-h2">'.__('Return to Report','rsvptoast').'</a> <a href="%s"  class="add-new-h2">'.__('Edit Member Stats','rsvptoast').'</a></h2>',admin_url('admin.php?page=toastmasters_reports'),admin_url('admin.php?page=toastmasters_edit_stats') );
 else
-	printf('<h2><a href="%s" class="add-new-h2">Edit Member Stats</a></h2>',admin_url('admin.php?page=toastmasters_edit_stats') );
+	printf('<h2><a href="%s" class="add-new-h2">'.__('Edit Member Stats','rsvptoast').'</a></h2>',admin_url('admin.php?page=toastmasters_edit_stats') );
 }
 
 if($_POST["adj"])
@@ -92,7 +92,7 @@ if($_POST["adj"])
 					{
 						if(!is_numeric($count))// || ($count != 0) || ($_POST["was"][$user_id][$role]) )
 						{
-						//printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
+
 						update_user_meta($user_id, $role, $count);
 						}
 						elseif($count != 0)
@@ -107,8 +107,8 @@ if($_POST["adj"])
 					}
 
 printf('<div id="message" class="updated">
-		<p><strong>%s '.__('updated','rsvptoast').'.</strong></p>
-	</div>',__('Member stats','rsvptoast'));
+		<p><strong>%s</strong></p>
+	</div>',__('Member stats updated','rsvptoast'));
 					
 			}
 	if($_POST["addcl"])
@@ -121,14 +121,14 @@ printf('<div id="message" class="updated">
 					{
 						$sql = sprintf( "INSERT into %s SET user_id=%d, role='%s', quantity=%d, datetime=CURDATE() ",$wpdb->prefix.'toastmasters_history',$user_id, $role, $count);
 						$wpdb->query($sql);
-						printf('<p>user: %s role: %s count: %s</p>',$user_id,$role,$count);
+						printf('<p>user: %s '.__('role','rsvptoast').': %s '.__('count','rsvptoast').': %s</p>',$user_id,$role,$count);
 					}
 
 				}
 		}
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Competent leader credits');
+		<p><strong>%s.</strong></p>
+	</div>',__('Competent leader credits updated','rsvptoast') );
 
 	}
 // display routines
@@ -180,12 +180,12 @@ if($_GET["toastmaster"])
 					{
 						$tasks .= sprintf('<option value="%s">%s</option>',$task,$task);
 					}
-				printf('<h3>Additonal Competent Leader Credits</h3>
+				printf('<h3>'.__('Additonal Competent Leader Credits','rsvptoast').'</h3>
 				<p><select name="addcl[]">%s</select></p>
 				<p><select name="addcl[]">%s</select></p>
 				<p><select name="addcl[]">%s</select></p>
 				',$tasks,$tasks,$tasks);
-			printf('<p><input type="text" name="adj[%d][%s]" value="0" size="4" /> Additional Comptent Communicator Speeches</p>',$userdata->ID,"CC Speeches");
+			printf('<p><input type="text" name="adj[%d][%s]" value="0" size="4" /> '.__('Additional Comptent Communicator Speeches','rsvptoast').'</p>',$userdata->ID,"CC Speeches");
 			}
 		
 		if(isset($userdata->toastuser_note) )
@@ -217,8 +217,8 @@ elseif($_GET["edit_adjustments"])
 				$wpdb->query("DELETE FROM ".$wpdb->prefix."toastmasters_history WHERE id=".$delete_id);
 				}
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Member stats');
+		<p><strong>%s.</strong></p>
+	</div>',__('Member stats updated','rsvptoast') );
 
 		}
 	printf('<form method="post" action="%s">',admin_url('admin.php?page=toastmasters_reports&edit_adjustments=1'));
@@ -303,19 +303,19 @@ foreach ($members as $index => $userdata)
 		$count++;
 		if(($count % 10) == 0)
 			echo $l;
-//		if(current_user_can('edit_others_rsvpmakers'))
-//			$ed = sprintf(' | <a href="%s">Edit</a>',admin_url('admin.php?page=toastmasters_reports&edit=1&toastmaster=').$userdata->ID);
+
+
 		printf('<tr><td>%s %s<br /><a href="%s%s">View</a>%s</td>',$userdata->first_name, $userdata->last_name,admin_url('admin.php?page=toastmasters_reports&toastmaster=').$userdata->ID,$start,$ed);
 		$myroles = $achievements[$index];
 		echo "<td>".$myroles["CC Speeches"];
 		if($_GET["edit"] && current_user_can('edit_others_rsvpmakers'))
-			printf('<br />Add:<br /><input type="text" name="adj[%d][%s]" value="0" size="2" />',$userdata->ID,"CC Speeches");
+			printf('<br />'.__('Add','rsvptoast').':<br /><input type="text" name="adj[%d][%s]" value="0" size="2" />',$userdata->ID,"CC Speeches");
 		echo "</td>";
 		foreach($toast_roles as $role)
 			{
 				echo "<td>".$myroles[$role];
 				if($_GET["edit"] && current_user_can('edit_others_rsvpmakers'))
-					printf('<br />Add:<br /><input type="text" name="adj[%d][%s]" value="0" size="2" />',$userdata->ID,$role);				
+					printf('<br />'.__('Add','rsvptoast').':<br /><input type="text" name="adj[%d][%s]" value="0" size="2" />',$userdata->ID,$role);				
 				echo "</td>";
 			}
 		echo "</tr>";
@@ -434,8 +434,8 @@ if($_POST)
 	{
 	update_post_meta($_POST["post_id"],'_reconciled',date('F j, Y') );
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Reconciliation report');
+		<p><strong>%s.</strong></p>
+	</div>',__('Reconciliation report updated','rsvptoast'));
 	echo '<div style="margin-bottom: 20px;"><h2>'.__('Would You Like To Record Attendance?','rsvptoast').'</h2>';
 	toastmasters_attendance();
 	echo "</div>";
@@ -513,11 +513,11 @@ if($_POST["attended"])
 				$meta_value = array_pop($parts);
 				$event = (int) $_POST["event"];
 				update_post_meta($event, $meta_key, $meta_value);
-				//printf('<p>%s %s</p>',$meta_key,$meta_value);
+
 			}
 printf('<div id="message" class="updated">
-		<p><strong>%s updated.</strong></p>
-	</div>','Attendance');
+		<p><strong>%s.</strong></p>
+	</div>',__('Attendance updated','rsvptoast'));
 
 	}
 
@@ -548,7 +548,7 @@ foreach($results as $row)
 	}
 
 ?>
-<div class="wrap"><h2>Record Attendance</h2>
+<div class="wrap"><h2><?php _e('Record Attendance','rsvptoast'); ?></h2>
 <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 <input type="hidden" name="page" value="toastmasters_attendance" />
 <select name="pick">
@@ -609,7 +609,7 @@ foreach ($members as $index => $userdata)
 		if(($count % 10) == 0)
 			echo $l;
 		if(in_array($userdata->ID,$present)) // || in_array('_Attended_'.$userdata->ID,$meeting_roles))
-			$att = ' <strong>YES</strong> ';
+			$att = ' <strong>'.__('YES','rsvptoast').'</strong> ';
 		else
 			$att = sprintf('<input type="checkbox" name="attended[]" value="_Attended_%d" />',$userdata->ID);
 /*
@@ -766,7 +766,7 @@ fullscreen_link();
 if(!$_GET["all"])
 {
 $datefilter = strtotime('3 months ago');
-printf('<p><em>Filtered by default to show members active within the last 3 months (since %s) <a href="%s">(show all)</a></em></p>',date('m/d/Y',$datefilter),admin_url('admin.php?page=toastmasters_cc&all=1'));
+printf('<p><em>'.__('Filtered by default to show members active within the last 3 months (since %s) <a href="%s">(show all)','rsvptoast').'</a></em></p>',date('m/d/Y',$datefilter),admin_url('admin.php?page=toastmasters_cc&all=1'));
 }
 
 echo "<table>";
@@ -779,7 +779,7 @@ echo "<table>";
 
 	$ts = get_latest_visit ($userdata->ID);
 	if($ts)
-		$d = sprintf('<br />Last attended: %s',date("m/d/Y",$ts));
+		$d = sprintf('<br />'.__('Last attended','rsvptoast').': %s',date("m/d/Y",$ts));
 	else
 		$d = '';
 
@@ -867,7 +867,7 @@ fullscreen_link();
 if(!$_GET["all"])
 {
 $datefilter = strtotime('3 months ago');
-printf('<p><em>Filtered by default to show members active within the last 3 months (since %s) <a href="%s">(show all)</a></em></p>',date('m/d/Y',$datefilter),admin_url('admin.php?page=cl_report&all=1'));
+printf(__('<p><em>Filtered by default to show members active within the last 3 months (since %s) <a href="%s">(show all)</a></em></p>','rsvptoast'),date('m/d/Y',$datefilter),admin_url('admin.php?page=cl_report&all=1'));
 }
 
 $text = '';
@@ -887,7 +887,7 @@ $blogusers = get_users('blog_id='.get_current_blog_id() );
 
 	$ts = get_latest_visit ($userdata->ID);
 	if($ts)
-		$d = sprintf('<br />Last attended: %s',date("m/d/Y",$ts));
+		$d = sprintf('<br />'.__('Last attended','rsvptoast').': %s',date("m/d/Y",$ts));
 	else
 		$d = '';
 
@@ -927,16 +927,16 @@ foreach($cl_leaders as $count => $users)
 		}
 	}
 
-echo "<table><tr><th>#</th><th class=\"name\">Name</th><th class=\"project\">Project 1</th>
-<th class=\"project\">Project 2</th>
-<th class=\"project\">Project 3</th>
-<th class=\"project\">Project 4</th>
-<th class=\"project\">Project 5</th>
-<th class=\"project\">Project 6</th>
-<th class=\"project\">Project 7</th>
-<th class=\"project\">Project 8</th>
-<th class=\"project\">Project 9</th>
-<th class=\"project\">Project 10</th>
+echo "<table><tr><th>#</th><th class=\"name\">Name</th><th class=\"project\">".__('Project','rsvptoast')." 1</th>
+<th class=\"project\">".__('Project','rsvptoast')." 2</th>
+<th class=\"project\">".__('Project','rsvptoast')." 3</th>
+<th class=\"project\">".__('Project','rsvptoast')." 4</th>
+<th class=\"project\">".__('Project','rsvptoast')." 5</th>
+<th class=\"project\">".__('Project','rsvptoast')." 6</th>
+<th class=\"project\">".__('Project','rsvptoast')." 7</th>
+<th class=\"project\">".__('Project','rsvptoast')." 8</th>
+<th class=\"project\">".__('Project','rsvptoast')." 9</th>
+<th class=\"project\">".__('Project','rsvptoast')." 10</th>
 </tr>
 $table2
 </table>";
@@ -1048,17 +1048,17 @@ if($met && $met2)
 	{
 	$completed++;
 	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Timer + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>',__('Timer + One Other','rsvptoast'));
 	}
 elseif($met)
-	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 1</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'DONE Timer TODO + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">'.__('Goal 1','rsvptoast').'</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('DONE Timer TODO + One Other','rsvptoast'));
 elseif($met2)
-	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">Goal 2</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'TODO Timer DONE + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div width="width: 100%; border: thin solid red; font-weight: bold;"><div style="width: 50%; background-color: red; color: #fff;">'.__('Goal 2','rsvptoast').'</div></div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('TODO Timer DONE + One Other','rsvptoast') );
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Timer + One Other');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Timer + One Other','rsvptoast'));
 
-echo "<h3>PROJECT 5: Planning and Implementation<br />
-  COMPLETE 3 OF 4</h3>\n";
+echo "<h3>".__('PROJECT 5: Planning and Implementation','rsvptoast').'<br />
+  '.__('COMPLETE 3 OF 4','rsvptoast')."</h3>\n";
 
 $choices = array(
 'Toastmaster of the Day',
@@ -1073,11 +1073,11 @@ $met = is_requirement_met($choices, $goal);
 if($met)
 	{
 	$completed++;
-	echo '<h4 style="color: green;">Project Complete</h4>';
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>','Planning & Implementation: 3 OF 4');
+	echo '<h4 style="color: green;">'.__('Project Complete','rsvptoast').'</h4>';
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; background-color: red; color: #fff; font-weight: bold;">Done!</div>'.sprintf('%s</td>',__('Planning & Implementation: 3 OF 4','rsvptoast'));
 	}
 else
-	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">TODO</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,'Planning & Implementation: 3 OF 4');
+	$project_gaps[$userdata->ID] .= '<td class="project"><div style="width: 100%; border: thin solid red; font-weight: bold;">'.__('TODO','rsvptoast').'</div>'.sprintf('<a href="#%s">%s</a></td>',$userdata->ID,__('Planning & Implementation: 3 OF 4','rsvptoast'));
 
 echo "<h3>".__("PROJECT 6: Organization and Delegation",'rsvptoast')."<br />
   ".__("COMPLETE 1 OF 6",'rsvptoast')."</h3>\n";
@@ -1651,7 +1651,7 @@ $ed = '';
 foreach ($members as $index => $userdata)
 	{
 		$myroles = $achievements[$index];
-		printf('<h3 id="%d">%s %s - <a href="%s">View</a></h3>',$userdata->ID, $userdata->first_name, $userdata->last_name,admin_url('admin.php?page=toastmasters_reports&toastmaster=').$userdata->ID);
+		printf('<h3 id="%d">%s %s - <a href="%s">'.__('View','rsvptoast').'</a></h3>',$userdata->ID, $userdata->first_name, $userdata->last_name,admin_url('admin.php?page=toastmasters_reports&toastmaster=').$userdata->ID);
 		echo $l;
 		echo "<tr><td>";
 			printf('<input type="text" name="newstat[%d][%s]" value="%d" size="2" />',$userdata->ID,"CC Speeches",$myroles["CC Speeches"]);
@@ -1860,7 +1860,7 @@ submit_button(__('Import Records (step 2)','rsvptoast'),'primary'); ?>
 elseif($_POST["dates"])
 {
 	
-	printf('<h3>Recording data. Verify by checking the <a href="%s">Toastmaster Reports</a> page.</h3>',admin_url('admin.php?page=toastmasters_reports'));
+	printf('<h3>'.__('Recording data. Verify by checking','rsvptoast').' <a href="%s">'.__('Toastmaster Reports','rsvptoast').'</a>.</h3>',admin_url('admin.php?page=toastmasters_reports'));
 	foreach($_POST["user"] as $nameindex => $id)
 		{
 			if($id)
