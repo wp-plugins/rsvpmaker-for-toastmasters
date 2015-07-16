@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.4.9
+Version: 1.5
 Author URI: http://www.carrcommunications.com
 */
 
@@ -328,11 +328,18 @@ echo '<li id="'.$index.'">';
 ?>
 <div class="note">
 
-<textarea name="agenda_note[<?php echo $index; ?>]" cols="80" rows="3" id="agenda_note_<?php echo $index; ?>" placeholder="<?php _e("Agenda Note",'rsvptoast');?>"/><?php echo $content; /*trim(strip_tags(str_replace("</p>","</p>\n",$content),'<b><strong><em><i>'));*/ ?></textarea> <br />
+<textarea name="agenda_note[<?php echo $index; ?>]" cols="80" rows="3" id="agenda_note_<?php echo $index; ?>" placeholder="<?php _e("Agenda Note",'rsvptoast');?>"/><?php echo $content; ?></textarea> <br />
+<a class="show">Show Advanced Options</a><br />
+<div class="advanced">
 <?php _e("Display on",'rsvptoast');?>: <select name="atts[<?php echo $index; ?>][agenda_display]" ><?php if($atts["agenda_display"]) printf('<option value="%s">%s</option>',$atts["agenda_display"], $atts["agenda_display"]) ?><option value="agenda"><?php _e("agenda",'rsvptoast');?></option><option value="web"><?php _e("web",'rsvptoast');?></option><option value="both"><?php _e("both",'rsvptoast');?></option></select>
-<input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> <?php _e("List Officers",'rsvptoast');?> <input type="text" name="atts[<?php echo $index; ?>][label]" size="40" id="field_<?php echo $index; ?>" placeholder="<?php _e("Label for Officers (default: Officers)",'rsvptoast');?>" value="<?php echo $atts["label"]; ?>" /> <?php _e("Separator between officer names",'rsvptoast');?>: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(strpos($atts["sep"],'>')) echo htmlentities($atts["sep"]); elseif(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" >
+<input type="checkbox" name="atts[<?php echo $index; ?>][officers]" value="1" <?php if($atts["officers"]) echo ' checked="checked"'; ?> /> <?php _e("List Officers",'rsvptoast');?> <input type="text" name="atts[<?php echo $index; ?>][label]" size="40" id="field_<?php echo $index; ?>" placeholder="<?php _e("Label for Officers (default: Officers)",'rsvptoast');?>" value="<?php echo $atts["label"]; ?>" />
+
+<br /><?php _e("Separator between officer names",'rsvptoast');?>: <select  name="atts[<?php echo $index; ?>][sep]" >
+<option value=", " <?php if(empty($atts["sep"]) || ($atts["sep"] == ', ') ) echo 'checked="checked"'; ?>>comma</option>
+<option value="br" <?php if(($atts["sep"] == 'br') ) echo 'checked="checked"'; ?>>line break</option></select>
 <br /><?php _e("CSS (advanced option)",'rsvptoast');?>
 <input type="text" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" >
+</div>
 <br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
 </div>
 </li>
@@ -366,7 +373,9 @@ elseif(isset($atts["officers"]))
 <div class="officers" >
 <input type="hidden" name="atts[<?php echo $index; ?>][officers]" value="1" />
 <input type="text" name="atts[<?php echo $index; ?>][label]" size="60" id="field_<?php echo $i; ?>" placeholder="<?php _e("Label for Officers (default: Officers)",'rsvptoast');?>" value="<?php echo $atts["label"]; ?>" /> <?php _e("Displays listing of officers on agenda",'rsvptoast');?>
-<br /><?php _e("Separator between officer names",'rsvptoast');?>: <input size="40" type="text" name="atts[<?php echo $index; ?>][sep]" value="<?php if(empty($atts["sep"])) echo ", "; else echo $atts["sep"]; ?>" placeholder="<?php _e("default: &quot;, &quot; for line break, use &quot;br&quot;",'rsvptoast');?>">
+<br /><?php _e("Separator between officer names",'rsvptoast');?>: <select  name="atts[<?php echo $index; ?>][sep]" >
+<option value=", " <?php if(empty($atts["sep"]) || ($atts["sep"] == ', ') ) echo 'checked="checked"'; ?>>comma</option>
+<option value="br" <?php if(($atts["sep"] == 'br') ) echo 'checked="checked"'; ?>>line break</option></select>
 <br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
 </div>
 <?php
@@ -1418,7 +1427,7 @@ $wp4toastmasters_disable_email = get_option('wp4toastmasters_disable_email' );
 if(empty($wp4toastmasters_disable_email))
 	$wp4toastmasters_disable_email = 0;
 $wp4toastmasters_agenda_layout = get_option('wp4toastmasters_agenda_layout');
-
+$wp4toastmasters_welcome_message = get_option('wp4toastmasters_welcome_message');
 	
 $public = get_option('blog_public');
 
@@ -1594,6 +1603,27 @@ foreach($layout_options as $value)
 <?php echo $options; ?>
 </select>
 </p>
+
+<?php
+$args = array('post_type' => 'page','orderby' => 'title','order' => 'ASC','posts_per_page' => 50);
+$posts = get_posts($args);
+$options = '<option value="">None</option>';
+foreach($posts as $p)
+	{
+	if($p->ID == $wp4toastmasters_welcome_message)
+		$s = ' selected="selected" ';
+	else
+		$s = '';
+	$options .= sprintf('<option value="%s" %s>%s</option>',$p->ID, $s, $p->post_title);
+	}
+?>
+
+<p><?php _e("Page Containing Welcome Message",'rsvptoast');?> 
+<select name="wp4toastmasters_welcome_message">
+<?php echo $options; ?>
+</select>
+</p>
+
 <input type="submit" value="<?php _e("Submit",'rsvptoast');?>" />
 </form>
 </div>
@@ -1613,6 +1643,7 @@ function register_wp4toastmasters_settings() {
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toastmasters_disable_email' );
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toast_reminder' );
 	register_setting( 'wp4toastmasters-settings-group', 'wp4toastmasters_agenda_layout' );
+	register_setting( 'wp4toastmasters-settings-group', 'wp4toastmasters_welcome_message' );
 	register_setting( 'wp4toastmasters-settings-group', 'timezone_string' );
 	register_setting( 'wp4toastmasters-settings-group', 'blog_public' );
 }
@@ -2029,7 +2060,7 @@ foreach($lines as $linenumber => $line)
 	if(isset($_POST["user_pass"]) && !empty($_POST["user_pass"]) )
 		$user["user_pass"] = $_POST["user_pass"];
 	else
-		$user["user_pass"] = wp_generate_password();
+		$user["user_pass"] = password_hurdle(wp_generate_password());
 	
 	$active_ids[] = add_member_user($user);
 	}
@@ -2091,7 +2122,7 @@ if($_POST["first_name"] && $_POST["last_name"] && $_POST["email"])
 		add_member_user($user);
 	}
 
-$user_pass_default = wp_generate_password();
+$user_pass_default = password_hurdle(wp_generate_password());
 ?>
 
 		<div class="wrap">
@@ -2237,6 +2268,14 @@ return $user;
 function add_member_user($user) {
 	global $wpdb;
 	$blog_id = get_current_blog_id();
+	
+	$welcome = '';
+	$w = get_option('wp4toastmasters_welcome_message');
+	if(!empty($w))
+		{
+		$p = get_post($w);
+		$welcome = '<h1>'.$p->post_title."</h1>\n\n".$p->post_content;
+		}
 
 	foreach($user as $name => $value)
 		$user[$name] = trim($value);	
@@ -2328,6 +2367,7 @@ Username: %s
 Password: %s
 
 Please <a href="%s">edit your member profile</a> to change your password and check that we have the correct contact information for you.','rsvptoast'),site_url(),$user["user_login"], $user["user_pass"], $profile_url );
+
 			if($_POST["no_email"])
 			{
 			echo "<h3>".__('Email notification disabled','rsvptoast')."</h3><pre>".$message."</pre>";
@@ -2337,13 +2377,12 @@ Please <a href="%s">edit your member profile</a> to change your password and che
 			$admin_email = get_bloginfo('admin_email');
 			$mail["subject"] = 'Welcome to '.get_bloginfo('name');
 			$mail["replyto"] = $admin_email;
-			$mail["html"] = "<html>\n<body>\n".wpautop($message)."\n</body></html>";
+			$mail["html"] = "<html>\n<body>\n".wpautop($message.$welcome)."\n</body></html>";
 			$mail["to"] = $user["user_email"];
 			$mail["cc"] = $admin_email;			
 			$mail["from"] = $admin_email;
 			$mail["fromname"] = get_bloginfo('name');
 			awemailer($mail);
-
 			echo "<h3>".__('Emailing to','rsvptoast')." ".$user["user_email"]."</h3><pre>".$message."</pre>";
 			}
 						
@@ -4206,7 +4245,7 @@ cursor:move;
 h1, h1 input[type="text"] {
 font-size: 30px;
 }
-a.removex 
+a.removex, a.show
 {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -4217,6 +4256,7 @@ a.removex
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
 }
 </style>
 <form id="agenda_form" method="post" action = "<?php echo admin_url('edit.php?post_type=rsvpmaker&page=agenda_setup&post_id='.$post_id); ?>">
@@ -4294,6 +4334,14 @@ jQuery(function($){
                 var order = $("#sortable").sortable("toArray");
                 $('#order').val(order.join(","));
             }
+    });
+
+	$(".advanced").hide();
+
+	$(".show").click(function(e) {
+	e.preventDefault();
+	$(".advanced").show();
+	$(".show").hide();
     });
 
 	$(".removex").click(function(e) {
@@ -5077,4 +5125,21 @@ wp_editor( $sidebar, $editor_id, $settings );
 <p><input type="checkbox" name="sidebar_officers" value="1" <?php if($sidebar_officers) echo ' checked="checked" ' ?> > <?php _e("Include officer listing",'rsvptoast');?></p>
 <?php
 }
+
+//boost random password complexity
+function password_hurdle ($pass) {
+$upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+$lower = 'abcdefghijklmnopqrstuvwxyz';
+$symbols = '!@#$%^&*()';
+if(!preg_match('/[!@#$%^&*()]/',$pass) )
+	$pass .= $symbols[ rand(0,9) ];
+if(!preg_match('/[0-9]/',$pass) )
+	$pass .= rand(0,9);
+if(!preg_match('/[a-z]/',$pass) )
+	$pass .= $lower[rand(0,25)];
+if(!preg_match('/[A-Z]/',$pass) )
+	$pass .= $upper[rand(0,25)];
+return $pass;
+}
+
 ?>

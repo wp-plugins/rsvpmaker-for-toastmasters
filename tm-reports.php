@@ -743,7 +743,7 @@ foreach($results as $row)
 	{
 		$sql = sprintf("SELECT meta_value FROM $wpdb->postmeta WHERE post_id=%d AND meta_key='%s'",$row->post_id,str_replace('_manual','',$row->meta_key));
 		$member = $wpdb->get_var($sql);
-		if($member)
+		if($member && is_user_member_of_blog($member) )
 			{
 			$ccs[$member]++;
 			}
