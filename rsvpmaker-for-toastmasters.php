@@ -4,7 +4,7 @@ Plugin Name: RSVPMaker for Toastmasters
 Plugin URI: http://wp4toastmasters.com
 Description: This Toastmasters-specific extension to the RSVPMaker events plugin adds role signups and member performance tracking. Better Toastmasters websites!
 Author: David F. Carr
-Version: 1.5
+Version: 1.5.1
 Author URI: http://www.carrcommunications.com
 */
 
@@ -340,7 +340,7 @@ echo '<li id="'.$index.'">';
 <br /><?php _e("CSS (advanced option)",'rsvptoast');?>
 <input type="text" name="atts[<?php echo $index; ?>][style]" value="<?php echo $atts["style"]; ?>" >
 </div>
-<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" class="removex" /> <?php _e("Remove",'rsvptoast');?> 
 </div>
 </li>
 <?php
@@ -364,7 +364,7 @@ if(isset($atts["themewords"]))
 ?>
 <div class="themewords">
 <input type="hidden" name="atts[<?php echo $index; ?>][themewords]" value="1" /><?php _e("Block of text for meeting theme, words of the day, or other notes (can be edited along with role assignments).",'rsvptoast');?>
-<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" /> <?php _e("Remove",'rsvptoast');?> </div>
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" class="removex" /> <?php _e("Remove",'rsvptoast');?> </div>
 <?php
 }
 elseif(isset($atts["officers"]))
@@ -376,7 +376,7 @@ elseif(isset($atts["officers"]))
 <br /><?php _e("Separator between officer names",'rsvptoast');?>: <select  name="atts[<?php echo $index; ?>][sep]" >
 <option value=", " <?php if(empty($atts["sep"]) || ($atts["sep"] == ', ') ) echo 'checked="checked"'; ?>>comma</option>
 <option value="br" <?php if(($atts["sep"] == 'br') ) echo 'checked="checked"'; ?>>line break</option></select>
-<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" class="removex" /> <?php _e("Remove",'rsvptoast');?> 
 </div>
 <?php
 }
@@ -399,8 +399,7 @@ if(isset($atts["leader"]) && $atts["leader"])
 else
 {
 ?>
-<br /><a title="<?php _e("Remove",'rsvptoast');?>" class="removex">Remove</a>
-<?php
+<br /><input type="checkbox" name="remove[<?php echo $index; ?>]" value="1" class="removex" /> <?php _e("Remove",'rsvptoast');
 }
 ?>
 <br />
