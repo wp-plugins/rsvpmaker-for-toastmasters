@@ -3,8 +3,8 @@ Contributors: davidfcarr
 Donate link: http://wp4toastmasters.com/
 Tags: toastmasters
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 1.4.6
+Tested up to: 4.2.2
+Stable tag: 1.5.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,19 @@ You can purchase hosting through [wp4toastmasters.com](http://wp4toastmasters.co
 2. Data collected through the plugin feeds performance reports, such as this one showing progress toward Competent Communicator.
 
 == Changelog ==
+
+= 1.5 =
+
+* Simplification of the Agenda Setup screen
+* Bug fix (plugin was interfering with WordPress standard password reset function. Sorry!)
+
+= 1.4.9 =
+
+Bug fixes and tweaks for compatibility with the latest version of RSVPMaker.
+
+= 1.4.7 =
+
+RSVPMaker for Toastmasters is now translation-ready. See the readme file in the translations folder for instructions on how to use the POEdit tool to define equivalent labels for user interface elements in other languages.
 
 = 1.4.6 =
 

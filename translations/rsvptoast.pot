@@ -1,0 +1,2119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RSVPMaker for Toastmasters\n"
+"POT-Creation-Date: 2015-05-08 20:51-0500\n"
+"PO-Revision-Date: 2015-05-08 20:52-0500\n"
+"Last-Translator: \n"
+"Language-Team: Carr Communications Inc. <david@carrcommunications.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.6\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../agenda-with-sidebar.php:20 ../rsvpmaker-for-toastmasters.php:4911
+msgid "Template"
+msgstr ""
+
+#: ../agenda-with-sidebar.php:154
+#, php-format
+msgid ""
+"<p>Set sidebar text using the <a href=\"%s\">Agenda Sidebar editor</a></p>"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:19
+msgid "You're viewing the private members-only area of the website."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:45
+msgid "Signup"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:45 ../rsvpmaker-for-toastmasters.php:1671
+msgid "Edit Signups"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:45
+msgid "Email Roster"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:47
+msgid "Print Agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:47
+msgid "Download to Word"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:59
+msgid "Print Signup Sheet"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:61
+msgid "Edit My Member Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:65
+msgid "Print Contacts List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:67
+msgid "Home Page"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:73
+msgid "Email all members"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:73
+msgid "for club business or social invitations, no spam please"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:83
+msgid "Administration"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:84 ../rsvpmaker-for-toastmasters.php:1380
+#: ../rsvpmaker-for-toastmasters.php:2092
+#: ../rsvpmaker-for-toastmasters.php:2144
+msgid "Add Member"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:86 ../rsvpmaker-for-toastmasters.php:1382
+msgid "Edit Members"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:88
+msgid "Extended Members List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:88
+msgid "includes former members"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:106
+msgid "You have no published events based on your club meeting template"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:111
+msgid "Future events scheduled"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:116
+msgid "Event Templates"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:120
+msgid "Add Events (based on template)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:120
+msgid "Agenda Setup (drag-and-drop editor)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:120
+msgid "Edit Shortcodes"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:125
+msgid "Members Email List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:128
+msgid "Officers Email List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:182
+msgid "Next meeting"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:191
+msgid "Reminder time is past"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:194
+msgid "Reminder already ran"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:197
+msgid "Run reminder now"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:203
+msgid "Reminder time is NOT past"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:220
+msgid "Calendar page created"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:224 ../rsvpmaker-for-toastmasters.php:233
+msgid "To Do: Create a Calendar page including the shortcode/placeholder"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:229
+msgid "Member page created"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:242
+msgid "Templates created"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:246 ../rsvpmaker-for-toastmasters.php:269
+msgid "To Do"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:246
+msgid "Create an event template for your regular meetings"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:255
+msgid "Members imported"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:259
+msgid "To Do: Import members. Current members:"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:259
+msgid "See add members screen"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:265
+msgid "Officer list recorded"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:269
+msgid "Record list of officers on settings screen"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:323
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "Agenda Note"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:324
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "Display on"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:324
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:324
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "web"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:324
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "both"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:325
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "List Officers"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:325 ../rsvpmaker-for-toastmasters.php:360
+#: ../rsvpmaker-for-toastmasters.php:4287
+msgid "Label for Officers (default: Officers)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:325 ../rsvpmaker-for-toastmasters.php:361
+msgid "Separator between officer names"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:326
+msgid "CSS (advanced option)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:328 ../rsvpmaker-for-toastmasters.php:352
+#: ../rsvpmaker-for-toastmasters.php:362 ../rsvpmaker-for-toastmasters.php:385
+#: ../rsvpmaker-for-toastmasters.php:4123
+#: ../rsvpmaker-for-toastmasters.php:4279
+#: ../rsvpmaker-for-toastmasters.php:4287
+#: ../rsvpmaker-for-toastmasters.php:4303
+#: ../rsvpmaker-for-toastmasters.php:4314
+#: ../rsvpmaker-for-toastmasters.php:4316
+msgid "Remove"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:351
+#: ../rsvpmaker-for-toastmasters.php:4303
+msgid ""
+"Block of text for meeting theme, words of the day, or other notes (can be "
+"edited along with role assignments)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:360
+#: ../rsvpmaker-for-toastmasters.php:4295
+msgid "Displays listing of officers on agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:361
+msgid "default: &quot;, &quot; for line break, use &quot;br&quot;"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:371
+#: ../rsvpmaker-for-toastmasters.php:4279
+msgid "Role"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:372
+msgid "Indent"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:373
+#: ../rsvpmaker-for-toastmasters.php:4279
+msgid "Role Note"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:373
+#: ../rsvpmaker-for-toastmasters.php:4279
+msgid "note displayed on agenda only"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:373
+#: ../rsvpmaker-for-toastmasters.php:4279
+msgid "Time (optional): 7:15 pm OR 7:15 pm, 7:30 pm, 7:45 pm"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:378
+msgid "Leader field"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:378
+msgid "can be renamed but should not be removed"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:434 ../rsvpmaker-for-toastmasters.php:466
+#: ../rsvpmaker-for-toastmasters.php:509 ../rsvpmaker-for-toastmasters.php:724
+msgid "Not Available"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:479 ../rsvpmaker-for-toastmasters.php:519
+#: ../rsvpmaker-for-toastmasters.php:701
+msgid "guest"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:539
+#: ../rsvpmaker-for-toastmasters.php:3614
+msgid "Delete"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:548
+msgid "Add a personal note (optional)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:563
+msgid "Update Role"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:567
+msgid "Remove Me"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:627
+#: ../rsvpmaker-for-toastmasters.php:4314
+#: ../rsvpmaker-for-toastmasters.php:4316
+msgid ""
+"Agenda Layout: to divide the agenda into 2 columns, use 3 of these blocks, "
+"one at the beginning of the first column, one at the beginning of the second "
+"column, and a third at the end of the second column. One column may be "
+"designated the sidebar (skinnier column)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:666
+msgid "Officers"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:687
+msgid "Officers list not yet set"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:699
+msgid "Open"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:722
+msgid "Available"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:723
+msgid "Not"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:837
+msgid "Sort by First Name"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:850
+msgid "Sort by Last Name"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1028
+msgid "Manual / Speech / Time"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1033
+msgid ""
+"Choose a speech from the current list of Toastmasters International manuals"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1185
+msgid "Progress Report for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1191
+msgid "Progress Report for You"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1194
+#: ../rsvpmaker-for-toastmasters.php:4999
+msgid "Get"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1196
+msgid "Speeches"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1220
+msgid "Other Roles"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1260
+msgid "user"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1269
+msgid "This version of the member list includes inactive members"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1284
+#: ../rsvpmaker-for-toastmasters.php:1837
+#: ../rsvpmaker-for-toastmasters.php:2119
+#: ../rsvpmaker-for-toastmasters.php:2382
+#: ../rsvpmaker-for-toastmasters.php:2822
+#: ../rsvpmaker-for-toastmasters.php:3876
+msgid "Home Phone"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1285
+#: ../rsvpmaker-for-toastmasters.php:1838
+#: ../rsvpmaker-for-toastmasters.php:2124
+#: ../rsvpmaker-for-toastmasters.php:2383
+#: ../rsvpmaker-for-toastmasters.php:2823
+#: ../rsvpmaker-for-toastmasters.php:3877
+msgid "Work Phone"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1286
+#: ../rsvpmaker-for-toastmasters.php:1839
+#: ../rsvpmaker-for-toastmasters.php:2129
+#: ../rsvpmaker-for-toastmasters.php:2384
+#: ../rsvpmaker-for-toastmasters.php:2824
+#: ../rsvpmaker-for-toastmasters.php:3878
+msgid "Mobile Phone"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1287
+#: ../rsvpmaker-for-toastmasters.php:1840
+#: ../rsvpmaker-for-toastmasters.php:2385
+msgid "Facebook Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1288
+#: ../rsvpmaker-for-toastmasters.php:1841
+#: ../rsvpmaker-for-toastmasters.php:2386
+msgid "Twitter Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1289
+#: ../rsvpmaker-for-toastmasters.php:1842
+#: ../rsvpmaker-for-toastmasters.php:2387
+msgid "LinkedIn Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1290
+#: ../rsvpmaker-for-toastmasters.php:1843
+#: ../rsvpmaker-for-toastmasters.php:2388
+msgid "Business Web Address"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1291
+#: ../rsvpmaker-for-toastmasters.php:1323
+#: ../rsvpmaker-for-toastmasters.php:1343
+#: ../rsvpmaker-for-toastmasters.php:1673
+#: ../rsvpmaker-for-toastmasters.php:1844
+#: ../rsvpmaker-for-toastmasters.php:1898
+#: ../rsvpmaker-for-toastmasters.php:2107
+#: ../rsvpmaker-for-toastmasters.php:2391
+#: ../rsvpmaker-for-toastmasters.php:2825
+#: ../rsvpmaker-for-toastmasters.php:2834
+#: ../rsvpmaker-for-toastmasters.php:3879
+msgid "Email"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1327
+#: ../rsvpmaker-for-toastmasters.php:1902
+msgid "About Me"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1335
+msgid "Combined email"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1336
+msgid "Former member emails"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1340
+msgid "Add Entry"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1341
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3513
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "First"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1342
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3517
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Last"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1344
+msgid "Home"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1345
+msgid "Work"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1346
+msgid "Mobile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1347
+msgid "Add Ex-Member Record"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1377
+#: ../rsvpmaker-for-toastmasters.php:1667
+msgid "Agenda Setup"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1378
+msgid "Agenda Sidebar"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1384
+msgid "Extended List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1402
+msgid "Settings"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "President"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "VP of Education"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "VP of Membership"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "VP of Public Relations"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "Treasurer"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "Secretary"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "Sgt. at Arms"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1408
+msgid "Immediate Past President"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1420
+msgid "Make the Website Public"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1421
+msgid "Yes, this website is open for business!"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1422
+msgid ""
+"No, I am still testing, so I don't want this site indexed by Google or other "
+"search engines"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1424
+msgid "Enable Email Functions"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1425
+msgid "Yes, we email list is active"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1426
+msgid "No, do not sent automated email from the website"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1431
+msgid ""
+"Timezone not set - defaults to UTC 0 (UK time). Scroll to the top of the "
+"list for U.S. timezones"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1452
+#: ../rsvpmaker-for-toastmasters.php:1453
+msgid "Timezone"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1463
+msgid "Choose a city in the same timezone as you."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1466
+msgid "Officer List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1483
+msgid ""
+"Officers will be listed at the top of the members page, be assigned editing "
+"rights on the website, and have access to the screens for adding or editing "
+"member (user) records"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1492
+msgid "Member Email List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1493
+#: ../rsvpmaker-for-toastmasters.php:1517
+msgid "List email address"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1494
+#: ../rsvpmaker-for-toastmasters.php:1518
+msgid "Path"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1494
+#: ../rsvpmaker-for-toastmasters.php:1518
+#: ../rsvpmaker-for-toastmasters.php:2137
+msgid "Password"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1496
+msgid "Add current members to mailing list"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1516
+msgid "Officer Email List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1521
+msgid "Update officers mailing list"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1537
+#: ../rsvpmaker-for-toastmasters.php:1631
+msgid "Error attempting to subscribe"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1546
+msgid "Message To Members on Dashboard"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1549
+msgid "Message To Officers on Dashboard"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1568
+msgid "Email Reminder"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1570
+msgid "None"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1586
+msgid "Agenda Layout"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1591
+#: ../rsvpmaker-for-toastmasters.php:1925
+#: ../rsvpmaker-for-toastmasters.php:2374
+msgid "Submit"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1647
+msgid "You have accepted a role for this meeting. Thanks!"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1649
+msgid ""
+"Oops, something went wrong with the automatic sign up. Please sign in with "
+"your password to take a role"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1651
+msgid ""
+"Oops, someone else took that role first. Sign in to take any other open role "
+"listed below"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1661
+msgid "Login to Sign Up for Roles"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1672
+msgid "Recommend"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1674
+msgid "Signup Sheet"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1675
+msgid "Agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1676
+msgid "Export to Word"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1701
+msgid "has recomended you for the role of"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1701
+msgid "for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1706
+#, php-format
+msgid ""
+"<p>Click here to <a href=\"%s\">ACCEPT</a> (no password required if you act "
+"before someone else takes this role)</p>"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1708
+msgid "Note from"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1716
+msgid "Sent by email to"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1729
+msgid "Edit Agenda Roles for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1797
+msgid ""
+"Contact details such as phone numbers and email are only displayed when you "
+"are logged into the website (and should only be used for Toastmasters "
+"business)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1797
+msgid "Related"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1797
+msgid "Print Contact List"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1799
+msgid ""
+"These members have chosen to create public profiles. For an expanded "
+"listing, members may"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1799
+msgid "login"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1824
+msgid "Email All"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1827
+msgid "Email Officers"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1924
+msgid "Status Expires"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1924
+msgid "Year-Month-Day"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:1927
+msgid "Clear Status"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2073
+msgid "Both a user name and an email must be supplied"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2096
+msgid "Create a website user account for a new member"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2101
+#: ../rsvpmaker-for-toastmasters.php:2276
+msgid "Username"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2103
+msgid ""
+"Hint: try the part of the email before the @ sign. If you leave this blank, "
+"a username will be assigned based on first and last name."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2107
+msgid "required"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2111
+msgid "First Name"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2115
+msgid "Last Name"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2133
+msgid "Toastmasters ID #"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2142
+#: ../rsvpmaker-for-toastmasters.php:2159
+#: ../rsvpmaker-for-toastmasters.php:2179
+msgid ""
+"Do not send email invites (for example, if you are still testing the site)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2153
+msgid "Batch Import From Toastmasters.org spreadsheet"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2154
+msgid ""
+"If you download the member spreadsheet from toastmasters.org, you should be "
+"able to copy the cells including member data (including the header row of "
+"column labels) and paste it here (use Ctrl-V on Windows)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2158
+#: ../rsvpmaker-for-toastmasters.php:2178
+msgid ""
+"Check for missing members (if you post a complete list of current members, "
+"this checkbox triggers a check of which website users are NOT currently on "
+"the toastmasters.org list and gives you an option to delete them)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2160
+#: ../rsvpmaker-for-toastmasters.php:2180
+msgid "Post"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2174
+msgid "Batch Import / Reconcile With Toastmasters.org Roster"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2175
+msgid ""
+"Copy roster from toastmasters.org (as shown below, Ctrl-C on Windows) and "
+"paste here (use Ctrl-V on Windows)."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2177
+msgid "Default Password"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2183
+msgid "Example"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2183
+msgid ""
+"Copy the entire roster from toastmasters.org from the first ID # to the last "
+"entry."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2254
+msgid "Error: invalid email address"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2259
+msgid "Account associated with Toastmasters ID"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2264
+#: ../rsvpmaker-for-toastmasters.php:2283
+#: ../rsvpmaker-for-toastmasters.php:2302
+msgid "Updating education awards"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2270
+msgid "Adding user to this site"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2287
+#: ../rsvpmaker-for-toastmasters.php:2307
+msgid "Adding"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2287
+#: ../rsvpmaker-for-toastmasters.php:2307
+msgid "to this site"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2295
+msgid "Account associated with"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2295
+msgid "already in use by"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2319
+#, php-format
+msgid ""
+"You have been registered at %s\n"
+"\t\n"
+"Username: %s\n"
+"Password: %s\n"
+"\n"
+"Please <a href=\"%s\">edit your member profile</a> to change your password "
+"and check that we have the correct contact information for you."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2327
+msgid "Email notification disabled"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2341
+msgid "Emailing to"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2347
+msgid "registration error"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2360
+msgid "No Match"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2361
+msgid ""
+"The members below don't show up on the current list. Check those who should "
+"be deleted."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2456
+msgid "Sign up for meeting"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2460
+msgid "Your membership"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2461
+msgid "Edit Member Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2462
+msgid "Member Dashboard"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2465
+msgid "Login"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2470
+msgid "Activity"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2498
+#: ../rsvpmaker-for-toastmasters.php:4585
+#: ../rsvpmaker-for-toastmasters.php:4723
+msgid "Title:"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2499
+msgid "Number to Show:"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2501
+msgid "Date Format:"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2501
+msgid ""
+"PHP <a target=\"_blank\" href=\"http://us2.php.net/manual/en/function.date."
+"php\">date</a> format string"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2526
+msgid "Edit signups and click <b>Save Changes</b> as the bottom of the form."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2527
+#: ../rsvpmaker-for-toastmasters.php:2591
+msgid "Save Changes"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2590
+msgid ""
+"This form lets you recommend that an individual member take a specific "
+"speaking slot or other role (the member will get an email with a coded link "
+"for one-click role signup. Make your selections and click <b>Save Changes</"
+"b> at the bottom of the form."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2722
+msgid "Open Roles"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2732
+msgid "Sign up at"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2732
+msgid "Forgot your password?"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2732
+msgid "Reset your password here"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2732
+msgid "Roster"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2772
+msgid "Roster for "
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2774
+msgid "open roles"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2776
+msgid "Add a Note"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2777
+msgid "Your note, along with the roster details, will be sent to all members."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2836
+#: ../rsvpmaker-for-toastmasters.php:3880
+msgid "Status"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2864
+msgid "YES, Matched changing now"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2867
+msgid "Password already reset"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2884
+msgid "Public Profile"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2887
+msgid ""
+"Check to allow name, social media links, photo, and the description you "
+"provided to be displayed publicly.<br /> Otherwise, your contact info will "
+"only be shown to other members who have logged in with a password. (Officer "
+"profiles are public by default)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2889
+msgid "Also show email publicly"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2920
+msgid "Updated your data for event listing"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2930
+msgid "Update speech details for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:2931
+msgid ""
+"Please enter speech details. If you are not speaking from a manual, you can "
+"still enter a brief description including estimated time required."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3049
+msgid "Your Speech Title"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3052
+msgid "Your Speech Introduction"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3056
+msgid "Enter a complete introduction for the Toastmaster."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3065
+msgid "Speaker does not match"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3105
+msgid "Speaker"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3110
+msgid "Manual"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3110
+#: ../rsvpmaker-for-toastmasters.php:4201
+msgid "Title"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3112
+msgid "Details not provided."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3128
+msgid ""
+"Can we get a photo of you for the members listing on our Toastmasters "
+"website? With our club growing, we would like to have a member roster with "
+"photos to help everyone get to know each other."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3128
+msgid ""
+"\n"
+"You can also log into the website and upload a photo. Take a few minutes to "
+"review your profile, making any needed additions or corrections to the "
+"contact info we have for you."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3157
+msgid "No Phone Number"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3160
+msgid "Facebook Connection Set"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3162
+msgid "Photo Provided"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3165
+msgid "Please provide a photo."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3167
+msgid ""
+"Please add your photo to your member listiong on the Toastmasters website"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3258
+msgid "Email sending functions disabled on this site."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3266
+msgid "Email not set up"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3392
+#: ../rsvpmaker-for-toastmasters.php:3414
+msgid "Theme/Words"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3473
+#, php-format
+msgid ""
+"You can edit the Toastmaster roles setup and agenda text in a <a href=\"%s"
+"\">simplified editor</a>, using drag-and-drop widgets."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3478
+#, php-format
+msgid ""
+"This site is not being indexed by search engines. To make it public, visit "
+"the <a href=\"%s\">Toastmasters Settings</a> screen."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3482
+#, php-format
+msgid ""
+"Make sure to set the correct timezone for your site so scheduling functions "
+"will work properly. Visit the <a href=\"%s\">Toastmasters Settings</a> "
+"screen."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3512
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Varies"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3514
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Second"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3515
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Third"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3516
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Fourth"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3509
+#: ../rsvpmaker-for-toastmasters.php:3518
+#: ../rsvpmaker-for-toastmasters.php:4327
+#: ../rsvpmaker-for-toastmasters.php:4964
+msgid "Every"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3520
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Sunday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3521
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Monday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3522
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Tuesday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3523
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Wednesday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3524
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Thursday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3525
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Friday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3510
+#: ../rsvpmaker-for-toastmasters.php:3526
+#: ../rsvpmaker-for-toastmasters.php:4326
+#: ../rsvpmaker-for-toastmasters.php:4963
+msgid "Saturday"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3536
+msgid "Regular Schedule"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3545
+msgid "Time"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3546
+msgid "Hour"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3569
+msgid "Minutes"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3580
+msgid ""
+"For an event starting at 12:30 p.m., you would select 12 p.m. and 30 minutes"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3732
+msgid "Toastmaster of the Day"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3736
+msgid "Toastmaster of the Day not assigned"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3776
+msgid "PLEASE ENTER MANUAL / SPEECH TIMING REQUIREMENT ON WEBSITE"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3777
+msgid ""
+"Remember to supply the Toastmaster of the Day with the title of your speech "
+"and an introduction."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3800
+#, php-format
+msgid ""
+"You are scheduled to serve as Toastmaster of the Day this coming Friday. If, "
+"for any reason, you will not be able to fulfill this duty, please let the "
+"club officers know as soon as possible.\n"
+"\n"
+"Through the website, you can print the agenda and look up contact "
+"information for club members. \n"
+"\n"
+"Print the agenda by clicking this link: <a href=\"%s\">%s</a>\n"
+"\n"
+"IMPORTANT: Don't print the agenda too far in advance because people may sign "
+"up for (or withdraw from) roles online during the week. \n"
+"The website resources are explained in more detail here:\n"
+"\n"
+"http://wp4toastmasters.com/\n"
+"\n"
+"Part of the job of Toastmaster of the Day is to call other members who have "
+"taken on a role to make sure they are aware of these duties. Ideally, you "
+"also want to fill any open spots on the roster prior to the day of the "
+"meeting.\n"
+"\n"
+"Here is the roster so far:\n"
+"\n"
+"%s\n"
+"\n"
+"Here is the current contacts list:\n"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3833
+msgid "Your assigned duty for our meeting on"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3837
+msgid ""
+"If for any reason you cannot attend, please notify the Toastmaster of the Day"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3842
+msgid "Toastmasters duty for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3901 ../tm-reports.php:1849
+msgid "Member"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3938
+msgid ""
+"For a regular Toastmasters meeting, do not worry about the parameters below. "
+"You may use this RSVP functionality to schedule other sorts of events (for "
+"example, training or open house events.)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:3950
+msgid ""
+"[agenda_note comment=\"text between here and /agenda_note will be shown on "
+"the agenda only\"]\n"
+"\n"
+"<strong>Club Mission:</strong> We provide a supportive and positive learning "
+"experience in which members are empowered to develop communication and "
+"leadership skills, resulting in greater self-confidence and personal "
+"growth.\n"
+"\n"
+"<strong>Sgt. at Arms</strong> <em>calls the meeting to the order,</em>\n"
+"\n"
+"[/agenda_note]\n"
+"\n"
+"[toastmaster role=\"Invocation\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[agenda_note comment=\"text between here and /agenda_note will be shown on "
+"the agenda only\"]\n"
+"\n"
+"<strong>President </strong>or<strong> Presiding Officer</strong> <em>leads "
+"the self-introductions</em>\n"
+"\n"
+"Introduces the <strong>Toastmaster of the Day</strong>\n"
+"\n"
+"[/agenda_note]\n"
+"\n"
+"[toastmaster role=\"Toastmaster of the Day\" count=\"1\" agenda_note="
+"\"Introduces supporting roles. Leads the meeting.\" ]\n"
+"\n"
+"[toastmaster role=\"Ah Counter\" count=\"1\" agenda_note=\"\" indent="
+"\"1\" ]\n"
+"\n"
+"[toastmaster role=\"Timer\" count=\"1\" agenda_note=\"\" indent=\"1\" ]\n"
+"\n"
+"[toastmaster role=\"Vote Counter\" count=\"1\" agenda_note=\"\" indent="
+"\"1\" ]\n"
+"\n"
+"[toastmaster role=\"Body Language Monitor\" count=\"1\" agenda_note=\"\" "
+"indent=\"1\" ]\n"
+"\n"
+"\n"
+"[toastmaster role=\"Grammarian\" count=\"1\" agenda_note=\"Leads word of the "
+"day contest.\" indent=\"1\" ]\n"
+"\n"
+"[toastmaster role=\"Topics Master\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"\n"
+"[toastmaster role=\"Humorist\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Speaker\" count=\"3\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Backup Speaker\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"General Evaluator\" count=\"1\" agenda_note=\"Explains "
+"the importance of evaluations. Introduces Evaluators. Asks for Grammarian "
+"report. Asks for Body Language Monitor report (and awarding of Best Gestures "
+"Ribbon). Gives overall evaluation of the meeting.\" ]\n"
+"\n"
+"[toastmaster role=\"Evaluator\" count=\"3\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster themewords=\"1\" ]\n"
+"\n"
+"[toastmaster officers=\"1\" label=\"Officers\" ]"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4020
+msgid ""
+"[agenda_note label=\"\" sep=\"\" comment=\"block of text continues until /"
+"agenda_note\"]\n"
+"\n"
+"<strong>Club Mission:</strong> We provide a supportive and positive learning "
+"experience in which members are empowered to develop communication and "
+"leadership skills, resulting in greater self-confidence and personal "
+"growth.\n"
+"\n"
+"<strong>Sgt. at Arms</strong> <em>calls the meeting to the order</em>\n"
+"\n"
+"<strong>President </strong>or<strong> Presiding Officer</strong> <em>leads "
+"the self-introductions</em>\n"
+"\n"
+"Introduces the <strong>Contest Master</strong>\n"
+"\n"
+"[/agenda_note]\n"
+"\n"
+"[toastmaster role=\"Contest Master\" count=\"1\" agenda_note=\"Introduces "
+"supporting roles. Leads the meeting.\" ]\n"
+"\n"
+"[toastmaster role=\"Chief Judge\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Timer\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Vote Counter\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Videographer\" count=\"1\" agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"International Speech Contestant\" count=\"6\" "
+"agenda_note=\"\" ]\n"
+"\n"
+"[toastmaster role=\"Table Topics Contestant\" count=\"6\" agenda_note="
+"\"\" ]\n"
+"\n"
+"[toastmaster role=\"Humorous Speech Contestant\" count=\"6\" agenda_note="
+"\"\" ]\n"
+"\n"
+"[toastmaster role=\"Evaluation Contest Contestant\" count=\"6\" agenda_note="
+"\"\" ]\n"
+"\n"
+"[agenda_note label=\"\" sep=\"\" comment=\"block of text continues until /"
+"agenda_note\"]\n"
+"\n"
+"<strong>Club Dues:</strong> Please pay your club dues of $5 per week. See "
+"Treasurer Bruce Goldfarb if you need to get caught up. Prepayment discount: "
+"$104 for 26 weeks\n"
+"\n"
+"[/agenda_note]\n"
+"\n"
+"[toastmaster officers=\"1\" label=\"Officers\" ]"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4112
+msgid "Meeting Agenda updated"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4112
+msgid "View Form"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4112
+msgid "View Agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4199
+msgid "Switch to standard WordPress editor<br />(shortcode view)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4202
+msgid ""
+"You can add and drop roles, change the number of openings for speakers and "
+"other roles, and specify other formatting parameters. To reorder items for "
+"the agenda and signup form, position your mouse over any of the blocks "
+"outlined in blue to drag-and-drop them into another position."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4247
+msgid "Default sidebar for this template"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4248
+msgid "Default sidebar (if not set in template)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4251
+msgid "Enable agenda layout with sidebar"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4258
+msgid "Add Role"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4258
+msgid "Add Agenda Note"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4258
+msgid "Add Officers"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4258
+msgid "Add Theme/Words of the Day"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4295
+msgid "<strong>tk</strong>"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4359
+msgid "Get Agenda For"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4359
+#: ../rsvpmaker-for-toastmasters.php:4996
+msgid "Templates"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4359
+#: ../rsvpmaker-for-toastmasters.php:4996
+msgid "Events"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4362
+msgid "Get Agenda"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4366
+msgid "Make New Agenda Template"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4462
+msgid "You must be logged in and a member of this blog to view this content"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4462
+msgid "Login to View"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4464
+msgid "Note: This is member-only content (login required)"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4474
+msgid "Your site&#8217;s most recent members-only posts."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4475
+msgid "Members Posts"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4504
+msgid "Members Only Posts"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4588
+#: ../rsvpmaker-for-toastmasters.php:4726
+msgid "Number of posts to show:"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4592
+#: ../rsvpmaker-for-toastmasters.php:4730
+msgid "Display post date?"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4601
+msgid "Your site&#8217;s most recent public blog posts."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4602
+msgid "Club News Posts"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4631
+#: ../rsvpmaker-for-toastmasters.php:4742
+msgid "Club News"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4850
+msgid "Read More"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4900
+msgid "Custom"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4933
+msgid "Sidebar for"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4939
+msgid "Apply to meeting template"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4949
+msgid "Default Sidebar"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:4996
+msgid "Get Sidebar For"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:5007
+msgid "Sidebar Content"
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:5008
+msgid ""
+"Use this space for dues reminders, previews of upcoming events and other "
+"supporting information. You can include images as long as they are no more "
+"than 175 pixels wide."
+msgstr ""
+
+#: ../rsvpmaker-for-toastmasters.php:5018
+msgid "Include officer listing"
+msgstr ""
+
+#: ../tm-reports.php:6
+msgid "Toastmasters Reports"
+msgstr ""
+
+#: ../tm-reports.php:7
+msgid "Reconcile"
+msgstr ""
+
+#: ../tm-reports.php:8
+msgid "Edit Stats"
+msgstr ""
+
+#: ../tm-reports.php:8 ../tm-reports.php:81 ../tm-reports.php:83
+#: ../tm-reports.php:1582
+msgid "Edit Member Stats"
+msgstr ""
+
+#: ../tm-reports.php:9 ../tm-reports.php:551
+msgid "Record Attendance"
+msgstr ""
+
+#: ../tm-reports.php:10 ../tm-reports.php:635
+msgid "Attendance Report"
+msgstr ""
+
+#: ../tm-reports.php:11 ../tm-reports.php:735
+msgid "Competent Communicator Progress Report"
+msgstr ""
+
+#: ../tm-reports.php:11
+msgid "CC Progress"
+msgstr ""
+
+#: ../tm-reports.php:12
+msgid "Competent Leader Progress Report"
+msgstr ""
+
+#: ../tm-reports.php:12
+msgid "CL Progress"
+msgstr ""
+
+#: ../tm-reports.php:13
+msgid "Mentors"
+msgstr ""
+
+#: ../tm-reports.php:14 ../tm-reports.php:1711
+msgid "Import Free Toast Host Data"
+msgstr ""
+
+#: ../tm-reports.php:81 ../tm-reports.php:1507
+msgid "Return to Report"
+msgstr ""
+
+#: ../tm-reports.php:111 ../tm-reports.php:221 ../tm-reports.php:1623
+msgid "Member stats updated"
+msgstr ""
+
+#: ../tm-reports.php:124
+msgid "role"
+msgstr ""
+
+#: ../tm-reports.php:124
+msgid "count"
+msgstr ""
+
+#: ../tm-reports.php:131
+msgid "Competent leader credits updated"
+msgstr ""
+
+#: ../tm-reports.php:145 ../tm-reports.php:241
+msgid ""
+"Use this form to give credit for activities that were not tracked through "
+"the agenda."
+msgstr ""
+
+#: ../tm-reports.php:183
+msgid "Additonal Competent Leader Credits"
+msgstr ""
+
+#: ../tm-reports.php:188
+msgid "Additional Comptent Communicator Speeches"
+msgstr ""
+
+#: ../tm-reports.php:202
+msgid ""
+"Include today's date (clear checkbox if you do NOT want these adjustments "
+"included in reports on the current period)."
+msgstr ""
+
+#: ../tm-reports.php:206
+msgid "Edit Stats For This Member"
+msgstr ""
+
+#: ../tm-reports.php:233
+msgid "Delete Checked"
+msgstr ""
+
+#: ../tm-reports.php:264 ../tm-reports.php:658
+msgid "Start Month"
+msgstr ""
+
+#: ../tm-reports.php:265 ../tm-reports.php:659
+msgid "Start Year"
+msgstr ""
+
+#: ../tm-reports.php:266 ../tm-reports.php:660
+msgid "Set"
+msgstr ""
+
+#: ../tm-reports.php:291
+msgid "Name"
+msgstr ""
+
+#: ../tm-reports.php:291 ../tm-reports.php:1643
+msgid "CC Speeches"
+msgstr ""
+
+#: ../tm-reports.php:312 ../tm-reports.php:318
+msgid "Add"
+msgstr ""
+
+#: ../tm-reports.php:328 ../tm-reports.php:1552
+msgid "Save"
+msgstr ""
+
+#: ../tm-reports.php:438
+msgid "Reconciliation report updated"
+msgstr ""
+
+#: ../tm-reports.php:439
+msgid "Would You Like To Record Attendance?"
+msgstr ""
+
+#: ../tm-reports.php:459
+msgid "Reconcile Meeting Roles"
+msgstr ""
+
+#: ../tm-reports.php:459
+msgid ""
+"Use this form to reconcile and add to your record of roles filled at past "
+"meetings."
+msgstr ""
+
+#: ../tm-reports.php:465
+msgid "Get Event"
+msgstr ""
+
+#: ../tm-reports.php:520
+msgid "Attendance updated"
+msgstr ""
+
+#: ../tm-reports.php:612
+msgid "YES"
+msgstr ""
+
+#: ../tm-reports.php:769
+#, php-format
+msgid ""
+"Filtered by default to show members active within the last 3 months (since "
+"%s) <a href=\"%s\">(show all)"
+msgstr ""
+
+#: ../tm-reports.php:782 ../tm-reports.php:890
+msgid "Last attended"
+msgstr ""
+
+#: ../tm-reports.php:812
+msgid "Advanced Members</h3><p>Potential additional CC?"
+msgstr ""
+
+#: ../tm-reports.php:837
+msgid "Goal Met!"
+msgstr ""
+
+#: ../tm-reports.php:870
+#, php-format
+msgid ""
+"<p><em>Filtered by default to show members active within the last 3 months "
+"(since %s) <a href=\"%s\">(show all)</a></em></p>"
+msgstr ""
+
+#: ../tm-reports.php:930 ../tm-reports.php:931 ../tm-reports.php:932
+#: ../tm-reports.php:933 ../tm-reports.php:934 ../tm-reports.php:935
+#: ../tm-reports.php:936 ../tm-reports.php:937 ../tm-reports.php:938
+#: ../tm-reports.php:939 ../tm-reports.php:1849
+msgid "Project"
+msgstr ""
+
+#: ../tm-reports.php:967
+msgid "PROJECT 1: Listening"
+msgstr ""
+
+#: ../tm-reports.php:968 ../tm-reports.php:1061
+msgid "COMPLETE 3 OF 4"
+msgstr ""
+
+#: ../tm-reports.php:981 ../tm-reports.php:1001 ../tm-reports.php:1021
+#: ../tm-reports.php:1076 ../tm-reports.php:1100 ../tm-reports.php:1122
+#: ../tm-reports.php:1153 ../tm-reports.php:1178 ../tm-reports.php:1211
+msgid "Project Complete"
+msgstr ""
+
+#: ../tm-reports.php:982 ../tm-reports.php:1022 ../tm-reports.php:1101
+#: ../tm-reports.php:1123 ../tm-reports.php:1154 ../tm-reports.php:1239
+#: ../tm-reports.php:1271 ../tm-reports.php:1317 ../tm-reports.php:1337
+#: ../tm-reports.php:1355 ../tm-reports.php:1380 ../tm-reports.php:1401
+#: ../tm-reports.php:1428
+msgid "Done!"
+msgstr ""
+
+#: ../tm-reports.php:982 ../tm-reports.php:985 ../tm-reports.php:1239
+#: ../tm-reports.php:1242
+msgid "Listening: 3 OF 4"
+msgstr ""
+
+#: ../tm-reports.php:985 ../tm-reports.php:1005 ../tm-reports.php:1025
+#: ../tm-reports.php:1058 ../tm-reports.php:1080 ../tm-reports.php:1161
+#: ../tm-reports.php:1182 ../tm-reports.php:1215 ../tm-reports.php:1242
+#: ../tm-reports.php:1274 ../tm-reports.php:1302 ../tm-reports.php:1320
+#: ../tm-reports.php:1340 ../tm-reports.php:1358 ../tm-reports.php:1387
+#: ../tm-reports.php:1404 ../tm-reports.php:1431
+msgid "TODO"
+msgstr ""
+
+#: ../tm-reports.php:987
+msgid "PROJECT 2: Critical Thinking"
+msgstr ""
+
+#: ../tm-reports.php:988
+msgid "COMPLETE 2 OF 3"
+msgstr ""
+
+#: ../tm-reports.php:1002 ../tm-reports.php:1005 ../tm-reports.php:1255
+#: ../tm-reports.php:1258
+msgid "Critical Thinking: 2 OF 3"
+msgstr ""
+
+#: ../tm-reports.php:1007
+msgid "PROJECT 3: Giving Feedback"
+msgstr ""
+
+#: ../tm-reports.php:1008
+msgid "COMPLETE 3 OF 3"
+msgstr ""
+
+#: ../tm-reports.php:1022 ../tm-reports.php:1025 ../tm-reports.php:1271
+#: ../tm-reports.php:1274
+msgid "Feedback: 3 OF 3"
+msgstr ""
+
+#: ../tm-reports.php:1027
+msgid "PROJECT 4: Time Management"
+msgstr ""
+
+#: ../tm-reports.php:1028
+msgid "COMPLETE TIMER"
+msgstr ""
+
+#: ../tm-reports.php:1035
+msgid "Other"
+msgstr ""
+
+#: ../tm-reports.php:1051 ../tm-reports.php:1058 ../tm-reports.php:1295
+#: ../tm-reports.php:1302
+msgid "Timer + One Other"
+msgstr ""
+
+#: ../tm-reports.php:1054 ../tm-reports.php:1157 ../tm-reports.php:1298
+#: ../tm-reports.php:1383
+msgid "Goal 1"
+msgstr ""
+
+#: ../tm-reports.php:1054
+msgid "DONE Timer TODO + One Other"
+msgstr ""
+
+#: ../tm-reports.php:1056 ../tm-reports.php:1300 ../tm-reports.php:1385
+msgid "Goal 2"
+msgstr ""
+
+#: ../tm-reports.php:1056
+msgid "TODO Timer DONE + One Other"
+msgstr ""
+
+#: ../tm-reports.php:1060
+msgid "PROJECT 5: Planning and Implementation"
+msgstr ""
+
+#: ../tm-reports.php:1077 ../tm-reports.php:1080 ../tm-reports.php:1317
+#: ../tm-reports.php:1320
+msgid "Planning & Implementation: 3 OF 4"
+msgstr ""
+
+#: ../tm-reports.php:1082
+msgid "PROJECT 6: Organization and Delegation"
+msgstr ""
+
+#: ../tm-reports.php:1083
+msgid "COMPLETE 1 OF 6"
+msgstr ""
+
+#: ../tm-reports.php:1101 ../tm-reports.php:1104 ../tm-reports.php:1337
+#: ../tm-reports.php:1340
+msgid "Organization & Delegation: 1 of 6"
+msgstr ""
+
+#: ../tm-reports.php:1106
+msgid "PROJECT 7: Facilitation"
+msgstr ""
+
+#: ../tm-reports.php:1107
+msgid "COMPLETE 2 OF 4"
+msgstr ""
+
+#: ../tm-reports.php:1123 ../tm-reports.php:1355
+msgid "Facilitation: 2 OF 4"
+msgstr ""
+
+#: ../tm-reports.php:1126 ../tm-reports.php:1358
+msgid "Facilitation: 2 of 4"
+msgstr ""
+
+#: ../tm-reports.php:1128
+msgid "PROJECT 8: Motivation"
+msgstr ""
+
+#: ../tm-reports.php:1129
+msgid "COMPLETE 1 CHAIR"
+msgstr ""
+
+#: ../tm-reports.php:1138
+msgid "OTHERS"
+msgstr ""
+
+#: ../tm-reports.php:1154 ../tm-reports.php:1161 ../tm-reports.php:1380
+#: ../tm-reports.php:1387
+msgid "Motivation: Chair + 1 Other"
+msgstr ""
+
+#: ../tm-reports.php:1157 ../tm-reports.php:1383
+msgid "DONE Chair TODO + One Other"
+msgstr ""
+
+#: ../tm-reports.php:1159 ../tm-reports.php:1385
+msgid "TODO Chair DONE + One Other"
+msgstr ""
+
+#: ../tm-reports.php:1163
+msgid "PROJECT 9: Mentoring"
+msgstr ""
+
+#: ../tm-reports.php:1164
+msgid "COMPLETE 1 OF 3"
+msgstr ""
+
+#: ../tm-reports.php:1179 ../tm-reports.php:1182 ../tm-reports.php:1401
+#: ../tm-reports.php:1404
+msgid "Mentoring: 1 of 3"
+msgstr ""
+
+#: ../tm-reports.php:1184
+msgid "PROJECT 10: Team Building"
+msgstr ""
+
+#: ../tm-reports.php:1185
+msgid "COMPLETE TOASTMASTER + GENERAL EVALUATOR"
+msgstr ""
+
+#: ../tm-reports.php:1195
+msgid "OR 1 OF THE FOLLOWING"
+msgstr ""
+
+#: ../tm-reports.php:1212 ../tm-reports.php:1215 ../tm-reports.php:1428
+#: ../tm-reports.php:1431
+msgid "Team Building"
+msgstr ""
+
+#: ../tm-reports.php:1501
+msgid "Mentor list updated"
+msgstr ""
+
+#: ../tm-reports.php:1509
+msgid "Edit"
+msgstr ""
+
+#: ../tm-reports.php:1514
+msgid "Filtered by default to show members active within the last 3 months"
+msgstr ""
+
+#: ../tm-reports.php:1514
+msgid "since"
+msgstr ""
+
+#: ../tm-reports.php:1514
+msgid "AND"
+msgstr ""
+
+#: ../tm-reports.php:1514
+msgid "who have not yet attained an educational award such as CC or CL"
+msgstr ""
+
+#: ../tm-reports.php:1514
+msgid "show all"
+msgstr ""
+
+#: ../tm-reports.php:1561
+msgid "Choose a Project"
+msgstr ""
+
+#: ../tm-reports.php:1654
+msgid "View"
+msgstr ""
+
+#: ../tm-reports.php:1686
+msgid "Additonal Competent Leader Credits for"
+msgstr ""
+
+#: ../tm-reports.php:1706
+msgid "Full Screen"
+msgstr ""
+
+#: ../tm-reports.php:1725
+msgid "Match Users"
+msgstr ""
+
+#: ../tm-reports.php:1725
+msgid ""
+"Either match with a WordPress user or leave blank (Match?) if there is no "
+"match, as with a former member."
+msgstr ""
+
+#: ../tm-reports.php:1849
+msgid "Date"
+msgstr ""
+
+#: ../tm-reports.php:1856
+msgid "Import Records (step 2)"
+msgstr ""
+
+#: ../tm-reports.php:1863
+msgid "Recording data. Verify by checking"
+msgstr ""
+
+#: ../tm-reports.php:1863
+msgid "Toastmaster Reports"
+msgstr ""
+
+#: ../tm-reports.php:1879
+msgid "Historical Data"
+msgstr ""
+
+#: ../tm-reports.php:1879
+msgid "used to track events imported from Free Toast Host. Do not delete."
+msgstr ""
+
+#: ../tm-reports.php:1932
+msgid "Paste in the contents of"
+msgstr ""
+
+#: ../tm-reports.php:1933
+msgid "Member Speech Historical Report"
+msgstr ""
+
+#: ../tm-reports.php:1936
+msgid "Member Role Historical Report"
+msgstr ""
+
+#: ../tm-reports.php:1938
+msgid "Import Records (step 1)"
+msgstr ""
