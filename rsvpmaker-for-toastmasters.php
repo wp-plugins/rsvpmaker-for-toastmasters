@@ -2549,9 +2549,6 @@ class AwesomeWidget extends WP_Widget {
 
 } // class AwesomeWidget
 
-// register AwesomeWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("AwesomeWidget");'));
-
 function awesome_roles() {
 global $wp_roles;
 $wp_roles->add_cap('contributor','upload_files');
@@ -4838,10 +4835,12 @@ class WP_Widget_Club_News_Posts extends WP_Widget {
 	}
 }
 
-add_action( 'widgets_init', function(){
-     register_widget( 'WP_Widget_Members_Posts' );
-     register_widget( 'WP_Widget_Club_News_Posts' );
-});
+function wptoast_widgets () {
+	register_widget("AwesomeWidget");
+	register_widget( 'WP_Widget_Members_Posts' );
+	register_widget( 'WP_Widget_Club_News_Posts' );
+}
+add_action( 'widgets_init', 'wptoast_widgets');
 
 function club_news($args) {
 ob_start();		
