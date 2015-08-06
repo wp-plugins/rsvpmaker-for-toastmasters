@@ -19,11 +19,11 @@ clear: both;
 }
 div.role-title { 
 font-weight: bold;
-width: 180px;
+width: 45%;
 float: left;
 }
 div.role-data {
-margin-left: 185px;
+margin-left: 50%;
 }
 
 .update_form {
